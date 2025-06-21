@@ -457,14 +457,19 @@ document.getElementById('downloadBtn').addEventListener('click', async function(
         console.log('Function response status:', response.status);
         
         if (response.ok) {
-            const blob = await response.blob();
+            const htmlContent = await response.text();
+            const blob = new Blob([htmlContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.pdf`;
+            const newWindow = window.open(url, '_blank');
+        if (!newWindow) {
+            a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.html`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
             URL.revokeObjectURL(url);
         } else {
             console.error('PDF generation failed:', response.status);
