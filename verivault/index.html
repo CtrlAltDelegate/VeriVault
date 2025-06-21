@@ -441,9 +441,34 @@ Distribution is restricted to authorized personnel only.
             document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Download PDF functionality
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            const reportContent = document.getElementById('reportContent').textContent;
+       // Download PDF functionality
+document.getElementById('downloadBtn').addEventListener('click', async function() {
+    const reportContent = document.getElementById('reportContent').textContent;
+    
+    try {
+        const response = await fetch('/.netlify/functions/generate_pdf', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: reportContent })
+        });
+        
+        console.log('Function response status:', response.status);
+        
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } else {
+            console.error('PDF generation failed:', response.status);
+            // Fallback to text file
             const blob = new Blob([reportContent], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -453,7 +478,21 @@ Distribution is restricted to authorized personnel only.
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-        });
+        }
+    } catch (error) {
+        console.error('Error calling PDF function:', error);
+        // Fallback to text file
+        const blob = new Blob([reportContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+});
     </script>
 </body>
 </html>
