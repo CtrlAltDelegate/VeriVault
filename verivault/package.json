@@ -2,5 +2,8 @@
   "name": "verivault-functions",
   "version": "1.0.0",
   "description": "VeriVault functions",
-  "main": "index.js"
+  "main": "index.js",
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  }
 }
