@@ -483,7 +483,7 @@ document.getElementById('downloadBtn').addEventListener('click', async function(
         console.error('Error calling PDF function:', error);
         // Fallback to text file
         const blob = new Blob([reportContent], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
+        const url = URL.createObjectURL(url);
         const a = document.createElement('a');
         a.href = url;
         a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.txt`;
