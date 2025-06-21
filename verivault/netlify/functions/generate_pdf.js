@@ -1,4 +1,7 @@
 exports.handler = async (event, context) => {
+    console.log('Function called, method:', event.httpMethod);
+    console.log('Body:', event.body);
+    
     const headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type',
@@ -10,17 +13,22 @@ exports.handler = async (event, context) => {
     }
 
     try {
-        const { content } = JSON.parse(event.body);
-        
-        if (!content) {
+        // Handle case where body might be null or empty
+        if (!event.body) {
+            console.log('No body provided');
             return {
                 statusCode: 400,
                 headers,
-                body: JSON.stringify({ error: 'Content is required' })
+                body: JSON.stringify({ error: 'No body provided' })
             };
         }
 
-        // Create HTML content for download
+        const requestData = JSON.parse(event.body);
+        console.log('Parsed data:', requestData);
+        
+        const content = requestData.content || 'No content provided';
+        
+        // Create HTML content
         const htmlContent = `
 <!DOCTYPE html>
 <html>
@@ -57,7 +65,6 @@ exports.handler = async (event, context) => {
     </div>
     <div class="content">${content}</div>
     <script>
-        // Auto-open print dialog
         window.onload = function() {
             window.print();
         };
@@ -65,6 +72,8 @@ exports.handler = async (event, context) => {
 </body>
 </html>
         `;
+
+        console.log('Generated HTML, length:', htmlContent.length);
 
         return {
             statusCode: 200,
@@ -77,13 +86,15 @@ exports.handler = async (event, context) => {
         };
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error in function:', error.message);
+        console.error('Stack:', error.stack);
+        
         return {
             statusCode: 500,
             headers,
             body: JSON.stringify({ 
-                error: 'Failed to generate report',
-                details: error.message 
+                error: 'Function error',
+                message: error.message 
             })
         };
     }
