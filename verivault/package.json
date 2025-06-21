@@ -1,0 +1,6 @@
+{
+  "name": "verivault-functions",
+  "version": "1.0.0",
+  "description": "VeriVault functions",
+  "main": "index.js"
+}
