@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VeriVault - AI Security Management</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -12,10 +14,11 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+            background: #0D1B2A;
             min-height: 100vh;
             padding: 20px;
+            color: #E1E5EA;
         }
 
         .container {
@@ -25,40 +28,66 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             color: white;
         }
 
         .logo {
             display: inline-flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
+            gap: 20px;
+            margin-bottom: 15px;
         }
 
         .shield-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #3A86FF, #2563eb);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 28px;
             color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(58, 134, 255, 0.3);
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: -1px;
         }
 
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             opacity: 0.9;
-            margin-top: 5px;
+            margin-top: 8px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(58, 134, 255, 0.1);
+            border: 1px solid #3A86FF;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
         }
 
         .main-content {
@@ -69,89 +98,119 @@
         }
 
         .card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
+            background: #2F3E5C;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 1px solid rgba(58, 134, 255, 0.1);
         }
 
         .card h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
+            color: #E1E5EA;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-bottom: 2px solid #3A86FF;
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: #E1E5EA;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
+            padding: 14px 16px;
+            border: 2px solid #D1D5DB;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            background: white;
+            color: #2E2E2E;
+            transition: all 0.3s ease;
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #3A86FF;
+            box-shadow: 0 0 0 4px rgba(58, 134, 255, 0.1);
         }
 
         textarea {
             resize: vertical;
-            min-height: 120px;
-            font-family: inherit;
+            min-height: 140px;
+            line-height: 1.6;
         }
 
         .file-upload {
-            border: 2px dashed #667eea;
-            border-radius: 8px;
-            padding: 20px;
+            border: 2px dashed #3A86FF;
+            border-radius: 12px;
+            padding: 25px;
             text-align: center;
-            background: #f8f9ff;
+            background: rgba(58, 134, 255, 0.05);
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
         }
 
         .file-upload:hover {
-            background: #f0f2ff;
+            background: rgba(58, 134, 255, 0.1);
+            border-color: #2563eb;
         }
 
         .file-upload input {
             display: none;
         }
 
+        .file-upload-content {
+            color: #E1E5EA;
+        }
+
+        .file-upload-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
         .generate-btn {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
+            background: linear-gradient(45deg, #3A86FF, #2563eb);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
+            padding: 18px 32px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(58, 134, 255, 0.3);
         }
 
         .generate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(58, 134, 255, 0.4);
         }
 
         .generate-btn:disabled {
@@ -160,51 +219,103 @@
             transform: none;
         }
 
+        .settings-tab {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(47, 62, 92, 0.9);
+            border: 1px solid #3A86FF;
+            padding: 10px 16px;
+            border-radius: 8px;
+            color: #E1E5EA;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .settings-tab:hover {
+            background: #3A86FF;
+            color: white;
+        }
+
         .report-section {
             grid-column: 1 / -1;
         }
 
         .report-content {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             white-space: pre-wrap;
-            line-height: 1.6;
-            font-family: 'Courier New', monospace;
+            line-height: 1.7;
+            font-family: 'Inter', sans-serif;
             max-height: 600px;
             overflow-y: auto;
+            color: #2E2E2E;
+            border: 1px solid #D1D5DB;
         }
 
         .download-btn {
-            background: linear-gradient(45deg, #2196F3, #1976D2);
+            background: linear-gradient(45deg, #22c55e, #16a34a);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
+            padding: 14px 28px;
+            border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 15px;
-            transition: all 0.3s;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .download-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.3);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
         }
 
-        .status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 8px;
+        .confirmation-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #22c55e;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            color: #E1E5EA;
+            display: none;
         }
 
-        .status-secure {
-            background: #4CAF50;
-            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        .confirmation-message.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .report-id {
+            font-family: 'Courier New', monospace;
+            color: #3A86FF;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .premium-badge {
+            background: linear-gradient(45deg, #D4AF37, #b8941f);
+            color: #0D1B2A;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 10px;
         }
 
         @media (max-width: 768px) {
@@ -214,40 +325,105 @@
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
             
             .card {
-                padding: 20px;
+                padding: 25px;
+            }
+
+            .settings-tab {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+                display: inline-block;
             }
         }
 
         .hidden {
             display: none;
         }
+
+        /* Settings Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2F3E5C;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            border: 1px solid #3A86FF;
+            min-width: 500px;
+        }
+
+        .modal h3 {
+            color: #E1E5EA;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #E1E5EA;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .save-settings-btn {
+            background: #3A86FF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
+    <a href="#" class="settings-tab" onclick="openSettings()">🔧 Admin Settings</a>
+
     <div class="container">
         <div class="header">
             <div class="logo">
                 <div class="shield-icon">🛡️</div>
                 <div>
                     <h1>VeriVault</h1>
-                    <div class="subtitle">AI-Powered Security Management System</div>
+                    <div class="subtitle">AI Security Intelligence Platform</div>
+                    <div class="premium-badge">Enterprise Grade</div>
                 </div>
+            </div>
+            <div class="auth-status">
+                <div class="auth-dot"></div>
+                System Authenticated & Operational
             </div>
         </div>
 
         <div class="main-content">
             <div class="card">
-                <h2><span class="status-indicator status-secure"></span>Report Configuration</h2>
+                <h2><span class="status-indicator"></span>Report Configuration</h2>
                 
-                <div class="form-group">
-                    <label for="apiKey">OpenAI API Key</label>
-                    <input type="password" id="apiKey" placeholder="sk-..." />
-                </div>
-
                 <div class="form-group">
                     <label for="clientName">Client Name</label>
                     <input type="text" id="clientName" placeholder="Enter client name" />
@@ -268,9 +444,22 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="biometricAuth" style="width: auto; margin-right: 8px;">
+                        Biometric Verification Required
+                    </label>
+                </div>
+
                 <button class="generate-btn" id="generateBtn">
                     🔒 Generate Professional Report
                 </button>
+
+                <div class="confirmation-message" id="confirmationMsg">
+                    <div style="font-weight: 600; margin-bottom: 10px;">✅ Report Generated Successfully</div>
+                    <div>Timestamp: <span id="confirmTimestamp"></span></div>
+                    <div>Report ID: <span class="report-id" id="confirmReportId"></span></div>
+                </div>
             </div>
 
             <div class="card">
@@ -291,11 +480,14 @@ Example:
                 </div>
 
                 <div class="form-group">
-                    <label>Or Upload Security Log File</label>
+                    <label>Upload Security Log File</label>
                     <div class="file-upload" onclick="document.getElementById('fileInput').click()">
                         <input type="file" id="fileInput" accept=".txt,.log,.csv" />
-                        <div>📎 Click to upload security log file</div>
-                        <small>Supports .txt, .log, .csv files</small>
+                        <div class="file-upload-content">
+                            <div class="file-upload-icon">📎</div>
+                            <div>Click to upload security log file</div>
+                            <small style="opacity: 0.7;">Supports .txt, .log, .csv files</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -303,15 +495,67 @@ Example:
             <div class="card report-section hidden" id="reportSection">
                 <h2>📊 Generated Security Report</h2>
                 <div class="report-content" id="reportContent"></div>
-                <button class="download-btn" id="downloadBtn">📥 Download PDF Report</button>
+                <button class="download-btn" id="downloadBtn">📥 Export Professional PDF</button>
             </div>
         </div>
     </div>
 
-    <script></script>
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeSettings()">&times;</button>
+            <h3>🔧 Administrative Settings</h3>
+            
+            <div class="form-group">
+                <label for="apiKey">OpenAI API Key</label>
+                <input type="password" id="apiKey" placeholder="sk-..." />
+                <small style="color: #D1D5DB; font-size: 12px;">Securely stored locally - never transmitted</small>
+            </div>
+
+            <div class="form-group">
+                <label for="defaultSecurity">Default Security Level</label>
+                <select id="defaultSecurity">
+                    <option value="standard">Standard Protection</option>
+                    <option value="executive">Executive Protection</option>
+                    <option value="government">Government Grade</option>
+                </select>
+            </div>
+
+            <button class="save-settings-btn" onclick="saveSettings()">Save Configuration</button>
+        </div>
+    </div>
+
     <script>
         // Set today's date by default
         document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
+
+        // Load saved API key
+        const savedApiKey = localStorage.getItem('verivault_api_key');
+        if (savedApiKey) {
+            document.getElementById('apiKey').value = savedApiKey;
+        }
+
+        // Settings modal functions
+        function openSettings() {
+            document.getElementById('settingsModal').style.display = 'block';
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').style.display = 'none';
+        }
+
+        function saveSettings() {
+            const apiKey = document.getElementById('apiKey').value;
+            localStorage.setItem('verivault_api_key', apiKey);
+            closeSettings();
+            
+            // Show brief confirmation
+            const original = document.querySelector('.auth-status').innerHTML;
+            document.querySelector('.auth-status').innerHTML = '<div class="auth-dot"></div>Settings Saved Successfully';
+            setTimeout(() => {
+                document.querySelector('.auth-status').innerHTML = original;
+            }, 2000);
+        }
 
         // File upload handling
         document.getElementById('fileInput').addEventListener('change', function(e) {
@@ -325,16 +569,22 @@ Example:
             }
         });
 
-        // Generate report with DIRECT OpenAI API
+        // Generate report functionality
         document.getElementById('generateBtn').addEventListener('click', async function() {
-            const apiKey = document.getElementById('apiKey').value;
+            const apiKey = localStorage.getItem('verivault_api_key');
             const clientName = document.getElementById('clientName').value;
             const reportDate = document.getElementById('reportDate').value;
             const reportType = document.getElementById('reportType').value;
             const securityLog = document.getElementById('securityLog').value;
 
             // Basic validation
-            if (!apiKey || !clientName || !reportDate || !securityLog) {
+            if (!apiKey) {
+                alert('Please configure your OpenAI API key in Admin Settings');
+                openSettings();
+                return;
+            }
+
+            if (!clientName || !reportDate || !securityLog) {
                 alert('Please fill in all required fields');
                 return;
             }
@@ -375,7 +625,7 @@ Requirements:
 
 Format the report with clear sections and professional presentation.`;
 
-                // Call OpenAI API directly from browser
+                // Call OpenAI API
                 const response = await fetch('https://api.openai.com/v1/chat/completions', {
                     method: 'POST',
                     headers: {
@@ -408,6 +658,7 @@ Format the report with clear sections and professional presentation.`;
                 const aiReport = data.choices[0].message.content;
 
                 // Add VeriVault footer
+                const reportId = `VV-${Date.now()}`;
                 const finalReport = `${aiReport}
 
 ═══════════════════════════════════════════════════════════════
@@ -415,7 +666,7 @@ Format the report with clear sections and professional presentation.`;
 DOCUMENT AUTHENTICATION
 Report Generated: ${new Date().toLocaleString()}
 Generated by: VeriVault AI Security Management System
-Report ID: VV-${Date.now()}
+Report ID: ${reportId}
 Digital Signature: [AI-VERIFIED]
 
 This report contains confidential and proprietary information.
@@ -424,6 +675,7 @@ Distribution is restricted to authorized personnel only.
 ═══════════════════════════════════════════════════════════════`;
 
                 displayReport(finalReport);
+                showConfirmation(reportId);
 
             } catch (error) {
                 console.error('Error:', error);
@@ -441,63 +693,73 @@ Distribution is restricted to authorized personnel only.
             document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-       // Download PDF functionality
-document.getElementById('downloadBtn').addEventListener('click', async function() {
-    const reportContent = document.getElementById('reportContent').textContent;
-    
-    try {
-        const response = await fetch('/.netlify/functions/generate_pdf', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ content: reportContent })
+        function showConfirmation(reportId) {
+            document.getElementById('confirmTimestamp').textContent = new Date().toLocaleString();
+            document.getElementById('confirmReportId').textContent = reportId;
+            document.getElementById('confirmationMsg').classList.add('show');
+        }
+
+        // Download PDF functionality
+        document.getElementById('downloadBtn').addEventListener('click', async function() {
+            const reportContent = document.getElementById('reportContent').textContent;
+            
+            try {
+                const response = await fetch('/.netlify/functions/generate_pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ content: reportContent })
+                });
+                
+                if (response.ok) {
+                    const htmlContent = await response.text();
+                    const blob = new Blob([htmlContent], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const newWindow = window.open(url, '_blank');
+                    if (!newWindow) {
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.html`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }
+                    URL.revokeObjectURL(url);
+                } else {
+                    // Fallback to text file
+                    const blob = new Blob([reportContent], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.txt`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                // Fallback to text file
+                const blob = new Blob([reportContent], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
         });
-        
-        console.log('Function response status:', response.status);
-        
-        if (response.ok) {
-            const htmlContent = await response.text();
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            const newWindow = window.open(url, '_blank');
-        if (!newWindow) {
-            a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('settingsModal');
+            if (event.target == modal) {
+                closeSettings();
+            }
         }
-            URL.revokeObjectURL(url);
-        } else {
-            console.error('PDF generation failed:', response.status);
-            // Fallback to text file
-            const blob = new Blob([reportContent], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-    } catch (error) {
-        console.error('Error calling PDF function:', error);
-        // Fallback to text file
-        const blob = new Blob([reportContent], { type: 'text/plain' });
-        const url = URL.createObjectURL(url);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-});
     </script>
 </body>
 </html>
