@@ -10,227 +10,167 @@
         body { font-family: 'Inter', sans-serif; }
         .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #0f172a 100%); }
         .glass { backdrop-filter: blur(16px); background: rgba(255, 255, 255, 0.1); }
-        .card-hover:hover { transform: scale(1.05); }
+        .sidebar-item:hover { background: rgba(255, 255, 255, 0.1); }
+        .sidebar-item.active { background: rgba(59, 130, 246, 0.3); border-left: 4px solid #3b82f6; }
+        .drag-area { border: 2px dashed rgba(156, 163, 175, 0.5); transition: all 0.3s ease; }
+        .drag-area.dragover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
     </style>
 </head>
 <body class="gradient-bg min-h-screen">
-    <div class="container mx-auto px-6 py-8">
-        <!-- Header -->
-        <div class="text-center mb-12">
-            <div class="flex items-center justify-center gap-4 mb-6">
-                <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center shadow-xl">
-                    <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-80 glass border-r border-white/20 p-6 overflow-y-auto">
+            <!-- Header -->
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-4xl font-bold text-white">VeriVault</h1>
-                    <p class="text-cyan-400">AI Security Intelligence Platform</p>
+                    <h1 class="text-xl font-bold text-white">VeriVault</h1>
+                    <p class="text-cyan-400 text-xs">AI Security Intelligence</p>
                 </div>
             </div>
-            <p class="text-xl text-slate-300 max-w-2xl mx-auto">
-                Generate comprehensive security reports with AI-powered intelligence and professional formatting
-            </p>
-        </div>
 
-        <!-- Report Types Grid -->
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-2xl font-bold text-white mb-8 text-center">Select Report Type</h2>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Daily Log -->
-                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('daily-log')">
-                    <div class="flex items-start gap-4 mb-4">
-                        <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
+                
+                <div class="sidebar-item active p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('daily-log')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                         </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white mb-2">Daily Log</h3>
-                            <p class="text-sm text-slate-300 leading-relaxed">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
+                        <div>
+                            <div class="text-white font-medium">Daily Log</div>
+                            <div class="text-slate-400 text-xs">Daily operations summary</div>
                         </div>
-                    </div>
-                    <div class="flex items-center justify-between text-sm text-slate-400">
-                        <span>Click to create report</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
                     </div>
                 </div>
 
-                <!-- Medical Incident -->
-                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('incident-medical')">
-                    <div class="flex items-start gap-4 mb-4">
-                        <div class="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('incident-medical')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                             </svg>
                         </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white mb-2">Incident Report - Medical</h3>
-                            <p class="text-sm text-slate-300 leading-relaxed">Medical emergencies, injuries, and health-related incidents requiring documentation</p>
+                        <div>
+                            <div class="text-white font-medium">Medical Incident</div>
+                            <div class="text-slate-400 text-xs">Injury & emergency reports</div>
                         </div>
-                    </div>
-                    <div class="flex items-center justify-between text-sm text-slate-400">
-                        <span>Click to create report</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
                     </div>
                 </div>
 
-                <!-- Non-Medical Incident -->
-                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('incident-non-medical')">
-                    <div class="flex items-start gap-4 mb-4">
-                        <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('incident-non-medical')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
                             </svg>
                         </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white mb-2">Incident Report - Non-Medical</h3>
-                            <p class="text-sm text-slate-300 leading-relaxed">Security incidents including altercations, trespassing, and suspicious activities</p>
+                        <div>
+                            <div class="text-white font-medium">Security Incident</div>
+                            <div class="text-slate-400 text-xs">Non-medical incidents</div>
                         </div>
-                    </div>
-                    <div class="flex items-center justify-between text-sm text-slate-400">
-                        <span>Click to create report</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
                     </div>
                 </div>
 
-                <!-- Annual Security -->
-                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('annual-security')">
-                    <div class="flex items-start gap-4 mb-4">
-                        <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('annual-security')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
                         </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white mb-2">Annual Security Report</h3>
-                            <p class="text-sm text-slate-300 leading-relaxed">Comprehensive threat analysis and long-term security recommendations</p>
+                        <div>
+                            <div class="text-white font-medium">Annual Security</div>
+                            <div class="text-slate-400 text-xs">Threat analysis & planning</div>
                         </div>
-                    </div>
-                    <div class="flex items-center justify-between text-sm text-slate-400">
-                        <span>Click to create report</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
                     </div>
                 </div>
 
-                <!-- Systems Audit -->
-                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('systems-audit')">
-                    <div class="flex items-start gap-4 mb-4">
-                        <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('systems-audit')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
                         </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white mb-2">Security Systems Audit</h3>
-                            <p class="text-sm text-slate-300 leading-relaxed">Equipment audit covering cameras, access controls, alarms, and monitoring systems</p>
+                        <div>
+                            <div class="text-white font-medium">Systems Audit</div>
+                            <div class="text-slate-400 text-xs">Equipment & technology</div>
                         </div>
-                    </div>
-                    <div class="flex items-center justify-between text-sm text-slate-400">
-                        <span>Click to create report</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
                     </div>
                 </div>
 
-                <!-- Discrepancy Report -->
-                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('discrepancy')">
-                    <div class="flex items-start gap-4 mb-4">
-                        <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('discrepancy')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                         </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white mb-2">Discrepancy Report</h3>
-                            <p class="text-sm text-slate-300 leading-relaxed">Single-issue reports for equipment malfunctions and operational discrepancies</p>
+                        <div>
+                            <div class="text-white font-medium">Discrepancy Report</div>
+                            <div class="text-slate-400 text-xs">Equipment issues</div>
                         </div>
-                    </div>
-                    <div class="flex items-center justify-between text-sm text-slate-400">
-                        <span>Click to create report</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
                     </div>
                 </div>
 
-                <!-- Vehicle Inspection -->
-                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('vehicle-inspection')">
-                    <div class="flex items-start gap-4 mb-4">
-                        <div class="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-5 5-2-2M5 12l3 3 7-7"/>
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('vehicle-inspection')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
                         </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white mb-2">Vehicle Inspection Report</h3>
-                            <p class="text-sm text-slate-300 leading-relaxed">Mobile field agent vehicle condition and operational readiness assessment</p>
+                        <div>
+                            <div class="text-white font-medium">Vehicle Inspection</div>
+                            <div class="text-slate-400 text-xs">Fleet management</div>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between text-sm text-slate-400">
-                        <span>Click to create report</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </div>
                 </div>
-            </div>
-        </div>
+            </nav>
 
-        <!-- Quick Access -->
-        <div class="max-w-4xl mx-auto mt-12 bg-white/5 rounded-2xl border border-white/10 p-8">
-            <div class="text-center">
-                <svg class="w-12 h-12 text-cyan-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <h3 class="text-xl font-semibold text-white mb-2">Need Real-Time Logging?</h3>
-                <p class="text-slate-300 mb-4">
-                    Access our Rapid Event Logger for live incident tracking and real-time security monitoring
-                </p>
-                <button onclick="window.open('/logger', '_blank')" class="px-6 py-3 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
-                    Open Event Logger →
+            <!-- Quick Actions -->
+            <div class="mt-8 pt-6 border-t border-white/10">
+                <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Quick Actions</h3>
+                <button onclick="window.open('/logger.html', '_blank')" class="w-full flex items-center gap-3 p-3 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors">
+                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="text-white font-medium">Event Logger</span>
                 </button>
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="text-center mt-12 text-slate-400">
-            <p>© 2025 VeriVault AI Security Intelligence • Classified Document Generation</p>
-        </div>
-    </div>
-
-    <!-- Report Form Modal (Hidden by default) -->
-    <div id="reportModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50">
-        <div class="flex items-center justify-center min-h-screen p-6">
-            <div class="glass border border-white/20 rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-4">
-                        <div id="reportIcon" class="w-12 h-12 rounded-xl flex items-center justify-center">
-                            <!-- Icon will be inserted here -->
-                        </div>
-                        <div>
-                            <h2 id="reportTitle" class="text-2xl font-bold text-white"></h2>
-                            <p id="reportDescription" class="text-slate-300"></p>
-                        </div>
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto">
+            <div class="p-8">
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 id="reportTitle" class="text-3xl font-bold text-white">Daily Log</h2>
+                        <p id="reportDescription" class="text-slate-300 mt-1">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
                     </div>
-                    <button onclick="closeReportForm()" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
-                        ← Back to Reports
-                    </button>
+                    <div class="flex gap-3">
+                        <button onclick="clearForm()" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Clear Form
+                        </button>
+                    </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="grid md:grid-cols-2 gap-6">
+                <!-- Form Content -->
+                <div class="max-w-4xl">
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">
                                 <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -251,6 +191,36 @@
                         </div>
                     </div>
 
+                    <!-- CSV Upload Section -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-300 mb-2">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                            Upload CSV Data for AI Analysis (Optional)
+                        </label>
+                        <div id="dropZone" class="drag-area w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors">
+                            <svg class="w-12 h-12 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                            <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
+                            <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
+                            <input type="file" id="csvInput" accept=".csv" class="hidden">
+                        </div>
+                        <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
+                    </div>
+
+                    <!-- AI Analysis Button -->
+                    <div id="aiAnalysisSection" class="mb-6 hidden">
+                        <button onclick="analyzeWithAI()" id="aiAnalyzeBtn" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                            Generate AI Analysis from CSV Data
+                        </button>
+                    </div>
+
+                    <!-- Report Content -->
                     <div>
                         <label class="block text-sm font-medium text-slate-300 mb-2">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,11 +228,12 @@
                             </svg>
                             Report Content
                         </label>
-                        <textarea id="reportContent" class="w-full h-96 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-mono text-sm" placeholder="Enter report details..." required></textarea>
+                        <textarea id="reportContent" class="w-full h-96 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-mono text-sm" placeholder="Enter report details or upload CSV for AI analysis..." required></textarea>
                     </div>
 
-                    <div class="flex gap-4 pt-4">
-                        <button onclick="generateReport()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
+                    <!-- Generate Button -->
+                    <div class="mt-6">
+                        <button onclick="generateReport()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
                             <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
@@ -275,13 +246,13 @@
     </div>
 
     <script>
-        let currentReportType = '';
-        
+        let currentReportType = 'daily-log';
+        let uploadedCsvData = null;
+
         const reportData = {
             'daily-log': {
                 title: 'Daily Log',
                 description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
-                color: 'bg-blue-500',
                 template: `CLIENT: [CLIENT_NAME]
 DATE: [REPORT_DATE]
 
@@ -313,9 +284,8 @@ RAW SECURITY LOG:
 [Note any security improvements or concerns for follow-up]`
             },
             'incident-medical': {
-                title: 'Incident Report - Medical',
+                title: 'Medical Incident Report',
                 description: 'Medical emergencies, injuries, and health-related incidents requiring documentation',
-                color: 'bg-red-500',
                 template: `CLIENT: [CLIENT_NAME]
 DATE: [REPORT_DATE]
 
@@ -350,9 +320,8 @@ MEDICAL INCIDENT REPORT:
 [Medical facility transport, family notification, etc.]`
             },
             'incident-non-medical': {
-                title: 'Incident Report - Non-Medical',
+                title: 'Security Incident Report',
                 description: 'Security incidents including altercations, trespassing, and suspicious activities',
-                color: 'bg-orange-500',
                 template: `CLIENT: [CLIENT_NAME]
 DATE: [REPORT_DATE]
 
@@ -386,7 +355,6 @@ SECURITY INCIDENT REPORT:
             'annual-security': {
                 title: 'Annual Security Report',
                 description: 'Comprehensive threat analysis and long-term security recommendations',
-                color: 'bg-purple-500',
                 template: `CLIENT: [CLIENT_NAME]
 REPORTING PERIOD: ${new Date().getFullYear()}
 
@@ -424,7 +392,6 @@ ANNUAL SECURITY ASSESSMENT:
             'systems-audit': {
                 title: 'Security Systems Audit',
                 description: 'Equipment audit covering cameras, access controls, alarms, and monitoring systems',
-                color: 'bg-green-500',
                 template: `CLIENT: [CLIENT_NAME]
 AUDIT DATE: [REPORT_DATE]
 
@@ -462,7 +429,6 @@ SECURITY SYSTEMS AUDIT:
             'discrepancy': {
                 title: 'Discrepancy Report',
                 description: 'Single-issue reports for equipment malfunctions and operational discrepancies',
-                color: 'bg-yellow-500',
                 template: `CLIENT: [CLIENT_NAME]
 DATE: [REPORT_DATE]
 
@@ -498,7 +464,6 @@ DISCREPANCY REPORT:
             'vehicle-inspection': {
                 title: 'Vehicle Inspection Report',
                 description: 'Mobile field agent vehicle condition and operational readiness assessment',
-                color: 'bg-indigo-500',
                 template: `VEHICLE ID: [License/Fleet Number]
 INSPECTOR: [CLIENT_NAME]
 DATE: [REPORT_DATE]
@@ -536,78 +501,16 @@ VEHICLE INSPECTION REPORT:
             }
         };
 
-        function openReportForm(reportType) {
+        function selectReport(reportType) {
             currentReportType = reportType;
             const report = reportData[reportType];
             
-            // Update modal content
+            // Update active sidebar item
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.sidebar-item').classList.add('active');
+            
+            // Update main content
             document.getElementById('reportTitle').textContent = report.title;
             document.getElementById('reportDescription').textContent = report.description;
-            document.getElementById('reportIcon').className = `w-12 h-12 ${report.color} rounded-xl flex items-center justify-center`;
             
-            // Set default date
-            document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
-            
-            // Set template content
-            const template = report.template
-                .replace('[CLIENT_NAME]', '')
-                .replace('[REPORT_DATE]', new Date().toISOString().split('T')[0]);
-            document.getElementById('reportContent').value = template;
-            
-            // Show modal
-            document.getElementById('reportModal').classList.remove('hidden');
-        }
-
-        function closeReportForm() {
-            document.getElementById('reportModal').classList.add('hidden');
-            currentReportType = '';
-        }
-
-        async function generateReport() {
-            const clientName = document.getElementById('clientName').value;
-            const reportDate = document.getElementById('reportDate').value;
-            const content = document.getElementById('reportContent').value;
-            
-            if (!clientName || !content) {
-                alert('Please fill in all required fields');
-                return;
-            }
-            
-            try {
-                const response = await fetch('/.netlify/functions/generate-pdf', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        content: content,
-                        clientName: clientName,
-                        reportDate: reportDate,
-                        reportType: currentReportType
-                    })
-                });
-
-                if (response.ok) {
-                    const pdfHTML = await response.text();
-                    const newWindow = window.open('', '_blank');
-                    newWindow.document.write(pdfHTML);
-                    newWindow.document.close();
-                    closeReportForm();
-                } else {
-                    alert('Error generating report. Please try again.');
-                }
-            } catch (error) {
-                console.error('Error generating PDF:', error);
-                alert('Error generating report. Please try again.');
-            }
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('reportModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeReportForm();
-            }
-        });
-    </script>
-</body>
-</html>
+            // Update
