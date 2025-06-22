@@ -103,7 +103,7 @@ exports.handler = async (event, context) => {
 
     // Implement smarter pagination - prevent blank pages
     const words = cleanContent.split(' ').filter(word => word.trim().length > 0);
-    const wordsPerPage = 350; // Optimized for better spacing and no content overlap
+    const wordsPerPage = 300; // Further reduced to ensure no content overlap
     const pages = [];
     
     // Only create multiple pages if content is substantial
@@ -119,17 +119,23 @@ exports.handler = async (event, context) => {
     }
     
     // Filter out any empty or very short pages
-    const filteredPages = pages.filter(page => page.trim().length > 50);
+    const filteredPages = pages.filter(page => page.trim().length > 100);
 
     console.log('📄 Intelligence report processing complete');
     console.log('📊 Generated pages:', filteredPages.length);
 
-    // Generate pages with proper numbering
+    // Generate pages with proper numbering and prevent blank pages
     let pagesHTML = '';
     
-    filteredPages.forEach((pageContent, index) => {
+    // Ensure we only create pages with substantial content
+    const validPages = filteredPages.filter(page => {
+        const wordCount = page.trim().split(' ').length;
+        return wordCount > 20; // Only pages with more than 20 words
+    });
+    
+    validPages.forEach((pageContent, index) => {
         const pageNumber = index + 1;
-        const isLastPage = index === filteredPages.length - 1;
+        const isLastPage = index === validPages.length - 1;
         
         pagesHTML += `
         <div class="page">
@@ -218,7 +224,7 @@ exports.handler = async (event, context) => {
             margin: 0 auto;
             background: white;
             position: relative;
-            padding: 1.7in 1in 1in 1in;
+            padding: 1.8in 1in 1in 1in;
             page-break-after: always;
             box-sizing: border-box;
         }
@@ -229,11 +235,11 @@ exports.handler = async (event, context) => {
 
         .page-number {
             position: absolute;
-            top: 0.8in;
+            top: 0.9in;
             right: 1in;
             font-size: 11px;
             font-weight: bold;
-            color: #1E3A8A;
+            color: white;
             z-index: 1001;
         }
 
