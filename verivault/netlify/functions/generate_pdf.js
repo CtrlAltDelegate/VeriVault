@@ -94,18 +94,21 @@ exports.handler = async (event, context) => {
         .replace(/^([A-Z\s]{3,}):$/gm, '<h4 style="color: #1E3A8A; font-weight: 600; font-size: 14px; margin: 15px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">$1:</h4>')
         .trim();
 
-    // Implement intelligent pagination (approximately 750 words per page for optimal reading)
-    const words = cleanContent.split(' ');
-    const wordsPerPage = 750;
+    // Implement intelligent pagination (approximately 600 words per page for better spacing)
+    const words = cleanContent.split(' ').filter(word => word.trim().length > 0);
+    const wordsPerPage = 600;
     const pages = [];
     
-    for (let i = 0; i < words.length; i += wordsPerPage) {
-        const pageWords = words.slice(i, i + wordsPerPage);
-        pages.push(pageWords.join(' '));
-    }
-
-    // Ensure minimum one page for short reports
-    if (pages.length === 0) {
+    // Only create multiple pages if content is substantial
+    if (words.length > wordsPerPage) {
+        for (let i = 0; i < words.length; i += wordsPerPage) {
+            const pageWords = words.slice(i, i + wordsPerPage);
+            if (pageWords.length > 0) {
+                pages.push(pageWords.join(' '));
+            }
+        }
+    } else {
+        // For shorter content, keep as single page
         pages.push(cleanContent);
     }
 
@@ -135,6 +138,8 @@ exports.handler = async (event, context) => {
             line-height: 1.6;
             font-size: 11pt;
             counter-reset: page;
+            margin: 0;
+            padding: 0;
         }
 
         .page {
@@ -143,8 +148,13 @@ exports.handler = async (event, context) => {
             margin: 0 auto;
             background: white;
             position: relative;
-            padding: 1.1in 1in 0.7in 1in;
+            padding: 1.3in 1in 1in 1in;
             page-break-after: always;
+            box-sizing: border-box;
+        }
+
+        .page:last-child {
+            page-break-after: avoid;
         }
 
         /* CLASSIFIED HEADER */
@@ -153,10 +163,10 @@ exports.handler = async (event, context) => {
             top: 0;
             left: 0;
             right: 0;
-            height: 0.9in;
+            height: 1in;
             background: linear-gradient(135deg, #1E3A8A 0%, #00CFFF 100%);
             color: white;
-            padding: 0.15in 1in;
+            padding: 0.2in 1in;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -239,9 +249,9 @@ exports.handler = async (event, context) => {
             bottom: 0;
             left: 0;
             right: 0;
-            height: 0.55in;
+            height: 0.7in;
             background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
-            padding: 0.1in 1in;
+            padding: 0.15in 1in;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -389,8 +399,18 @@ exports.handler = async (event, context) => {
         }
 
         @media print {
-            body { margin: 0; }
-            .page { margin: 0; box-shadow: none; }
+            body { 
+                margin: 0; 
+                counter-reset: page;
+            }
+            .page { 
+                margin: 0; 
+                box-shadow: none; 
+                page-break-after: always;
+            }
+            .page:last-child {
+                page-break-after: avoid;
+            }
         }
 
         /* Mobile responsiveness */
@@ -406,6 +426,15 @@ exports.handler = async (event, context) => {
     </style>
     <script>
         window.onload = function() {
+            // Add page numbers to each page
+            const pages = document.querySelectorAll('.page-counter');
+            pages.forEach((page, index) => {
+                const pageNumber = page.querySelector('.page-number');
+                if (pageNumber) {
+                    pageNumber.textContent = `Page ${index + 1}`;
+                }
+            });
+            
             // Auto-trigger print dialog for PDF generation
             setTimeout(() => {
                 window.print();
@@ -427,11 +456,11 @@ exports.handler = async (event, context) => {
         <div class="header-info">
             <div class="classification">🔒 CLASSIFIED</div>
             <div>Generated: ${currentTimestamp}</div>
-            <div class="page-counter"></div>
         </div>
     </div>
 
-    <div class="page">
+    <div class="page page-counter">
+        <div class="page-number" style="position: absolute; top: 0.4in; right: 1in; font-size: 9px; color: white; z-index: 1001;"></div>
         <div class="report-title">
             <h2>Intelligence Operations Report</h2>
             <div class="report-subtitle">Classified Security Assessment</div>
@@ -468,14 +497,15 @@ exports.handler = async (event, context) => {
             </div>
         </div>
 
-        <div class="content-section">${pages.length > 0 ? pages[0] : cleanContent}</div>
+        <div class="content-section">${pages[0] || cleanContent}</div>
 
         ${pages.length > 1 ? pages.slice(1).map((pageContent, index) => `
-        </div>
-        
-        <div class="page">
-            <div class="content-section">${pageContent}</div>
-        `).join('') : ''}
+    </div>
+    
+    <div class="page page-counter">
+        <div class="page-number" style="position: absolute; top: 0.4in; right: 1in; font-size: 9px; color: white; z-index: 1001;"></div>
+        <div class="content-section">${pageContent}</div>
+    `).join('') : ''}
 
         <div class="digital-signature">
             <div style="font-weight: 700; margin-bottom: 8px; color: #F59E0B; font-family: 'Rajdhani', sans-serif;">DOCUMENT AUTHENTICATION & CLASSIFICATION</div>
