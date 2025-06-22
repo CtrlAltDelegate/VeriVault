@@ -142,7 +142,7 @@
 
         input, select, textarea {
             width: 100%;
-            padding: 14px 16px;
+            padding: 16px 18px;
             border: 2px solid #D1D5DB;
             border-radius: 10px;
             font-size: 15px;
@@ -203,9 +203,13 @@
             cursor: pointer;
             width: 100%;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            text-transform: none;
+            letter-spacing: 0.5px;
             box-shadow: 0 8px 25px rgba(58, 134, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .generate-btn:hover {
@@ -399,6 +403,127 @@
             cursor: pointer;
             margin-top: 20px;
         }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toggle-input {
+            display: none;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .toggle-slider {
+            width: 48px;
+            height: 24px;
+            background: #D1D5DB;
+            border-radius: 24px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-input:checked + .toggle-label .toggle-slider {
+            background: #3A86FF;
+        }
+
+        .toggle-input:checked + .toggle-label .toggle-slider::before {
+            transform: translateX(24px);
+        }
+
+        .toggle-text {
+            font-size: 13px;
+            color: #E1E5EA;
+            opacity: 0.8;
+        }
+
+        /* Success Modal */
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .success-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2F3E5C;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            border: 2px solid #22c55e;
+            text-align: center;
+            min-width: 400px;
+        }
+
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            color: #22c55e;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .success-details {
+            color: #E1E5EA;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .view-report-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .close-success-btn {
+            background: transparent;
+            color: #E1E5EA;
+            border: 2px solid #E1E5EA;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -445,14 +570,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="biometricAuth" style="width: auto; margin-right: 8px;">
-                        Biometric Verification Required
-                    </label>
+                    <label>Biometric Verification</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="biometricAuth" class="toggle-input">
+                        <label for="biometricAuth" class="toggle-label">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-text">Required for high-security operations</span>
+                        </label>
+                    </div>
                 </div>
 
                 <button class="generate-btn" id="generateBtn">
-                    🔒 Generate Professional Report
+                    <span id="btnIcon">🔒</span>
+                    <span id="btnText">Generate Professional Report</span>
                 </button>
 
                 <div class="confirmation-message" id="confirmationMsg">
@@ -525,6 +655,21 @@ Example:
         </div>
     </div>
 
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-modal-content">
+            <div class="success-icon">✅</div>
+            <div class="success-title">Report Generated Successfully</div>
+            <div class="success-details">
+                <div>Timestamp: <span id="successTimestamp"></span></div>
+                <div>Report ID: <span class="report-id" id="successReportId"></span></div>
+                <div style="margin-top: 15px; opacity: 0.8;">Your professional security report is ready for export.</div>
+            </div>
+            <button class="view-report-btn" onclick="scrollToReport()">View Report</button>
+            <button class="close-success-btn" onclick="closeSuccessModal()">Close</button>
+        </div>
+    </div>
+
     <script>
         // Set today's date by default
         document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
@@ -594,7 +739,8 @@ Example:
             
             // Show loading state
             generateBtn.disabled = true;
-            generateBtn.innerHTML = '🔄 Generating AI Report...';
+            document.getElementById('btnIcon').textContent = '🔄';
+            document.getElementById('btnText').textContent = 'Generating AI Report...';
 
             try {
                 const reportTypePrompts = {
@@ -675,7 +821,7 @@ Distribution is restricted to authorized personnel only.
 ═══════════════════════════════════════════════════════════════`;
 
                 displayReport(finalReport);
-                showConfirmation(reportId);
+                showSuccessModal(reportId);
 
             } catch (error) {
                 console.error('Error:', error);
@@ -683,7 +829,8 @@ Distribution is restricted to authorized personnel only.
             } finally {
                 // Re-enable button
                 generateBtn.disabled = false;
-                generateBtn.innerHTML = originalButtonText;
+                document.getElementById('btnIcon').textContent = '🔒';
+                document.getElementById('btnText').textContent = 'Generate Professional Report';
             }
         });
 
@@ -693,10 +840,19 @@ Distribution is restricted to authorized personnel only.
             document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function showConfirmation(reportId) {
-            document.getElementById('confirmTimestamp').textContent = new Date().toLocaleString();
-            document.getElementById('confirmReportId').textContent = reportId;
-            document.getElementById('confirmationMsg').classList.add('show');
+        function showSuccessModal(reportId) {
+            document.getElementById('successTimestamp').textContent = new Date().toLocaleString();
+            document.getElementById('successReportId').textContent = reportId;
+            document.getElementById('successModal').style.display = 'block';
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
+        function scrollToReport() {
+            closeSuccessModal();
+            document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
         }
 
         // Download PDF functionality
