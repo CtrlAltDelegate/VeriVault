@@ -94,12 +94,12 @@ exports.handler = async (event, context) => {
         .replace(/^([A-Z\s]{3,}):$/gm, '<h4 style="color: #1E3A8A; font-weight: 600; font-size: 14px; margin: 15px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">$1:</h4>')
         .trim();
 
-    // Implement smarter pagination - reduce words per page to ensure signature fits
+    // Implement smarter pagination - prevent blank pages
     const words = cleanContent.split(' ').filter(word => word.trim().length > 0);
-    const wordsPerPage = 500; // Reduced to leave more room for signature
+    const wordsPerPage = 400; // Further reduced to ensure proper spacing
     const pages = [];
     
-    // Only create multiple pages if content is substantial
+    // Only create additional pages if we have substantial content
     if (words.length > wordsPerPage) {
         for (let i = 0; i < words.length; i += wordsPerPage) {
             const pageWords = words.slice(i, i + wordsPerPage);
@@ -108,9 +108,12 @@ exports.handler = async (event, context) => {
             }
         }
     } else {
-        // For shorter content, keep as single page
+        // For shorter content, keep as single page with signature
         pages.push(cleanContent);
     }
+    
+    // Remove any empty pages
+    const filteredPages = pages.filter(page => page.trim().length > 0);
 
     console.log('📄 Intelligence report processing complete');
     console.log('📊 Generated pages:', pages.length);
@@ -147,7 +150,7 @@ exports.handler = async (event, context) => {
             margin: 0 auto;
             background: white;
             position: relative;
-            padding: 1.4in 1in 1in 1in;
+            padding: 1.5in 1in 0.8in 1in;
             page-break-after: always;
             box-sizing: border-box;
         }
@@ -157,11 +160,12 @@ exports.handler = async (event, context) => {
         }
 
         .page-number {
-            position: absolute;
-            top: 0.6in;
+            position: fixed;
+            top: 0.7in;
             right: 1in;
             color: white;
-            font-size: 9px;
+            font-size: 10px;
+            font-weight: bold;
             z-index: 1001;
         }
 
