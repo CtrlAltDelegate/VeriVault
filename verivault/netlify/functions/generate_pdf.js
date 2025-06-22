@@ -137,7 +137,7 @@ exports.handler = async (event, context) => {
             color: #1E3A8A;
             line-height: 1.6;
             font-size: 11pt;
-            counter-reset: page;
+            counter-reset: pagenum;
             margin: 0;
             padding: 0;
         }
@@ -386,11 +386,11 @@ exports.handler = async (event, context) => {
 
         /* Page Counter */
         .page-counter {
-            counter-increment: page;
+            counter-increment: pagenum;
         }
 
         .page-counter::after {
-            content: "Page " counter(page);
+            content: "Page " counter(pagenum);
         }
 
         @page {
@@ -401,7 +401,7 @@ exports.handler = async (event, context) => {
         @media print {
             body { 
                 margin: 0; 
-                counter-reset: page;
+                counter-reset: pagenum;
             }
             .page { 
                 margin: 0; 
@@ -426,17 +426,8 @@ exports.handler = async (event, context) => {
     </style>
     <script>
         window.onload = function() {
-            // Add page numbers to each page
-            const pages = document.querySelectorAll('.page-counter');
-            pages.forEach((page, index) => {
-                const pageNumber = page.querySelector('.page-number');
-                if (pageNumber) {
-                    pageNumber.textContent = `Page ${index + 1}`;
-                }
-            });
-            
             // Auto-trigger print dialog for PDF generation
-            setTimeout(() => {
+            setTimeout(function() {
                 window.print();
             }, 800);
         };
@@ -456,11 +447,11 @@ exports.handler = async (event, context) => {
         <div class="header-info">
             <div class="classification">🔒 CLASSIFIED</div>
             <div>Generated: ${currentTimestamp}</div>
+            <div class="page-counter"></div>
         </div>
     </div>
 
     <div class="page page-counter">
-        <div class="page-number" style="position: absolute; top: 0.4in; right: 1in; font-size: 9px; color: white; z-index: 1001;"></div>
         <div class="report-title">
             <h2>Intelligence Operations Report</h2>
             <div class="report-subtitle">Classified Security Assessment</div>
@@ -503,7 +494,6 @@ exports.handler = async (event, context) => {
     </div>
     
     <div class="page page-counter">
-        <div class="page-number" style="position: absolute; top: 0.4in; right: 1in; font-size: 9px; color: white; z-index: 1001;"></div>
         <div class="content-section">${pageContent}</div>
     `).join('') : ''}
 
