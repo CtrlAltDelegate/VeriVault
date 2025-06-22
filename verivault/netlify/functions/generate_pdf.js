@@ -122,7 +122,7 @@ exports.handler = async (event, context) => {
     const filteredPages = pages.filter(page => page.trim().length > 100);
 
     console.log('📄 Intelligence report processing complete');
-    console.log('📊 Generated pages:', filteredPages.length);
+    console.log('📊 Generated pages:', validPages.length);
 
     // Generate pages with proper numbering and prevent blank pages
     let pagesHTML = '';
