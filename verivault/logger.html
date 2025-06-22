@@ -1,1 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeriVault Event Logger - Real-Time Security Monitoring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #0f172a 100%); }
+        .glass { backdrop-filter: blur(16px); background: rgba(255, 255, 255, 0.1); }
+        .event-item:hover { background: rgba(255, 255, 255, 0.1); }
+        .priority-low { background: rgba(34, 197, 94, 0.1); color: rgb(34, 197, 94); border-color: rgba(34, 197, 94, 0.3); }
+        .priority-medium { background: rgba(251, 191, 36, 0.1); color: rgb(251, 191, 36); border-color: rgba(251, 191, 36, 0.3); }
+        .priority-high { background: rgba(239, 68, 68, 0.1); color: rgb(239, 68, 68); border-color: rgba(239, 68, 68, 0.3); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-white">VeriVault Event Logger</h1>
+                    <p class="text-cyan-400 text-sm">Real-Time Security Monitoring</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="window.open('/', '_blank')" class="flex items-center gap-2 px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Reports Dashboard
+                </button>
+                <button onclick="exportToCSV()" class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Export CSV
+                </button>
+            </div>
+        </div>
 
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Event Log -->
+            <div class="lg:col-span-2">
+                <div class="glass border border-white/20 rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold text-white">Live Event Log</h2>
+                        <div class="flex items-center gap-4">
+                            <!-- Search -->
+                            <div class="relative">
+                                <svg class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                                <input type="text" id="searchInput" placeholder="Search events..." oninput="filterEvents()" class="pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                            </div>
+                            
+                            <!-- Filter -->
+                            <select id="filterSelect" onchange="filterEvents()" class="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                                <option value="all">All Events</option>
+                                <option value="arrival">Staff Arrival</option>
+                                <option value="departure">Staff Departure</option>
+                                <option value="delivery">Delivery/Vendor</option>
+                                <option value="patrol">Patrol Check</option>
+                                <option value="incident">Security Incident</option>
+                                <option value="maintenance">Maintenance</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Events List -->
+                    <div id="eventsList" class="space-y-3 max-h-96 overflow-y-auto">
+                        <div class="text-center py-8 text-slate-400">
+                            <svg class="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <p>No events logged yet. Start by adding an event.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Event Panel -->
+            <div class="space-y-6">
+                <!-- Quick Add Button -->
+                <div id="quickAddButton" class="glass border border-white/20 rounded-2xl p-6 text-center">
+                    <button onclick="showAddForm()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Log New Event
+                    </button>
+                </div>
+
+                <!-- Add Event Form -->
+                <div id="addEventForm" class="glass border border-white/20 rounded-2xl p-6 hidden">
+                    <h3 class="text-lg font-bold text-white mb-4">Log New Event</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Event Type</label>
+                            <select id="eventType" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                                <option value="">Select type...</option>
+                                <option value="arrival">Staff Arrival</option>
+                                <option value="departure">Staff Departure</option>
+                                <option value="delivery">Delivery/Vendor</option>
+                                <option value="patrol">Patrol Check</option>
+                                <option value="incident">Security Incident</option>
+                                <option value="maintenance">Maintenance</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Description</label>
+                            <textarea id="eventDescription" placeholder="Describe the event..." class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400" rows="3"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Location</label>
+                            <input type="text" id="eventLocation" placeholder="Location (optional)" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Priority</label>
+                            <select id="eventPriority" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+
+                        <div class="flex gap-3 pt-4">
+                            <button onclick="addEvent()" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-2 px-4 rounded-lg font-semibold hover:from-green-600 hover:to-green-700 transition-all">
+                                Add Event
+                            </button>
+                            <button onclick="hideAddForm()" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="glass border border-white/20 rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">Today's Statistics</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">Total Events</span>
+                            <span id="totalEvents" class="text-white font-bold">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">High Priority</span>
+                            <span id="highPriorityEvents" class="text-red-400 font-bold">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">Incidents</span>
+                            <span id="incidentEvents" class="text-orange-400 font-bold">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let events = [];
+        let filteredEvents = [];
+
+        const eventTypes = {
+            arrival: { 
+                label: 'Staff Arrival', 
+                icon: '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>', 
+                color: 'bg-green-500' 
+            },
+            departure: { 
+                label: 'Staff Departure', 
+                icon: '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>', 
+                color: 'bg-blue-500' 
+            },
+            delivery: { 
+                label: 'Delivery/Vendor', 
+                icon: '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>', 
+                color: 'bg-purple-500' 
+            },
+            patrol: { 
+                label: 'Patrol Check', 
+                icon: '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>', 
+                color: 'bg-indigo-500' 
+            },
+            incident: { 
+                label: 'Security Incident', 
+                icon: '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>', 
+                color: 'bg-red-500' 
+            },
+            maintenance: { 
+                label: 'Maintenance', 
+                icon: '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>', 
+                color: 'bg-orange-500' 
+            },
+            other: { 
+                label: 'Other', 
+                icon: '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>', 
+                color: 'bg-gray-500' 
+            }
+        };
+
+        function showAddForm() {
+            document.getElementById('quickAddButton').classList.add('hidden');
+            document.getElementById('addEventForm').classList.remove('hidden');
+        }
+
+        function hideAddForm() {
+            document.getElementById('quickAddButton').classList.remove('hidden');
+            document.getElementById('addEventForm').classList.add('hidden');
+            clearForm();
+        }
+
+        function clearForm() {
+            document.getElementById('eventType').value = '';
+            document.getElementById('eventDescription').value = '';
+            document.getElementById('eventLocation').value = '';
+            document.getElementById('eventPriority').value = 'low';
+        }
+
+        function addEvent() {
+            const type = document.getElementById('eventType').value;
+            const description = document.getElementById('eventDescription').value;
+            const location = document.getElementById('eventLocation').value;
+            const priority = document.getElementById('eventPriority').value;
+
+            if (!type || !description) {
+                alert('Please fill in event type and description');
+                return;
+            }
+
+            const event = {
+                id: Date.now(),
+                type: type,
+                description: description,
+                location: location,
+                priority: priority,
+                timestamp: new Date().toISOString(),
+                time: new Date().toLocaleTimeString(),
+                date: new Date().toLocaleDateString()
+            };
+
+            events.unshift(event);
+            updateEventsList();
+            updateStatistics();
+            hideAddForm();
+        }
+
+        function updateEventsList() {
+            const eventsList = document.getElementById('eventsList');
+            
+            if (filteredEvents.length === 0) {
+                eventsList.innerHTML = `
+                    <div class="text-center py-8 text-slate-400">
+                        <svg class="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <p>No events match your current filter.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            eventsList.innerHTML = filteredEvents.map(event => {
+                const typeInfo = eventTypes[event.type];
+                return `
+                    <div class="glass border border-white/10 rounded-lg p-4 hover:bg-white/10 transition-colors event-item">
+                        <div class="flex items-start gap-4">
+                            <div class="${typeInfo.color} w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                ${typeInfo.icon}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="font-semibold text-white">${typeInfo.label}</h3>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-1 rounded-full text-xs font-medium border priority-${event.priority}">
+                                            ${event.priority.toUpperCase()}
+                                        </span>
+                                        <span class="text-xs text-slate-400">${event.time}</span>
+                                    </div>
+                                </div>
+                                <p class="text-slate-300 text-sm mb-2">${event.description}</p>
+                                ${event.location ? `
+                                    <div class="flex items-center gap-1 text-xs text-slate-400">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                        ${event.location}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterEvents() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filterType = document.getElementById('filterSelect').value;
+
+            filteredEvents = events.filter(event => {
+                const matchesSearch = event.description.toLowerCase().includes(searchTerm) ||
+                                    event.location.toLowerCase().includes(searchTerm);
+                const matchesFilter = filterType === 'all' || event.type === filterType;
+                return matchesSearch && matchesFilter;
+            });
+
+            updateEventsList();
+        }
+
+        function updateStatistics() {
+            document.getElementById('totalEvents').textContent = events.length;
+            document.getElementById('highPriorityEvents').textContent = events.filter(e => e.priority === 'high').length;
+            document.getElementById('incidentEvents').textContent = events.filter(e => e.type === 'incident').length;
+        }
+
+        function exportToCSV() {
+            if (events.length === 0) {
+                alert('No events to export');
+                return;
+            }
+
+            const csvContent = [
+                ['Timestamp', 'Type', 'Description', 'Location', 'Priority'].join(','),
+                ...events.map(event => [
+                    event.timestamp,
+                    eventTypes[event.type].label,
+                    `"${event.description}"`,
+                    `"${event.location}"`,
+                    event.priority
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `security-log-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize
+        filteredEvents = events;
+        updateEventsList();
+        updateStatistics();
+    </script>
+</body>
+</html>
