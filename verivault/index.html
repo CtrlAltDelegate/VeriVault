@@ -1,116 +1,289 @@
-import React, { useState } from 'react';
-import { Shield, FileText, AlertTriangle, Heart, Search, Car, Settings, ChevronDown, Calendar, User, Building, Clock } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeriVault - AI Security Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #0f172a 100%); }
+        .glass { backdrop-filter: blur(16px); background: rgba(255, 255, 255, 0.1); }
+        .card-hover:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="flex items-center justify-center gap-4 mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center shadow-xl">
+                    <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-4xl font-bold text-white">VeriVault</h1>
+                    <p class="text-cyan-400">AI Security Intelligence Platform</p>
+                </div>
+            </div>
+            <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+                Generate comprehensive security reports with AI-powered intelligence and professional formatting
+            </p>
+        </div>
 
-const VeriVault = () => {
-  const [selectedReportType, setSelectedReportType] = useState('');
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
-    clientName: '',
-    operationDate: new Date().toISOString().split('T')[0],
-    reportDate: new Date().toISOString().split('T')[0],
-    content: ''
-  });
+        <!-- Report Types Grid -->
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-2xl font-bold text-white mb-8 text-center">Select Report Type</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Daily Log -->
+                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('daily-log')">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white mb-2">Daily Log</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-sm text-slate-400">
+                        <span>Click to create report</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </div>
 
-  const reportTypes = [
-    {
-      id: 'daily-log',
-      title: 'Daily Log',
-      description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
-      icon: Calendar,
-      color: 'bg-blue-500',
-      fields: ['staffArrivals', 'deliveries', 'patrols', 'observations', 'incidents']
-    },
-    {
-      id: 'incident-medical',
-      title: 'Incident Report - Medical',
-      description: 'Medical emergencies, injuries, and health-related incidents requiring documentation',
-      icon: Heart,
-      color: 'bg-red-500',
-      fields: ['injuryType', 'location', 'witness', 'firstAid', 'emergencyServices']
-    },
-    {
-      id: 'incident-non-medical',
-      title: 'Incident Report - Non-Medical',
-      description: 'Security incidents including altercations, trespassing, and suspicious activities',
-      icon: AlertTriangle,
-      color: 'bg-orange-500',
-      fields: ['incidentType', 'location', 'personsInvolved', 'actions', 'followUp']
-    },
-    {
-      id: 'annual-security',
-      title: 'Annual Security Report',
-      description: 'Comprehensive threat analysis and long-term security recommendations',
-      icon: Shield,
-      color: 'bg-purple-500',
-      fields: ['threatAssessment', 'recommendations', 'budgetAnalysis', 'training', 'compliance']
-    },
-    {
-      id: 'systems-audit',
-      title: 'Security Systems Audit',
-      description: 'Equipment audit covering cameras, access controls, alarms, and monitoring systems',
-      icon: Settings,
-      color: 'bg-green-500',
-      fields: ['cameras', 'accessControl', 'alarms', 'monitoring', 'maintenance']
-    },
-    {
-      id: 'discrepancy',
-      title: 'Discrepancy Report',
-      description: 'Single-issue reports for equipment malfunctions and operational discrepancies',
-      icon: Search,
-      color: 'bg-yellow-500',
-      fields: ['equipment', 'issue', 'impact', 'priority', 'resolution']
-    },
-    {
-      id: 'vehicle-inspection',
-      title: 'Vehicle Inspection Report',
-      description: 'Mobile field agent vehicle condition and operational readiness assessment',
-      icon: Car,
-      color: 'bg-indigo-500',
-      fields: ['vehicleInfo', 'exterior', 'interior', 'mechanical', 'equipment']
-    }
-  ];
+                <!-- Medical Incident -->
+                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('incident-medical')">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white mb-2">Incident Report - Medical</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Medical emergencies, injuries, and health-related incidents requiring documentation</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-sm text-slate-400">
+                        <span>Click to create report</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </div>
 
-  const handleReportSelect = (reportType) => {
-    setSelectedReportType(reportType);
-    setShowForm(true);
-  };
+                <!-- Non-Medical Incident -->
+                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('incident-non-medical')">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white mb-2">Incident Report - Non-Medical</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Security incidents including altercations, trespassing, and suspicious activities</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-sm text-slate-400">
+                        <span>Click to create report</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </div>
 
-  const handleFormSubmit = async () => {
-    if (!formData.clientName || !formData.content) {
-      alert('Please fill in all required fields');
-      return;
-    }
-    
-    try {
-      const response = await fetch('/.netlify/functions/generate-pdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: formData.content,
-          clientName: formData.clientName,
-          reportDate: formData.reportDate,
-          reportType: selectedReportType
-        })
-      });
+                <!-- Annual Security -->
+                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('annual-security')">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white mb-2">Annual Security Report</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Comprehensive threat analysis and long-term security recommendations</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-sm text-slate-400">
+                        <span>Click to create report</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </div>
 
-      if (response.ok) {
-        const pdfHTML = await response.text();
-        const newWindow = window.open('', '_blank');
-        newWindow.document.write(pdfHTML);
-        newWindow.document.close();
-      }
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('Error generating report. Please try again.');
-    }
-  };
+                <!-- Systems Audit -->
+                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('systems-audit')">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white mb-2">Security Systems Audit</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Equipment audit covering cameras, access controls, alarms, and monitoring systems</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-sm text-slate-400">
+                        <span>Click to create report</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </div>
 
-  const getReportTemplate = (reportType) => {
-    const templates = {
-      'daily-log': `CLIENT: ${formData.clientName}
-DATE: ${formData.operationDate}
+                <!-- Discrepancy Report -->
+                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('discrepancy')">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white mb-2">Discrepancy Report</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Single-issue reports for equipment malfunctions and operational discrepancies</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-sm text-slate-400">
+                        <span>Click to create report</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Vehicle Inspection -->
+                <div class="glass border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer card-hover hover:shadow-xl" onclick="openReportForm('vehicle-inspection')">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-5 5-2-2M5 12l3 3 7-7"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white mb-2">Vehicle Inspection Report</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed">Mobile field agent vehicle condition and operational readiness assessment</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-sm text-slate-400">
+                        <span>Click to create report</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Access -->
+        <div class="max-w-4xl mx-auto mt-12 bg-white/5 rounded-2xl border border-white/10 p-8">
+            <div class="text-center">
+                <svg class="w-12 h-12 text-cyan-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <h3 class="text-xl font-semibold text-white mb-2">Need Real-Time Logging?</h3>
+                <p class="text-slate-300 mb-4">
+                    Access our Rapid Event Logger for live incident tracking and real-time security monitoring
+                </p>
+                <button onclick="window.open('/logger', '_blank')" class="px-6 py-3 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
+                    Open Event Logger →
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-12 text-slate-400">
+            <p>© 2025 VeriVault AI Security Intelligence • Classified Document Generation</p>
+        </div>
+    </div>
+
+    <!-- Report Form Modal (Hidden by default) -->
+    <div id="reportModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-6">
+            <div class="glass border border-white/20 rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-4">
+                        <div id="reportIcon" class="w-12 h-12 rounded-xl flex items-center justify-center">
+                            <!-- Icon will be inserted here -->
+                        </div>
+                        <div>
+                            <h2 id="reportTitle" class="text-2xl font-bold text-white"></h2>
+                            <p id="reportDescription" class="text-slate-300"></p>
+                        </div>
+                    </div>
+                    <button onclick="closeReportForm()" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
+                        ← Back to Reports
+                    </button>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                                Client Name
+                            </label>
+                            <input type="text" id="clientName" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400" placeholder="Enter client name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                Report Date
+                            </label>
+                            <input type="date" id="reportDate" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Report Content
+                        </label>
+                        <textarea id="reportContent" class="w-full h-96 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-mono text-sm" placeholder="Enter report details..." required></textarea>
+                    </div>
+
+                    <div class="flex gap-4 pt-4">
+                        <button onclick="generateReport()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Generate Classified Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentReportType = '';
+        
+        const reportData = {
+            'daily-log': {
+                title: 'Daily Log',
+                description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
+                color: 'bg-blue-500',
+                template: `CLIENT: [CLIENT_NAME]
+DATE: [REPORT_DATE]
 
 ═══════════════════════════════════════════════════
 RAW SECURITY LOG:
@@ -137,10 +310,14 @@ RAW SECURITY LOG:
 [Report on security equipment and systems]
 
 **RECOMMENDATIONS:**
-[Note any security improvements or concerns for follow-up]`,
-
-      'incident-medical': `CLIENT: ${formData.clientName}
-DATE: ${formData.operationDate}
+[Note any security improvements or concerns for follow-up]`
+            },
+            'incident-medical': {
+                title: 'Incident Report - Medical',
+                description: 'Medical emergencies, injuries, and health-related incidents requiring documentation',
+                color: 'bg-red-500',
+                template: `CLIENT: [CLIENT_NAME]
+DATE: [REPORT_DATE]
 
 ═══════════════════════════════════════════════════
 MEDICAL INCIDENT REPORT:
@@ -170,10 +347,14 @@ MEDICAL INCIDENT REPORT:
 [If ambulance/police called, include times and response]
 
 **FOLLOW-UP ACTIONS:**
-[Medical facility transport, family notification, etc.]`,
-
-      'incident-non-medical': `CLIENT: ${formData.clientName}
-DATE: ${formData.operationDate}
+[Medical facility transport, family notification, etc.]`
+            },
+            'incident-non-medical': {
+                title: 'Incident Report - Non-Medical',
+                description: 'Security incidents including altercations, trespassing, and suspicious activities',
+                color: 'bg-orange-500',
+                template: `CLIENT: [CLIENT_NAME]
+DATE: [REPORT_DATE]
 
 ═══════════════════════════════════════════════════
 SECURITY INCIDENT REPORT:
@@ -200,9 +381,13 @@ SECURITY INCIDENT REPORT:
 [Photos, video footage, physical evidence]
 
 **FOLLOW-UP REQUIRED:**
-[Investigation steps, policy changes, training needs]`,
-
-      'annual-security': `CLIENT: ${formData.clientName}
+[Investigation steps, policy changes, training needs]`
+            },
+            'annual-security': {
+                title: 'Annual Security Report',
+                description: 'Comprehensive threat analysis and long-term security recommendations',
+                color: 'bg-purple-500',
+                template: `CLIENT: [CLIENT_NAME]
 REPORTING PERIOD: ${new Date().getFullYear()}
 
 ═══════════════════════════════════════════════════
@@ -234,10 +419,14 @@ ANNUAL SECURITY ASSESSMENT:
 [Long-term security improvements and investments]
 
 **COMPLIANCE STATUS:**
-[Regulatory compliance and industry standards adherence]`,
-
-      'systems-audit': `CLIENT: ${formData.clientName}
-AUDIT DATE: ${formData.operationDate}
+[Regulatory compliance and industry standards adherence]`
+            },
+            'systems-audit': {
+                title: 'Security Systems Audit',
+                description: 'Equipment audit covering cameras, access controls, alarms, and monitoring systems',
+                color: 'bg-green-500',
+                template: `CLIENT: [CLIENT_NAME]
+AUDIT DATE: [REPORT_DATE]
 
 ═══════════════════════════════════════════════════
 SECURITY SYSTEMS AUDIT:
@@ -268,10 +457,14 @@ SECURITY SYSTEMS AUDIT:
 [Upgrades, repairs, or replacements needed]
 
 **COMPLIANCE NOTES:**
-[Adherence to security standards and regulations]`,
-
-      'discrepancy': `CLIENT: ${formData.clientName}
-DATE: ${formData.operationDate}
+[Adherence to security standards and regulations]`
+            },
+            'discrepancy': {
+                title: 'Discrepancy Report',
+                description: 'Single-issue reports for equipment malfunctions and operational discrepancies',
+                color: 'bg-yellow-500',
+                template: `CLIENT: [CLIENT_NAME]
+DATE: [REPORT_DATE]
 
 ═══════════════════════════════════════════════════
 DISCREPANCY REPORT:
@@ -300,11 +493,15 @@ DISCREPANCY REPORT:
 [Timeline for permanent fix]
 
 **WORKAROUND MEASURES:**
-[Alternative procedures until repair is complete]`,
-
-      'vehicle-inspection': `VEHICLE ID: [License/Fleet Number]
-INSPECTOR: ${formData.clientName || '[Inspector Name]'}
-DATE: ${formData.operationDate}
+[Alternative procedures until repair is complete]`
+            },
+            'vehicle-inspection': {
+                title: 'Vehicle Inspection Report',
+                description: 'Mobile field agent vehicle condition and operational readiness assessment',
+                color: 'bg-indigo-500',
+                template: `VEHICLE ID: [License/Fleet Number]
+INSPECTOR: [CLIENT_NAME]
+DATE: [REPORT_DATE]
 
 ═══════════════════════════════════════════════════
 VEHICLE INSPECTION REPORT:
@@ -336,186 +533,81 @@ VEHICLE INSPECTION REPORT:
 
 **RECOMMENDATIONS:**
 [Maintenance needs, safety concerns, equipment updates]`
-    };
+            }
+        };
 
-    return templates[reportType] || '';
-  };
+        function openReportForm(reportType) {
+            currentReportType = reportType;
+            const report = reportData[reportType];
+            
+            // Update modal content
+            document.getElementById('reportTitle').textContent = report.title;
+            document.getElementById('reportDescription').textContent = report.description;
+            document.getElementById('reportIcon').className = `w-12 h-12 ${report.color} rounded-xl flex items-center justify-center`;
+            
+            // Set default date
+            document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
+            
+            // Set template content
+            const template = report.template
+                .replace('[CLIENT_NAME]', '')
+                .replace('[REPORT_DATE]', new Date().toISOString().split('T')[0]);
+            document.getElementById('reportContent').value = template;
+            
+            // Show modal
+            document.getElementById('reportModal').classList.remove('hidden');
+        }
 
-  if (showForm) {
-    const currentReport = reportTypes.find(r => r.id === selectedReportType);
-    
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
-        <div className="container mx-auto px-6 py-8">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Shield className="w-7 h-7 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-white">VeriVault</h1>
-                <p className="text-cyan-400 text-sm">AI Security Intelligence</p>
-              </div>
-            </div>
-            <button
-              onClick={() => setShowForm(false)}
-              className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors"
-            >
-              ← Back to Reports
-            </button>
-          </div>
+        function closeReportForm() {
+            document.getElementById('reportModal').classList.add('hidden');
+            currentReportType = '';
+        }
 
-          {/* Form */}
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 p-8">
-              <div className="flex items-center gap-4 mb-6">
-                <div className={`w-12 h-12 ${currentReport?.color} rounded-xl flex items-center justify-center`}>
-                  {currentReport?.icon && <currentReport.icon className="w-6 h-6 text-white" />}
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-white">{currentReport?.title}</h2>
-                  <p className="text-slate-300">{currentReport?.description}</p>
-                </div>
-              </div>
+        async function generateReport() {
+            const clientName = document.getElementById('clientName').value;
+            const reportDate = document.getElementById('reportDate').value;
+            const content = document.getElementById('reportContent').value;
+            
+            if (!clientName || !content) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/.netlify/functions/generate-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        clientName: clientName,
+                        reportDate: reportDate,
+                        reportType: currentReportType
+                    })
+                });
 
-              <div className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
-                      <User className="w-4 h-4 inline mr-2" />
-                      Client Name
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.clientName}
-                      onChange={(e) => setFormData({...formData, clientName: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                      placeholder="Enter client name"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
-                      <Calendar className="w-4 h-4 inline mr-2" />
-                      Report Date
-                    </label>
-                    <input
-                      type="date"
-                      value={formData.reportDate}
-                      onChange={(e) => setFormData({...formData, reportDate: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                      required
-                    />
-                  </div>
-                </div>
+                if (response.ok) {
+                    const pdfHTML = await response.text();
+                    const newWindow = window.open('', '_blank');
+                    newWindow.document.write(pdfHTML);
+                    newWindow.document.close();
+                    closeReportForm();
+                } else {
+                    alert('Error generating report. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating report. Please try again.');
+            }
+        }
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    <FileText className="w-4 h-4 inline mr-2" />
-                    Report Content
-                  </label>
-                  <textarea
-                    value={formData.content || getReportTemplate(selectedReportType)}
-                    onChange={(e) => setFormData({...formData, content: e.target.value})}
-                    className="w-full h-96 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-mono text-sm"
-                    placeholder="Enter report details..."
-                    required
-                  />
-                </div>
-
-                <div className="flex gap-4 pt-4">
-                  <button
-                    onClick={handleFormSubmit}
-                    className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg"
-                  >
-                    <FileText className="w-5 h-5 inline mr-2" />
-                    Generate Classified Report
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
-      <div className="container mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center shadow-xl">
-              <Shield className="w-9 h-9 text-white" />
-            </div>
-            <div>
-              <h1 className="text-4xl font-bold text-white">VeriVault</h1>
-              <p className="text-cyan-400">AI Security Intelligence Platform</p>
-            </div>
-          </div>
-          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            Generate comprehensive security reports with AI-powered intelligence and professional formatting
-          </p>
-        </div>
-
-        {/* Report Types Grid */}
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-white mb-8 text-center">Select Report Type</h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {reportTypes.map((report) => {
-              const IconComponent = report.icon;
-              return (
-                <div
-                  key={report.id}
-                  onClick={() => handleReportSelect(report.id)}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all cursor-pointer group hover:scale-105 hover:shadow-xl"
-                >
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className={`w-12 h-12 ${report.color} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                      <IconComponent className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-white mb-2">{report.title}</h3>
-                      <p className="text-sm text-slate-300 leading-relaxed">{report.description}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between text-sm text-slate-400">
-                    <span>Click to create report</span>
-                    <ChevronDown className="w-4 h-4 group-hover:text-cyan-400 transition-colors" />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Quick Access */}
-        <div className="max-w-4xl mx-auto mt-12 bg-white/5 rounded-2xl border border-white/10 p-8">
-          <div className="text-center">
-            <Clock className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">Need Real-Time Logging?</h3>
-            <p className="text-slate-300 mb-4">
-              Access our Rapid Event Logger for live incident tracking and real-time security monitoring
-            </p>
-            <button 
-              onClick={() => window.open('/logger', '_blank')}
-              className="px-6 py-3 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors"
-            >
-              Open Event Logger →
-            </button>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="text-center mt-12 text-slate-400">
-          <p>© 2025 VeriVault AI Security Intelligence • Classified Document Generation</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default VeriVault;
+        // Close modal when clicking outside
+        document.getElementById('reportModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeReportForm();
+            }
+        });
+    </script>
+</body>
+</html>
