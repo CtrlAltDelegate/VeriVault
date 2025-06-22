@@ -1124,6 +1124,8 @@ Distribution is restricted to authorized personnel only.
             const clientName = document.getElementById('clientName').value || 'Client';
             const reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
             
+            console.log('Attempting PDF export with:', { clientName, reportDate, contentLength: reportContent.length });
+            
             try {
                 const response = await fetch('/.netlify/functions/generate_pdf', {
                     method: 'POST',
@@ -1137,34 +1139,44 @@ Distribution is restricted to authorized personnel only.
                     })
                 });
                 
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
                 if (response.ok) {
                     const htmlContent = await response.text();
+                    console.log('Received HTML content, length:', htmlContent.length);
+                    
+                    // Create blob and download
                     const blob = new Blob([htmlContent], { type: 'text/html' });
                     const url = URL.createObjectURL(blob);
+                    
+                    // Try to open in new window first (for print dialog)
                     const newWindow = window.open(url, '_blank');
+                    
                     if (!newWindow) {
+                        console.log('Popup blocked, using direct download');
+                        // Fallback to direct download
                         const a = document.createElement('a');
                         a.href = url;
                         a.download = `VeriVault_Report_${clientName.replace(/\s+/g, '_')}_${reportDate}.html`;
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
+                    } else {
+                        console.log('PDF opened in new window successfully');
                     }
+                    
                     URL.revokeObjectURL(url);
                 } else {
-                    // Fallback to text file
-                    const blob = new Blob([reportContent], { type: 'text/plain' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `VeriVault_Report_${clientName.replace(/\s+/g, '_')}_${reportDate}.txt`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
+                    console.error('Response not OK:', response.status, response.statusText);
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                    throw new Error(`Server error: ${response.status} - ${errorText}`);
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('PDF Export Error:', error);
+                alert(`PDF export failed: ${error.message}\n\nFalling back to text file download.`);
+                
                 // Fallback to text file with proper filename
                 const blob = new Blob([reportContent], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
