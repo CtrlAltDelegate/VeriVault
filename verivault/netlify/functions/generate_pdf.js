@@ -1,4 +1,71 @@
-<!DOCTYPE html>
+exports.handler = async (event, context) => {
+  // Set CORS headers
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'text/html'
+  };
+
+  // Handle preflight requests
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: ''
+    };
+  }
+
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      headers,
+      body: 'Method Not Allowed'
+    };
+  }
+
+  try {
+    const { content } = JSON.parse(event.body);
+    
+    if (!content) {
+      return {
+        statusCode: 400,
+        headers,
+        body: 'No content provided'
+      };
+    }
+
+    // Parse content to extract key information
+    const lines = content.split('\n');
+    let clientName = 'Confidential Client';
+    let reportDate = new Date().toLocaleDateString();
+    let reportType = 'Security Report';
+    let reportId = `VV-${Date.now()}`;
+    
+    // Extract client name and date from content
+    lines.forEach(line => {
+      if (line.includes('CLIENT:')) {
+        clientName = line.split('CLIENT:')[1]?.trim() || clientName;
+      }
+      if (line.includes('DATE:')) {
+        reportDate = line.split('DATE:')[1]?.trim() || reportDate;
+      }
+      if (line.includes('Report ID:')) {
+        reportId = line.split('Report ID:')[1]?.trim() || reportId;
+      }
+    });
+
+    // Clean up content for display
+    const cleanContent = content
+      .replace(/CLIENT:.*\n/g, '')
+      .replace(/DATE:.*\n/g, '')
+      .replace(/RAW SECURITY LOG:\n/g, '')
+      .replace(/═══.*\n/g, '')
+      .replace(/DOCUMENT AUTHENTICATION[\s\S]*$/g, '')
+      .trim();
+
+    // Generate professional HTML report
+    const htmlReport = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -46,6 +113,7 @@
             align-items: center;
             justify-content: space-between;
             z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .logo-section {
@@ -184,105 +252,14 @@
             color: #2E2E2E;
         }
 
-        .section {
+        .content-section {
             margin-bottom: 25px;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #0D1B2A;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #E1E5EA;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .executive-summary {
-            background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+            background: white;
             padding: 25px;
             border-radius: 8px;
             border: 1px solid #E1E5EA;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .executive-summary::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(to bottom, #3A86FF, #0D1B2A);
-            border-radius: 0 2px 2px 0;
-        }
-
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #e8f5e8;
-            color: #0d5016;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #22c55e;
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
-        }
-
-        .content-text {
-            line-height: 1.7;
-            margin-bottom: 15px;
-        }
-
-        .timestamp-log {
-            background: #fafafa;
-            padding: 20px;
-            border-radius: 6px;
-            border-left: 3px solid #3A86FF;
-            font-family: 'Courier New', monospace;
-            font-size: 10px;
-            line-height: 1.8;
             white-space: pre-wrap;
-        }
-
-        .recommendations {
-            background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #fed7aa;
-        }
-
-        .recommendations ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .recommendations li {
-            padding: 8px 0;
-            border-bottom: 1px solid #fed7aa;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .recommendations li::before {
-            content: "▸";
-            color: #ea580c;
-            font-weight: bold;
-            position: absolute;
-            left: 0;
+            line-height: 1.8;
         }
 
         .digital-signature {
@@ -307,13 +284,41 @@
             font-weight: 600;
         }
 
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 48px;
+            color: rgba(58, 134, 255, 0.05);
+            font-weight: 700;
+            z-index: -1;
+            user-select: none;
+            pointer-events: none;
+        }
+
         @media print {
             body { margin: 0; }
             .page { margin: 0; box-shadow: none; }
         }
+
+        @page {
+            margin: 0;
+            size: letter;
+        }
     </style>
+    <script>
+        window.onload = function() {
+            // Auto-trigger print dialog
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        };
+    </script>
 </head>
 <body>
+    <div class="watermark">VERIVAULT CONFIDENTIAL</div>
+    
     <div class="header">
         <div class="logo-section">
             <div class="logo-icon">🛡️</div>
@@ -324,98 +329,55 @@
         </div>
         <div class="header-info">
             <div class="classification">CONFIDENTIAL</div>
-            <div>Generated: <span id="currentDateTime"></span></div>
-            <div>Page 1 of 3</div>
+            <div>Generated: ${new Date().toLocaleString()}</div>
+            <div>Page 1 of 1</div>
         </div>
     </div>
 
     <div class="page">
         <div class="report-title">
             <h2>Security Operations Report</h2>
-            <div class="report-subtitle">Executive Protection Daily Summary</div>
+            <div class="report-subtitle">Professional Security Assessment</div>
         </div>
 
         <div class="meta-info">
             <div>
                 <div class="meta-item">
                     <span class="meta-label">Client</span>
-                    <span class="meta-value">Bankteller</span>
+                    <span class="meta-value">${clientName}</span>
                 </div>
                 <div class="meta-item">
                     <span class="meta-label">Report Date</span>
-                    <span class="meta-value">May 31, 2025</span>
+                    <span class="meta-value">${reportDate}</span>
                 </div>
                 <div class="meta-item">
-                    <span class="meta-label">Report Type</span>
-                    <span class="meta-value">Daily Summary</span>
+                    <span class="meta-label">Classification</span>
+                    <span class="meta-value">Confidential</span>
                 </div>
             </div>
             <div>
                 <div class="meta-item">
-                    <span class="meta-label">Security Level</span>
-                    <span class="meta-value">Executive Protection</span>
+                    <span class="meta-label">Generated By</span>
+                    <span class="meta-value">VeriVault AI</span>
                 </div>
                 <div class="meta-item">
-                    <span class="meta-label">Lead Agent</span>
-                    <span class="meta-value">Agent Ramirez</span>
+                    <span class="meta-label">Report ID</span>
+                    <span class="meta-value">${reportId}</span>
                 </div>
                 <div class="meta-item">
                     <span class="meta-label">Status</span>
-                    <span class="meta-value">✅ Operational</span>
+                    <span class="meta-value">✅ Verified</span>
                 </div>
             </div>
         </div>
 
-        <div class="executive-summary">
-            <div class="status-indicator">
-                <div class="status-dot"></div>
-                Security Status: Operational
-            </div>
-            <div class="section-title">Executive Summary</div>
-            <div class="content-text">
-                This report provides a comprehensive review of security operations for client Bankteller on May 31, 2025. The day was marked by routine patrols, hourly checks, and personnel changes. However, a significant security concern was identified during a patrol conducted by Agent Troy Ramirez at 0725 hours. The North-Side gate was found propped open with a trash can. All other checks and patrols reported no discrepancies, and all security equipment was operational throughout the day.
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Detailed Security Log</div>
-            <div class="content-text">
-                The security log for the day was initiated at 0600 hours with the changeover from the night shift to the day shift. The day shift was manned by Agents Marcus Bell and Troy Ramirez, while the night shift was handled by Agents Daniela Knox and Eli Sutton.
-            </div>
-            <div class="content-text">
-                Throughout the day, routine patrols were conducted by the agents, with no discrepancies observed except for the aforementioned security concern at 0725 hours. The perimeter was found secure during all patrols.
-            </div>
-            <div class="timestamp-log">0600: Day shift changeover - Agents Bell and Ramirez on duty
-0725: SECURITY CONCERN - North gate found propped open with trash can
-0730: North gate secured, trash can removed, perimeter check completed
-0900: Hourly perimeter patrol - All clear
-1000: Equipment check - All systems operational
-1200: Client departure for lunch meeting
-1215: Escort detail activated for client transport
-1400: Client return, premises secured
-1500: Afternoon patrol cycle initiated
-1800: Evening shift preparation
-2000: Day shift concluded</div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Security Assessment & Recommendations</div>
-            <div class="recommendations">
-                <ul>
-                    <li>Investigate North-Side gate incident - Review overnight surveillance footage</li>
-                    <li>Implement additional gate sensors with immediate alert capabilities</li>
-                    <li>Increase patrol frequency during shift changeover periods</li>
-                    <li>Conduct security briefing with all personnel regarding gate protocols</li>
-                    <li>Consider upgrading gate locking mechanism to prevent unauthorized propping</li>
-                </ul>
-            </div>
-        </div>
+        <div class="content-section">${cleanContent}</div>
 
         <div class="digital-signature">
             <div style="font-weight: 600; margin-bottom: 10px; color: #0D1B2A;">DOCUMENT AUTHENTICATION</div>
             <div class="signature-line">
                 <span>Report Generated:</span>
-                <span id="generationTime"></span>
+                <span>${new Date().toLocaleString()}</span>
             </div>
             <div class="signature-line">
                 <span>Generated by:</span>
@@ -423,7 +385,7 @@
             </div>
             <div class="signature-line">
                 <span>Report ID:</span>
-                <span class="report-id">VV-20250531-EP-001</span>
+                <span class="report-id">${reportId}</span>
             </div>
             <div class="signature-line">
                 <span>Digital Signature:</span>
@@ -447,12 +409,21 @@
             <div>support@verivault.ai | +1 (555) 123-4567</div>
         </div>
     </div>
-
-    <script>
-        // Set current date/time
-        const now = new Date();
-        document.getElementById('currentDateTime').textContent = now.toLocaleString();
-        document.getElementById('generationTime').textContent = now.toLocaleString();
-    </script>
 </body>
-</html>
+</html>`;
+
+    return {
+      statusCode: 200,
+      headers,
+      body: htmlReport
+    };
+
+  } catch (error) {
+    console.error('Error:', error);
+    return {
+      statusCode: 500,
+      headers,
+      body: `Error generating PDF: ${error.message}`
+    };
+  }
+};
