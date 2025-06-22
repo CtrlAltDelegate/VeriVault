@@ -94,9 +94,9 @@ exports.handler = async (event, context) => {
         .replace(/^([A-Z\s]{3,}):$/gm, '<h4 style="color: #1E3A8A; font-weight: 600; font-size: 14px; margin: 15px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">$1:</h4>')
         .trim();
 
-    // Implement intelligent pagination (approximately 600 words per page for better spacing)
+    // Implement smarter pagination - reduce words per page to ensure signature fits
     const words = cleanContent.split(' ').filter(word => word.trim().length > 0);
-    const wordsPerPage = 600;
+    const wordsPerPage = 500; // Reduced to leave more room for signature
     const pages = [];
     
     // Only create multiple pages if content is substantial
@@ -137,7 +137,6 @@ exports.handler = async (event, context) => {
             color: #1E3A8A;
             line-height: 1.6;
             font-size: 11pt;
-            counter-reset: pagenum;
             margin: 0;
             padding: 0;
         }
@@ -148,13 +147,22 @@ exports.handler = async (event, context) => {
             margin: 0 auto;
             background: white;
             position: relative;
-            padding: 1.3in 1in 1in 1in;
+            padding: 1.4in 1in 1in 1in;
             page-break-after: always;
             box-sizing: border-box;
         }
 
         .page:last-child {
             page-break-after: avoid;
+        }
+
+        .page-number {
+            position: absolute;
+            top: 0.6in;
+            right: 1in;
+            color: white;
+            font-size: 9px;
+            z-index: 1001;
         }
 
         /* CLASSIFIED HEADER */
@@ -384,15 +392,7 @@ exports.handler = async (event, context) => {
             letter-spacing: 3px;
         }
 
-        /* Page Counter */
-        .page-counter {
-            counter-increment: pagenum;
-        }
-
-        .page-counter::after {
-            content: "Page " counter(pagenum);
-        }
-
+        /* Page Counter - Remove CSS counters to avoid conflicts */
         @page {
             margin: 0;
             size: letter;
@@ -401,7 +401,6 @@ exports.handler = async (event, context) => {
         @media print {
             body { 
                 margin: 0; 
-                counter-reset: pagenum;
             }
             .page { 
                 margin: 0; 
@@ -447,11 +446,11 @@ exports.handler = async (event, context) => {
         <div class="header-info">
             <div class="classification">🔒 CLASSIFIED</div>
             <div>Generated: ${currentTimestamp}</div>
-            <div class="page-counter"></div>
         </div>
     </div>
 
-    <div class="page page-counter">
+    <div class="page">
+        <div class="page-number">Page 1</div>
         <div class="report-title">
             <h2>Intelligence Operations Report</h2>
             <div class="report-subtitle">Classified Security Assessment</div>
@@ -493,7 +492,8 @@ exports.handler = async (event, context) => {
         ${pages.length > 1 ? pages.slice(1).map((pageContent, index) => `
     </div>
     
-    <div class="page page-counter">
+    <div class="page">
+        <div class="page-number">Page ${index + 2}</div>
         <div class="content-section">${pageContent}</div>
     `).join('') : ''}
 
