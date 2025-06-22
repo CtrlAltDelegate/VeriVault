@@ -142,7 +142,7 @@ exports.handler = async (event, context) => {
             letter-spacing: -0.5px;
         }
 
-        .logo-text .tagline {
+            <div class="logo-text .tagline {
             font-size: 10px;
             opacity: 0.8;
             font-weight: 300;
@@ -324,11 +324,11 @@ exports.handler = async (event, context) => {
             <div class="logo-icon">🛡️</div>
             <div class="logo-text">
                 <h1>VeriVault</h1>
-                <div class="tagline">AI Security Intelligence Platform</div>
+                <div class="tagline">AI-Powered Executive Protection Reports</div>
             </div>
         </div>
         <div class="header-info">
-            <div class="classification">CONFIDENTIAL</div>
+            <div class="classification">🔒 CONFIDENTIAL</div>
             <div>Generated: ${new Date().toLocaleString()}</div>
             <div>Page 1 of 1</div>
         </div>
@@ -398,15 +398,15 @@ exports.handler = async (event, context) => {
     </div>
 
     <div class="footer">
-        <div class="footer-left">
+            <div class="footer-left">
             <div class="security-badge">AI-VERIFIED</div>
-            <span>VeriVault Security Intelligence Platform</span>
+            <span>VeriVault AI Security Platform</span>
         </div>
         <div style="text-align: center;">
             <div>CONFIDENTIAL - AUTHORIZED PERSONNEL ONLY</div>
         </div>
         <div style="text-align: right;">
-            <div>support@verivault.ai | +1 (555) 123-4567</div>
+            <div><a href="mailto:support@verivault.ai" style="color: inherit; text-decoration: none;">support@verivault.ai</a> | <span class="phone-desktop">+1 (555) 123-4567</span></div>
         </div>
     </div>
 </body>
