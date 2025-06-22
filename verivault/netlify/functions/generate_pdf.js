@@ -383,7 +383,7 @@ exports.handler = async (event, context) => {
             </div>
         </div>
 
-        <div class="content-section">${pages.length > 1 ? pages[0] : cleanContent}</div>
+        <div class="content-section">${pages.length > 0 ? pages[0] : cleanContent}</div>
 
         ${pages.length > 1 ? pages.slice(1).map((pageContent, index) => `
         </div>
@@ -431,6 +431,9 @@ exports.handler = async (event, context) => {
 </body>
 </html>`;
 
+    console.log('Generating HTML report...');
+    console.log('Content pages:', pages.length);
+
     return {
       statusCode: 200,
       headers,
@@ -438,7 +441,8 @@ exports.handler = async (event, context) => {
     };
 
   } catch (error) {
-    console.error('Error:', error);
+    console.error('PDF Generation Error:', error);
+    console.error('Error stack:', error.stack);
     return {
       statusCode: 500,
       headers,
