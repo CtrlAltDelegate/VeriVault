@@ -535,7 +535,7 @@
                 <div class="shield-icon">🛡️</div>
                 <div>
                     <h1>VeriVault</h1>
-                    <div class="subtitle">AI Security Intelligence Platform</div>
+                    <div class="subtitle">AI-Powered Executive Protection Reports</div>
                     <div class="premium-badge">Enterprise Grade</div>
                 </div>
             </div>
@@ -626,6 +626,7 @@ Example:
                 <h2>📊 Generated Security Report</h2>
                 <div class="report-content" id="reportContent"></div>
                 <button class="download-btn" id="downloadBtn">📥 Export Professional PDF</button>
+                <button class="download-btn" onclick="exportDocx()" style="background: linear-gradient(45deg, #7c3aed, #5b21b6); margin-left: 10px;">📄 Export Word Document</button>
             </div>
         </div>
     </div>
@@ -666,6 +667,7 @@ Example:
                 <div style="margin-top: 15px; opacity: 0.8;">Your professional security report is ready for export.</div>
             </div>
             <button class="view-report-btn" onclick="scrollToReport()">View Report</button>
+            <button class="download-btn" onclick="downloadPDF()" style="background: #22c55e; border: none; margin: 0 5px;">📥 Download PDF</button>
             <button class="close-success-btn" onclick="closeSuccessModal()">Close</button>
         </div>
     </div>
@@ -850,14 +852,43 @@ Distribution is restricted to authorized personnel only.
             document.getElementById('successModal').style.display = 'none';
         }
 
+        // Enhanced download functionality with proper filename
+        function downloadPDF() {
+            const clientName = document.getElementById('clientName').value || 'Client';
+            const reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
+            
+            document.getElementById('downloadBtn').click();
+        }
+
+        function exportDocx() {
+            const reportContent = document.getElementById('reportContent').textContent;
+            const clientName = document.getElementById('clientName').value || 'Client';
+            const reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
+            
+            // Create DOCX-compatible content
+            const docContent = `VeriVault Security Report\n\nClient: ${clientName}\nDate: ${reportDate}\n\n${reportContent}`;
+            
+            const blob = new Blob([docContent], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `VeriVault_Report_${clientName.replace(/\s+/g, '_')}_${reportDate}.docx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
         function scrollToReport() {
             closeSuccessModal();
             document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Download PDF functionality
+        // Download PDF functionality with improved filename
         document.getElementById('downloadBtn').addEventListener('click', async function() {
             const reportContent = document.getElementById('reportContent').textContent;
+            const clientName = document.getElementById('clientName').value || 'Client';
+            const reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
             
             try {
                 const response = await fetch('/.netlify/functions/generate_pdf', {
@@ -876,7 +907,7 @@ Distribution is restricted to authorized personnel only.
                     if (!newWindow) {
                         const a = document.createElement('a');
                         a.href = url;
-                        a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.html`;
+                        a.download = `VeriVault_Report_${clientName.replace(/\s+/g, '_')}_${reportDate}.html`;
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
@@ -888,7 +919,7 @@ Distribution is restricted to authorized personnel only.
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.txt`;
+                    a.download = `VeriVault_Report_${clientName.replace(/\s+/g, '_')}_${reportDate}.txt`;
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
@@ -896,12 +927,12 @@ Distribution is restricted to authorized personnel only.
                 }
             } catch (error) {
                 console.error('Error:', error);
-                // Fallback to text file
+                // Fallback to text file with proper filename
                 const blob = new Blob([reportContent], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `VeriVault-Report-${new Date().toISOString().split('T')[0]}.txt`;
+                a.download = `VeriVault_Report_${clientName.replace(/\s+/g, '_')}_${reportDate}.txt`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
