@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VeriVault - AI Security Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
     <div class="flex h-screen">
@@ -191,7 +192,7 @@
                     <div>
                         <button id="generateReportBtn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg relative overflow-hidden">
                             <span id="generateBtnText">
-                                📄 Generate Intelligent Report
+                                📄 Generate Daily Summary
                             </span>
                             <div id="generateBtnLoading" class="hidden">
                                 <span class="inline-block animate-spin">⚡</span>
@@ -199,7 +200,7 @@
                             </div>
                         </button>
                         <p class="text-slate-400 text-sm mt-2 text-center">
-                            <span id="generateBtnSubtext">Creates professional report with AI-enhanced insights when CSV data is available</span>
+                            <span id="generateBtnSubtext">Creates professional PDF report with AI-enhanced insights when CSV data is available</span>
                         </p>
                     </div>
                 </div>
@@ -375,7 +376,7 @@
         }
 
         function generateAIEnhancedReport(clientName, reportDate, baseContent, csvData) {
-            console.log('=== Generating AI-Enhanced Report ===');
+            console.log('=== Generating AI-Enhanced PDF Report ===');
             
             // Parse CSV data for insights
             var insights = analyzeCSVData(csvData);
@@ -413,12 +414,12 @@
             // Update the report content
             document.getElementById('reportContent').value = enhancedContent;
             
-            // Show success message
-            alert('🤖 AI-Enhanced Report Generated!\n\nYour report has been intelligently enhanced with:\n• Data analysis from ' + insights.recordCount + ' records\n• Pattern recognition insights\n• AI-powered recommendations\n\nThe enhanced report is now ready for download or further editing.');
+            // Generate PDF
+            generatePDF(enhancedContent, clientName, reportDate, insights);
         }
 
         function generateStandardReport(clientName, reportDate, baseContent) {
-            console.log('=== Generating Standard Report ===');
+            console.log('=== Generating Standard PDF Report ===');
             
             var finalContent = baseContent
                 .replace(/\[CLIENT_NAME\]/g, clientName)
@@ -427,8 +428,162 @@
             // Update the report content
             document.getElementById('reportContent').value = finalContent;
             
-            // Show completion message
-            alert('📄 Standard Report Generated!\n\nYour professional security report is ready.\n\nTip: Upload CSV data before generating to unlock AI-enhanced insights and recommendations!');
+            // Generate PDF
+            generatePDF(finalContent, clientName, reportDate, null);
+        }
+
+        function generatePDF(content, clientName, reportDate, aiInsights) {
+            console.log('=== Creating PDF Document ===');
+            
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // PDF styling
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const margin = 20;
+                const lineHeight = 6;
+                let yPosition = margin;
+                
+                // Header with logo and branding
+                doc.setFillColor(30, 41, 59); // slate-800
+                doc.rect(0, 0, pageWidth, 40, 'F');
+                
+                // VeriVault logo and title
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(24);
+                doc.setFont('helvetica', 'bold');
+                doc.text('VeriVault', margin, 20);
+                
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'normal');
+                doc.text('AI Security Intelligence Platform', margin, 30);
+                
+                // Date and classification
+                doc.setTextColor(34, 197, 94); // green-500
+                doc.setFontSize(10);
+                doc.text('Generated: ' + new Date().toLocaleString(), pageWidth - 80, 20);
+                doc.setTextColor(239, 68, 68); // red-500
+                doc.text('CONFIDENTIAL', pageWidth - 80, 30);
+                
+                yPosition = 60;
+                
+                // Report title
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(18);
+                doc.setFont('helvetica', 'bold');
+                var reportTitle = reportData[currentReportType].title;
+                if (aiInsights) reportTitle += ' - AI Enhanced';
+                doc.text(reportTitle, margin, yPosition);
+                yPosition += 15;
+                
+                // Client and date info
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Client: ' + clientName, margin, yPosition);
+                doc.text('Report Date: ' + reportDate, pageWidth/2, yPosition);
+                yPosition += 15;
+                
+                // AI enhancement badge if applicable
+                if (aiInsights) {
+                    doc.setFillColor(147, 51, 234); // purple-600
+                    doc.roundedRect(margin, yPosition, 60, 12, 3, 3, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('🤖 AI ENHANCED', margin + 5, yPosition + 8);
+                    
+                    doc.setTextColor(147, 51, 234);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text('Confidence: ' + aiInsights.confidence + '%', margin + 70, yPosition + 8);
+                    yPosition += 20;
+                }
+                
+                // Content processing
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                
+                var lines = content.split('\n');
+                var maxWidth = pageWidth - (2 * margin);
+                
+                for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i];
+                    
+                    // Check for page break
+                    if (yPosition > pageHeight - 30) {
+                        doc.addPage();
+                        yPosition = margin;
+                        
+                        // Add page header
+                        doc.setFillColor(248, 250, 252); // slate-50
+                        doc.rect(0, 0, pageWidth, 20, 'F');
+                        doc.setTextColor(71, 85, 105); // slate-600
+                        doc.setFontSize(8);
+                        doc.text('VeriVault Security Report - Page ' + doc.getNumberOfPages(), margin, 12);
+                        doc.text('CONFIDENTIAL', pageWidth - 40, 12);
+                        yPosition = 30;
+                        doc.setTextColor(0, 0, 0);
+                        doc.setFontSize(10);
+                    }
+                    
+                    // Style different sections
+                    if (line.includes('===')) {
+                        doc.setFont('helvetica', 'bold');
+                        doc.setTextColor(59, 130, 246); // blue-500
+                        yPosition += 5;
+                    } else if (line.startsWith('•')) {
+                        doc.setFont('helvetica', 'normal');
+                        doc.setTextColor(0, 0, 0);
+                        line = '  ' + line; // Indent bullets
+                    } else if (line.trim() === '') {
+                        yPosition += 2;
+                        continue;
+                    } else {
+                        doc.setFont('helvetica', 'normal');
+                        doc.setTextColor(0, 0, 0);
+                    }
+                    
+                    // Split long lines
+                    var splitLines = doc.splitTextToSize(line, maxWidth);
+                    for (var j = 0; j < splitLines.length; j++) {
+                        doc.text(splitLines[j], margin, yPosition);
+                        yPosition += lineHeight;
+                    }
+                }
+                
+                // Footer on last page
+                yPosition = pageHeight - 20;
+                doc.setFillColor(248, 250, 252); // slate-50
+                doc.rect(0, yPosition - 5, pageWidth, 25, 'F');
+                doc.setTextColor(71, 85, 105); // slate-600
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'italic');
+                doc.text('This report was generated by VeriVault AI Security Intelligence Platform', margin, yPosition + 5);
+                doc.text('© 2025 VeriVault Systems - All Rights Reserved', margin, yPosition + 12);
+                
+                // Generate filename
+                var fileName = 'VeriVault_' + currentReportType.replace('-', '_') + '_' + 
+                              (clientName || 'Report') + '_' + reportDate + '.pdf';
+                
+                // Save the PDF
+                doc.save(fileName);
+                
+                // Show success message
+                setTimeout(function() {
+                    alert('📄 PDF Report Generated Successfully!\n\n' +
+                          '✅ File: ' + fileName + '\n' +
+                          '✅ Pages: ' + doc.getNumberOfPages() + '\n' +
+                          (aiInsights ? '✅ AI Enhanced with ' + aiInsights.recordCount + ' records analyzed\n' : '') +
+                          '✅ Status: Ready for download\n\n' +
+                          'Your professional security report has been saved to your Downloads folder.');
+                }, 500);
+                
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                alert('❌ PDF Generation Error\n\nThere was an issue creating the PDF. Please try again or check the console for details.');
+            }
         }
 
         function analyzeCSVData(csvData) {
