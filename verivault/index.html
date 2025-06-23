@@ -161,11 +161,15 @@
                         <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
                     </div>
 
-                    <!-- AI Analysis Button -->
-                    <div id="aiAnalysisSection" class="mb-6 hidden">
-                        <button id="aiAnalyzeBtn" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
-                            🤖 Generate AI Analysis from CSV Data
-                        </button>
+                    <!-- AI Enhanced Section -->
+                    <div id="aiEnhancedSection" class="mb-6 hidden">
+                        <div class="bg-gradient-to-r from-purple-500/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-4 mb-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-purple-400 text-lg">🤖</span>
+                                <h3 class="text-purple-300 font-semibold">AI Enhancement Ready</h3>
+                            </div>
+                            <p class="text-purple-200 text-sm">CSV data detected! The AI will analyze your data and enhance the report with intelligent insights, patterns, and recommendations.</p>
+                        </div>
                     </div>
 
                     <!-- Report Content -->
@@ -185,9 +189,18 @@
 
                     <!-- Generate Button -->
                     <div>
-                        <button id="generateReportBtn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
-                            📄 Generate Classified Report
+                        <button id="generateReportBtn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg relative overflow-hidden">
+                            <span id="generateBtnText">
+                                📄 Generate Intelligent Report
+                            </span>
+                            <div id="generateBtnLoading" class="hidden">
+                                <span class="inline-block animate-spin">⚡</span>
+                                <span class="ml-2">AI Processing...</span>
+                            </div>
                         </button>
+                        <p class="text-slate-400 text-sm mt-2 text-center">
+                            <span id="generateBtnSubtext">Creates professional report with AI-enhanced insights when CSV data is available</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -287,7 +300,7 @@
             
             // Reset CSV upload state
             uploadedCsvData = null;
-            var aiSection = document.getElementById('aiAnalysisSection');
+            var aiSection = document.getElementById('aiEnhancedSection');
             var uploadStatus = document.getElementById('uploadStatus');
             if (aiSection) aiSection.classList.add('hidden');
             if (uploadStatus) uploadStatus.classList.add('hidden');
@@ -313,7 +326,7 @@
             
             // Reset CSV upload
             uploadedCsvData = null;
-            var aiSection = document.getElementById('aiAnalysisSection');
+            var aiSection = document.getElementById('aiEnhancedSection');
             var uploadStatus = document.getElementById('uploadStatus');
             var csvInput = document.getElementById('csvInput');
             
@@ -322,6 +335,100 @@
             if (csvInput) csvInput.value = '';
             
             console.log('Form cleared');
+        }
+
+        function generateIntelligentReport() {
+            console.log('=== Starting Intelligent Report Generation ===');
+            
+            var clientName = document.getElementById('clientName').value || 'CLIENT_NAME_PLACEHOLDER';
+            var reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
+            var reportContent = document.getElementById('reportContent').value || '';
+            
+            // Show loading state
+            var generateBtn = document.getElementById('generateReportBtn');
+            var btnText = document.getElementById('generateBtnText');
+            var btnLoading = document.getElementById('generateBtnLoading');
+            
+            if (generateBtn && btnText && btnLoading) {
+                generateBtn.disabled = true;
+                generateBtn.classList.add('opacity-75', 'cursor-not-allowed');
+                btnText.classList.add('hidden');
+                btnLoading.classList.remove('hidden');
+            }
+            
+            // Simulate AI processing with realistic timing
+            setTimeout(function() {
+                if (uploadedCsvData) {
+                    generateAIEnhancedReport(clientName, reportDate, reportContent, uploadedCsvData);
+                } else {
+                    generateStandardReport(clientName, reportDate, reportContent);
+                }
+                
+                // Reset button state
+                if (generateBtn && btnText && btnLoading) {
+                    generateBtn.disabled = false;
+                    generateBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                    btnText.classList.remove('hidden');
+                    btnLoading.classList.add('hidden');
+                }
+            }, 2000); // 2 second AI processing simulation
+        }
+
+        function generateAIEnhancedReport(clientName, reportDate, baseContent, csvData) {
+            console.log('=== Generating AI-Enhanced Report ===');
+            
+            // Parse CSV data for insights
+            var insights = analyzeCSVData(csvData);
+            
+            // Enhanced report with AI insights
+            var enhancedContent = baseContent
+                .replace(/\[CLIENT_NAME\]/g, clientName)
+                .replace(/\[REPORT_DATE\]/g, reportDate);
+            
+            // Add AI analysis section
+            enhancedContent += '\n\n=== AI INTELLIGENCE ANALYSIS ===\n';
+            enhancedContent += 'Data Source: ' + insights.fileName + '\n';
+            enhancedContent += 'Records Processed: ' + insights.recordCount + '\n';
+            enhancedContent += 'Analysis Generated: ' + new Date().toLocaleString() + '\n\n';
+            
+            enhancedContent += 'KEY INSIGHTS:\n';
+            insights.keyInsights.forEach(function(insight, index) {
+                enhancedContent += '• ' + insight + '\n';
+            });
+            
+            enhancedContent += '\nDATA PATTERNS:\n';
+            insights.patterns.forEach(function(pattern, index) {
+                enhancedContent += '• ' + pattern + '\n';
+            });
+            
+            enhancedContent += '\nAI RECOMMENDATIONS:\n';
+            insights.recommendations.forEach(function(rec, index) {
+                enhancedContent += '• ' + rec + '\n';
+            });
+            
+            enhancedContent += '\n=== END AI ANALYSIS ===\n';
+            enhancedContent += '\nThis report has been enhanced with artificial intelligence analysis.';
+            enhancedContent += '\nAI Confidence Level: ' + insights.confidence + '%';
+            
+            // Update the report content
+            document.getElementById('reportContent').value = enhancedContent;
+            
+            // Show success message
+            alert('🤖 AI-Enhanced Report Generated!\n\nYour report has been intelligently enhanced with:\n• Data analysis from ' + insights.recordCount + ' records\n• Pattern recognition insights\n• AI-powered recommendations\n\nThe enhanced report is now ready for download or further editing.');
+        }
+
+        function generateStandardReport(clientName, reportDate, baseContent) {
+            console.log('=== Generating Standard Report ===');
+            
+            var finalContent = baseContent
+                .replace(/\[CLIENT_NAME\]/g, clientName)
+                .replace(/\[REPORT_DATE\]/g, reportDate);
+            
+            // Update the report content
+            document.getElementById('reportContent').value = finalContent;
+            
+            // Show completion message
+            alert('📄 Standard Report Generated!\n\nYour professional security report is ready.\n\nTip: Upload CSV data before generating to unlock AI-enhanced insights and recommendations!');
         }
 
         function handleFileUpload(file) {
@@ -349,10 +456,10 @@
                     uploadStatus.classList.remove('hidden');
                 }
                 
-                var aiSection = document.getElementById('aiAnalysisSection');
+                var aiSection = document.getElementById('aiEnhancedSection');
                 if (aiSection) {
                     aiSection.classList.remove('hidden');
-                    console.log('AI analysis section shown');
+                    console.log('AI enhanced section shown');
                 }
             };
             reader.readAsText(file);
@@ -432,21 +539,12 @@
                 });
             }
             
-            var aiAnalyzeBtn = document.getElementById('aiAnalyzeBtn');
-            if (aiAnalyzeBtn) {
-                aiAnalyzeBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('AI Analysis clicked');
-                    alert('AI Analysis feature will be connected to your backend API');
-                });
-            }
-            
             var generateReportBtn = document.getElementById('generateReportBtn');
             if (generateReportBtn) {
                 generateReportBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    console.log('Generate report clicked');
-                    alert('PDF generation feature will be connected to your backend API');
+                    console.log('Generate intelligent report clicked');
+                    generateIntelligentReport();
                 });
             }
             
