@@ -75,7 +75,7 @@ function submitSecurityAudit() {
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-slate-300 mb-2">Property Type</label>
-                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                                         <option value="">Select type</option>
                                         <option value="residential_estate">Residential Estate</option>
                                         <option value="commercial">Commercial Building</option>
@@ -88,13 +88,36 @@ function submitSecurityAudit() {
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-slate-300 mb-2">Risk Level</label>
-                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                                         <option value="">Assess risk</option>
                                         <option value="low">Low Risk</option>
                                         <option value="medium">Medium Risk</option>
                                         <option value="high">High Risk</option>
                                         <option value="critical">Critical Risk</option>
                                     </select>
+                                </div>
+                            </div>
+
+                            <!-- File Upload Sections -->
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Top-Down View</label>
+                                    <div class="border-2 border-dashed border-cyan-400/30 rounded-lg p-4 text-center hover:border-cyan-400/50 transition-colors cursor-pointer bg-white/5">
+                                        <div class="text-3xl mb-2">🛰️</div>
+                                        <p class="text-slate-300 text-sm mb-1">Upload aerial view, Google Earth screenshot, or property layout</p>
+                                        <p class="text-slate-400 text-xs">PNG, JPG, PDF up to 10MB</p>
+                                        <input type="file" accept="image/*,.pdf" class="hidden" id="propertyTopDownUpload">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Current Camera Locations & Views</label>
+                                    <div class="border-2 border-dashed border-green-400/30 rounded-lg p-4 text-center hover:border-green-400/50 transition-colors cursor-pointer bg-white/5">
+                                        <div class="text-3xl mb-2">📹</div>
+                                        <p class="text-slate-300 text-sm mb-1">Upload photos of existing cameras and their current views</p>
+                                        <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
+                                        <input type="file" accept="image/*" multiple class="hidden" id="currentCamerasUpload">
+                                    </div>
                                 </div>
                             </div>
 
@@ -142,7 +165,7 @@ function submitSecurityAudit() {
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
-                                <select id="auditBudgetRange" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <select id="auditBudgetRange" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                                     <option value="">Select budget</option>
                                     <option value="2500-5000">$2,500 - $5,000</option>
                                     <option value="5000-10000">$5,000 - $10,000</option>
@@ -285,7 +308,7 @@ function submitSecurityAudit() {
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">Report Package</label>
-                            <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                            <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                                 <option value="starter">Starter Audit - $799</option>
                                 <option value="premium">Premium Audit - $2,499</option>
                                 <option value="enterprise">Enterprise Audit - $5,999</option>
@@ -375,7 +398,7 @@ function submitSecurityAudit() {
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-slate-300 mb-2">Property Type</label>
-                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                                         <option value="">Select property type</option>
                                         <option value="residential">Residential Estate</option>
                                         <option value="commercial">Commercial Building</option>
@@ -413,7 +436,7 @@ function submitSecurityAudit() {
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
-                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                                         <option value="">Select budget range</option>
                                         <option value="5k">$2,500 - $5,000</option>
                                         <option value="10k">$5,000 - $10,000</option>
@@ -1237,6 +1260,46 @@ function submitSecurityAudit() {
             
             // Set premium package as default selected
             selectAuditPackage('premium');
+
+            // Setup file upload handlers for audit tool
+            var propertyTopDownUpload = document.getElementById('propertyTopDownUpload');
+            var currentCamerasUpload = document.getElementById('currentCamerasUpload');
+            
+            if (propertyTopDownUpload) {
+                var topDownArea = propertyTopDownUpload.parentElement;
+                topDownArea.addEventListener('click', function() {
+                    propertyTopDownUpload.click();
+                });
+                
+                propertyTopDownUpload.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        var file = e.target.files[0];
+                        topDownArea.innerHTML = `
+                            <div class="text-3xl mb-2">✅</div>
+                            <p class="text-green-400 text-sm mb-1">Top-down view uploaded: ${file.name}</p>
+                            <p class="text-slate-400 text-xs">Click to change file</p>
+                        `;
+                    }
+                });
+            }
+            
+            if (currentCamerasUpload) {
+                var camerasArea = currentCamerasUpload.parentElement;
+                camerasArea.addEventListener('click', function() {
+                    currentCamerasUpload.click();
+                });
+                
+                currentCamerasUpload.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        var fileCount = e.target.files.length;
+                        camerasArea.innerHTML = `
+                            <div class="text-3xl mb-2">✅</div>
+                            <p class="text-green-400 text-sm mb-1">${fileCount} camera image(s) uploaded</p>
+                            <p class="text-slate-400 text-xs">Click to change files</p>
+                        `;
+                    }
+                });
+            }
             
             console.log('=== VeriVault Dashboard Ready ===');
         });
@@ -1259,8 +1322,8 @@ function submitSecurityAudit() {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
-    <!-- Top Navigation Tabs -->
-    <div class="bg-slate-800/50 backdrop-blur-sm border-b border-white/10">
+    <!-- Top Navigation Tabs - Moved to very top -->
+    <div class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex space-x-8">
                 <button id="tabReports" class="tab-button active py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400/10">
@@ -1525,7 +1588,7 @@ function submitSecurityAudit() {
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
-                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                                         <option value="">Select action</option>
                                         <option value="arrived">Arrived</option>
                                         <option value="departed">Departed</option>
@@ -1561,7 +1624,7 @@ function submitSecurityAudit() {
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                                 <div>
                                     <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
-                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                                         <option value="">Select action</option>
                                         <option value="arrived">Arrived</option>
                                         <option value="departed">Departed</option>
@@ -1622,7 +1685,7 @@ function submitSecurityAudit() {
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                                 <div>
                                     <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
-                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                                         <option value="">Select action</option>
                                         <option value="arrived">Arrived</option>
                                         <option value="departed">Departed</option>
