@@ -6,38 +6,42 @@
     <title>VeriVault - AI Security Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #0f172a 100%); }
-        .glass { backdrop-filter: blur(16px); background: rgba(255, 255, 255, 0.1); }
-        .sidebar-item:hover { background: rgba(255, 255, 255, 0.1); }
-        .sidebar-item.active { background: rgba(59, 130, 246, 0.3); border-left: 4px solid #3b82f6; }
-        .drag-area { border: 2px dashed rgba(156, 163, 175, 0.5); transition: all 0.3s ease; }
-        .drag-area.dragover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .sidebar-item.active {
+            background-color: rgba(59, 130, 246, 0.2) !important;
+            border-left: 3px solid #3b82f6;
+        }
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+        .drag-area.dragover {
+            border-color: #3b82f6 !important;
+            background-color: rgba(59, 130, 246, 0.1) !important;
+            transform: scale(1.02);
+        }
     </style>
 </head>
-<body class="gradient-bg min-h-screen">
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="w-80 glass border-r border-white/20 p-6 overflow-y-auto">
-            <!-- Header -->
+        <div class="w-80 bg-slate-800/50 backdrop-blur-sm border-r border-white/10 p-6">
+            <!-- Logo -->
             <div class="flex items-center gap-3 mb-8">
-                <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
                 </div>
                 <div>
                     <h1 class="text-xl font-bold text-white">VeriVault</h1>
-                    <p class="text-cyan-400 text-xs">AI Security Intelligence</p>
+                    <p class="text-sm text-cyan-400">AI Security Intelligence</p>
                 </div>
             </div>
 
-            <!-- Navigation -->
-            <nav class="space-y-2">
+            <!-- Report Types -->
+            <div class="space-y-2">
                 <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
                 
-                <div class="sidebar-item active p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('daily-log')">
+                <div class="sidebar-item active p-3 rounded-lg cursor-pointer transition-all" data-report="daily-log">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +55,7 @@
                     </div>
                 </div>
 
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('incident-medical')">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="incident-medical">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,7 +69,7 @@
                     </div>
                 </div>
 
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('incident-non-medical')">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="incident-non-medical">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +83,7 @@
                     </div>
                 </div>
 
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('annual-security')">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="annual-security">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +97,7 @@
                     </div>
                 </div>
 
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('systems-audit')">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="systems-audit">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +112,7 @@
                     </div>
                 </div>
 
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('discrepancy')">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="discrepancy">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +126,7 @@
                     </div>
                 </div>
 
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" onclick="selectReport('vehicle-inspection')">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="vehicle-inspection">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,7 +139,7 @@
                         </div>
                     </div>
                 </div>
-            </nav>
+            </div>
 
             <!-- Quick Actions -->
             <div class="mt-8 pt-6 border-t border-white/10">
@@ -150,27 +154,18 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 overflow-y-auto">
-            <div class="p-8">
+        <div class="flex-1 p-8">
+            <div class="max-w-4xl mx-auto">
                 <!-- Header -->
-                <div class="flex items-center justify-between mb-8">
-                    <div>
-                        <h2 id="reportTitle" class="text-3xl font-bold text-white">Daily Log</h2>
-                        <p id="reportDescription" class="text-slate-300 mt-1">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
-                    </div>
-                    <div class="flex gap-3">
-                        <button onclick="clearForm()" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
-                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                            </svg>
-                            Clear Form
-                        </button>
-                    </div>
+                <div class="mb-8">
+                    <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log</h2>
+                    <p id="reportDescription" class="text-slate-400">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
                 </div>
 
-                <!-- Form Content -->
-                <div class="max-w-4xl">
-                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <!-- Form -->
+                <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                    <!-- Basic Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">
                                 <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +173,7 @@
                                 </svg>
                                 Client Name
                             </label>
-                            <input type="text" id="clientName" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400" placeholder="Enter client name" required>
+                            <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">
@@ -187,7 +182,7 @@
                                 </svg>
                                 Report Date
                             </label>
-                            <input type="date" id="reportDate" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
+                            <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                         </div>
                     </div>
 
@@ -221,14 +216,24 @@
                     </div>
 
                     <!-- Report Content -->
-                    <div>
+                    <div class="mb-6">
                         <label class="block text-sm font-medium text-slate-300 mb-2">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
                             Report Content
                         </label>
-                        <textarea id="reportContent" class="w-full h-96 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-mono text-sm" placeholder="Enter report details or upload CSV for AI analysis..." required></textarea>
+                        <textarea id="reportContent" rows="15" placeholder="Enter report details or upload csv for AI analysis..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm"></textarea>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex gap-3">
+                        <button id="clearFormBtn" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357 2m15.357-2H15"/>
+                            </svg>
+                            Clear Form
+                        </button>
                     </div>
 
                     <!-- Generate Button -->
@@ -246,271 +251,296 @@
     </div>
 
     <script>
-        let currentReportType = 'daily-log';
-        let uploadedCsvData = null;
+        // Global variables
+        window.currentReportType = 'daily-log';
+        window.uploadedCsvData = null;
 
-        const reportData = {
+        // Report templates
+        window.reportData = {
             'daily-log': {
                 title: 'Daily Log',
                 description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
-                template: `CLIENT: [CLIENT_NAME]
-DATE: [REPORT_DATE]
+                template: `DAILY OPERATIONS LOG
 
-═══════════════════════════════════════════════════
-RAW SECURITY LOG:
-═══════════════════════════════════════════════════
+Client: [CLIENT_NAME]
+Date: [REPORT_DATE]
+Report Type: Daily Operations Summary
 
-**DAILY OPERATIONS LOG**
+OPERATIONAL OVERVIEW:
+• Staff deployment and assignments
+• Security checkpoint activities
+• Visitor management and access control
+• Equipment status and functionality
+• Notable incidents or observations
+• Communication logs
 
-**SHIFT SUMMARY:**
-[Enter shift times, personnel count, and general overview]
+RECOMMENDATIONS:
+• Continued monitoring protocols
+• Equipment maintenance schedules
+• Staff training updates
 
-**STAFF ARRIVALS & DEPARTURES:**
-[Log all personnel movements with times]
-
-**DELIVERIES & VISITORS:**
-[Document all external parties and deliveries]
-
-**PATROL REPORTS:**
-[Detail patrol routes, times, and observations]
-
-**INCIDENTS & OBSERVATIONS:**
-[Record any unusual events or security concerns]
-
-**SYSTEM STATUS:**
-[Report on security equipment and systems]
-
-**RECOMMENDATIONS:**
-[Note any security improvements or concerns for follow-up]`
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
             },
             'incident-medical': {
                 title: 'Medical Incident Report',
-                description: 'Medical emergencies, injuries, and health-related incidents requiring documentation',
-                template: `CLIENT: [CLIENT_NAME]
-DATE: [REPORT_DATE]
+                description: 'Detailed documentation for injury and emergency situations requiring medical response',
+                template: `MEDICAL INCIDENT REPORT
 
-═══════════════════════════════════════════════════
-MEDICAL INCIDENT REPORT:
-═══════════════════════════════════════════════════
+Client: [CLIENT_NAME]
+Date: [REPORT_DATE]
+Report Type: Medical Emergency Documentation
 
-**INCIDENT CLASSIFICATION:** Medical Emergency
+INCIDENT DETAILS:
+• Time and location of incident
+• Individuals involved and injuries sustained
+• Immediate response actions taken
+• Medical personnel contacted
+• Emergency services coordination
+• Witness statements and documentation
 
-**INJURED PARTY INFORMATION:**
-[Name, age, position/visitor status]
+MEDICAL RESPONSE:
+• First aid administered
+• Medical equipment utilized
+• Transport arrangements
+• Hospital/clinic notifications
+• Follow-up medical care
 
-**INJURY DETAILS:**
-[Type of injury, body parts affected, severity]
+PREVENTION MEASURES:
+• Risk assessment updates
+• Safety protocol improvements
+• Additional training requirements
 
-**INCIDENT LOCATION:**
-[Specific location where incident occurred]
-
-**TIME & CIRCUMSTANCES:**
-[Exact time and sequence of events leading to injury]
-
-**WITNESS INFORMATION:**
-[Names and contact details of witnesses]
-
-**FIRST AID PROVIDED:**
-[Details of immediate medical response]
-
-**EMERGENCY SERVICES:**
-[If ambulance/police called, include times and response]
-
-**FOLLOW-UP ACTIONS:**
-[Medical facility transport, family notification, etc.]`
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
             },
             'incident-non-medical': {
                 title: 'Security Incident Report',
-                description: 'Security incidents including altercations, trespassing, and suspicious activities',
-                template: `CLIENT: [CLIENT_NAME]
-DATE: [REPORT_DATE]
+                description: 'Documentation for security breaches, unauthorized access, and non-medical emergencies',
+                template: `SECURITY INCIDENT REPORT
 
-═══════════════════════════════════════════════════
-SECURITY INCIDENT REPORT:
-═══════════════════════════════════════════════════
+Client: [CLIENT_NAME]
+Date: [REPORT_DATE]
+Report Type: Non-Medical Security Incident
 
-**INCIDENT TYPE:** [Trespassing/Altercation/Suspicious Activity/Other]
+INCIDENT CLASSIFICATION:
+• Security breach assessment
+• Unauthorized access attempts
+• Equipment malfunction or damage
+• Suspicious activity documentation
+• Policy violations
+• Environmental hazards
 
-**LOCATION & TIME:**
-[Specific location and exact time of incident]
+RESPONSE ACTIONS:
+• Immediate containment measures
+• Law enforcement coordination
+• Evidence collection and preservation
+• Witness interviews
+• Damage assessment
+• Communication protocols
 
-**PERSONS INVOLVED:**
-[Names, descriptions, and roles of all parties]
+REMEDIATION PLAN:
+• Security enhancement recommendations
+• Policy updates and revisions
+• Additional monitoring requirements
+• Staff retraining initiatives
 
-**INCIDENT DESCRIPTION:**
-[Detailed chronological account of events]
-
-**WITNESS STATEMENTS:**
-[Names and accounts from witnesses]
-
-**ACTIONS TAKEN:**
-[Security response, law enforcement contact, etc.]
-
-**EVIDENCE COLLECTED:**
-[Photos, video footage, physical evidence]
-
-**FOLLOW-UP REQUIRED:**
-[Investigation steps, policy changes, training needs]`
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
             },
             'annual-security': {
-                title: 'Annual Security Report',
-                description: 'Comprehensive threat analysis and long-term security recommendations',
-                template: `CLIENT: [CLIENT_NAME]
-REPORTING PERIOD: ${new Date().getFullYear()}
+                title: 'Annual Security Assessment',
+                description: 'Comprehensive yearly security analysis including threat assessment and strategic planning',
+                template: `ANNUAL SECURITY ASSESSMENT
 
-═══════════════════════════════════════════════════
-ANNUAL SECURITY ASSESSMENT:
-═══════════════════════════════════════════════════
+Client: [CLIENT_NAME]
+Assessment Period: [REPORT_DATE]
+Report Type: Comprehensive Security Analysis
 
-**EXECUTIVE SUMMARY:**
-[High-level overview of security posture and key findings]
+THREAT LANDSCAPE ANALYSIS:
+• Current security environment assessment
+• Emerging threat identification
+• Risk probability and impact evaluation
+• Industry-specific security challenges
+• Regulatory compliance status
 
-**THREAT LANDSCAPE ANALYSIS:**
-[Current and emerging threats relevant to the facility]
+SECURITY INFRASTRUCTURE REVIEW:
+• Physical security systems evaluation
+• Personnel security protocols
+• Technology integration assessment
+• Communication systems analysis
+• Emergency response capabilities
 
-**INCIDENT REVIEW:**
-[Analysis of security incidents over the past year]
+STRATEGIC RECOMMENDATIONS:
+• Security enhancement priorities
+• Technology upgrade requirements
+• Training and development needs
+• Budget allocation recommendations
+• Implementation timeline
 
-**VULNERABILITY ASSESSMENT:**
-[Identified weaknesses in current security measures]
-
-**SYSTEM PERFORMANCE:**
-[Evaluation of security systems and equipment]
-
-**TRAINING & PERSONNEL:**
-[Security staff performance and training recommendations]
-
-**BUDGET ANALYSIS:**
-[Cost-benefit analysis of current security investments]
-
-**STRATEGIC RECOMMENDATIONS:**
-[Long-term security improvements and investments]
-
-**COMPLIANCE STATUS:**
-[Regulatory compliance and industry standards adherence]`
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
             },
             'systems-audit': {
-                title: 'Security Systems Audit',
-                description: 'Equipment audit covering cameras, access controls, alarms, and monitoring systems',
-                template: `CLIENT: [CLIENT_NAME]
-AUDIT DATE: [REPORT_DATE]
+                title: 'Systems Audit Report',
+                description: 'Technical evaluation of security equipment, technology infrastructure, and operational systems',
+                template: `SYSTEMS AUDIT REPORT
 
-═══════════════════════════════════════════════════
-SECURITY SYSTEMS AUDIT:
-═══════════════════════════════════════════════════
+Client: [CLIENT_NAME]
+Audit Date: [REPORT_DATE]
+Report Type: Technology and Equipment Assessment
 
-**CAMERA SYSTEMS:**
-[Status of all CCTV cameras, recording quality, blind spots]
+SYSTEM PERFORMANCE ANALYSIS:
+• Security camera network status
+• Access control system functionality
+• Communication equipment assessment
+• Monitoring software evaluation
+• Database integrity verification
 
-**ACCESS CONTROL:**
-[Card readers, locks, entry points, user permissions]
+EQUIPMENT INVENTORY:
+• Hardware condition assessment
+• Software version compliance
+• Maintenance schedule adherence
+• Replacement timeline planning
+• Warranty and support status
 
-**ALARM SYSTEMS:**
-[Intrusion detection, fire alarms, emergency systems]
+OPTIMIZATION RECOMMENDATIONS:
+• System upgrade priorities
+• Performance enhancement measures
+• Integration improvement opportunities
+• Cybersecurity strengthening
+• Operational efficiency gains
 
-**PERIMETER SECURITY:**
-[Fencing, gates, barriers, lighting]
-
-**MONITORING EQUIPMENT:**
-[Central monitoring station, backup systems, communications]
-
-**MAINTENANCE RECORDS:**
-[Recent repairs, scheduled maintenance, warranty status]
-
-**SYSTEM INTEGRATION:**
-[How various security systems work together]
-
-**RECOMMENDATIONS:**
-[Upgrades, repairs, or replacements needed]
-
-**COMPLIANCE NOTES:**
-[Adherence to security standards and regulations]`
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
             },
             'discrepancy': {
                 title: 'Discrepancy Report',
-                description: 'Single-issue reports for equipment malfunctions and operational discrepancies',
-                template: `CLIENT: [CLIENT_NAME]
-DATE: [REPORT_DATE]
+                description: 'Documentation of equipment issues, policy violations, and operational inconsistencies',
+                template: `DISCREPANCY REPORT
 
-═══════════════════════════════════════════════════
-DISCREPANCY REPORT:
-═══════════════════════════════════════════════════
+Client: [CLIENT_NAME]
+Report Date: [REPORT_DATE]
+Report Type: Operational Discrepancy Documentation
 
-**EQUIPMENT/SYSTEM:** [Specific item with malfunction]
+DISCREPANCY IDENTIFICATION:
+• Equipment malfunction details
+• Policy compliance violations
+• Procedural inconsistencies
+• Documentation irregularities
+• Performance standard deviations
 
-**DISCREPANCY IDENTIFIED:**
-[Detailed description of the problem or malfunction]
+IMPACT ASSESSMENT:
+• Operational effect evaluation
+• Security implications analysis
+• Cost impact determination
+• Timeline considerations
+• Risk level assessment
 
-**DISCOVERY TIME:**
-[When the issue was first noticed]
+CORRECTIVE ACTION PLAN:
+• Immediate remediation steps
+• Long-term solution development
+• Prevention strategy implementation
+• Monitoring and verification protocols
+• Responsibility assignments
 
-**IMPACT ASSESSMENT:**
-[How this affects security operations]
-
-**IMMEDIATE ACTIONS:**
-[Temporary measures taken to address the issue]
-
-**PRIORITY LEVEL:** [Low/Medium/High/Critical]
-
-**REPAIR REQUIREMENTS:**
-[Parts, labor, or external services needed]
-
-**ESTIMATED RESOLUTION:**
-[Timeline for permanent fix]
-
-**WORKAROUND MEASURES:**
-[Alternative procedures until repair is complete]`
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
             },
             'vehicle-inspection': {
                 title: 'Vehicle Inspection Report',
-                description: 'Mobile field agent vehicle condition and operational readiness assessment',
-                template: `VEHICLE ID: [License/Fleet Number]
-INSPECTOR: [CLIENT_NAME]
-DATE: [REPORT_DATE]
+                description: 'Comprehensive vehicle safety and operational readiness assessment for fleet management',
+                template: `VEHICLE INSPECTION REPORT
 
-═══════════════════════════════════════════════════
-VEHICLE INSPECTION REPORT:
-═══════════════════════════════════════════════════
+Client: [CLIENT_NAME]
+Inspection Date: [REPORT_DATE]
+Report Type: Fleet Vehicle Assessment
 
-**VEHICLE INFORMATION:**
-[Make, model, year, mileage, last service date]
+VEHICLE IDENTIFICATION:
+• Make, model, and year
+• Vehicle identification number
+• License plate information
+• Mileage and service history
+• Insurance and registration status
 
-**EXTERIOR INSPECTION:**
-[Body condition, lights, tires, mirrors, license plates]
+SAFETY INSPECTION:
+• Brake system functionality
+• Tire condition and pressure
+• Lighting system operation
+• Emergency equipment inventory
+• Communication device status
 
-**INTERIOR INSPECTION:**
-[Seats, controls, cleanliness, safety equipment]
+OPERATIONAL READINESS:
+• Fuel level and efficiency
+• Engine performance metrics
+• Maintenance schedule compliance
+• Driver assignment protocols
+• Route optimization capabilities
 
-**MECHANICAL SYSTEMS:**
-[Engine, transmission, brakes, steering, fluids]
-
-**SECURITY EQUIPMENT:**
-[Radio, emergency lights, first aid kit, tools]
-
-**FUEL & MAINTENANCE:**
-[Fuel level, oil level, scheduled maintenance due]
-
-**DEFICIENCIES NOTED:**
-[Any issues requiring attention or repair]
-
-**VEHICLE READINESS:**
-[Operational status and fitness for duty]
-
-**RECOMMENDATIONS:**
-[Maintenance needs, safety concerns, equipment updates]`
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
             }
         };
 
-        function selectReport(reportType) {
-            currentReportType = reportType;
-            const report = reportData[reportType];
+        // Main functions
+        window.selectReport = function(reportType) {
+            console.log('📋 Selecting report:', reportType);
+            
+            window.currentReportType = reportType;
+            const report = window.reportData[reportType];
+            
+            if (!report) {
+                console.error('❌ Report type not found:', reportType);
+                return;
+            }
             
             // Update active sidebar item
             document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-            event.target.closest('.sidebar-item').classList.add('active');
+            const targetItem = document.querySelector('[data-report="' + reportType + '"]');
+            if (targetItem) {
+                targetItem.classList.add('active');
+                console.log('✅ Updated active sidebar item');
+            }
             
             // Update main content
-            document.getElementById('reportTitle').textContent = report.title;
-            document.getElementById('reportDescription').textContent = report.description;
+            const titleElement = document.getElementById('reportTitle');
+            const descElement = document.getElementById('reportDescription');
+            const contentElement = document.getElementById('reportContent');
             
-            // Update
+            if (titleElement) titleElement.textContent = report.title;
+            if (descElement) descElement.textContent = report.description;
+            
+            // Update template content
+            if (contentElement) {
+                const clientName = document.getElementById('clientName').value || '';
+                const reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
+                
+                const template = report.template
+                    .replace('[CLIENT_NAME]', clientName)
+                    .replace('[REPORT_DATE]', reportDate);
+                contentElement.value = template;
+                console.log('✅ Updated report content');
+            }
+            
+            // Reset CSV upload state
+            window.uploadedCsvData = null;
+            const aiSection = document.getElementById('aiAnalysisSection');
+            const uploadStatus = document.getElementById('uploadStatus');
+            if (aiSection) aiSection.classList.add('hidden');
+            if (uploadStatus) uploadStatus.classList.add('hidden');
+        };
+
+        window.clearForm = function() {
+            console.log('🧹 Clearing form...');
+            
+            const clientName = document.getElementById('clientName');
+            const reportDate = document.getElementById('reportDate');
+            const reportContent = document.getElementById('reportContent');
+            
+            if (clientName) clientName.value = '';
+            if (reportDate) reportDate.value = new Date().toISOString().split('T')[0];
+            
+            // Reset to default template
+            const report = window.reportData[window.currentReportType];
+            if (reportContent && report) {
+                reportContent.value = report.template
