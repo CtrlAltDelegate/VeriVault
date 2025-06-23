@@ -251,12 +251,14 @@
     </div>
 
     <script>
+        console.log('Script starting...');
+        
         // Global variables
-        window.currentReportType = 'daily-log';
-        window.uploadedCsvData = null;
+        var currentReportType = 'daily-log';
+        var uploadedCsvData = null;
 
         // Report templates
-        window.reportData = {
+        var reportData = {
             'daily-log': {
                 title: 'Daily Log',
                 description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
@@ -483,64 +485,118 @@ Classification: CONFIDENTIAL`
         };
 
         // Main functions
-        window.selectReport = function(reportType) {
-            console.log('📋 Selecting report:', reportType);
+        function selectReport(reportType) {
+            console.log('Selecting report:', reportType);
             
-            window.currentReportType = reportType;
-            const report = window.reportData[reportType];
+            currentReportType = reportType;
+            var report = reportData[reportType];
             
             if (!report) {
-                console.error('❌ Report type not found:', reportType);
+                console.error('Report type not found:', reportType);
                 return;
             }
             
             // Update active sidebar item
-            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-            const targetItem = document.querySelector('[data-report="' + reportType + '"]');
+            var sidebarItems = document.querySelectorAll('.sidebar-item');
+            for (var i = 0; i < sidebarItems.length; i++) {
+                sidebarItems[i].classList.remove('active');
+            }
+            
+            var targetItem = document.querySelector('[data-report="' + reportType + '"]');
             if (targetItem) {
                 targetItem.classList.add('active');
-                console.log('✅ Updated active sidebar item');
+                console.log('Updated active sidebar item');
             }
             
             // Update main content
-            const titleElement = document.getElementById('reportTitle');
-            const descElement = document.getElementById('reportDescription');
-            const contentElement = document.getElementById('reportContent');
+            var titleElement = document.getElementById('reportTitle');
+            var descElement = document.getElementById('reportDescription');
+            var contentElement = document.getElementById('reportContent');
             
             if (titleElement) titleElement.textContent = report.title;
             if (descElement) descElement.textContent = report.description;
             
             // Update template content
             if (contentElement) {
-                const clientName = document.getElementById('clientName').value || '';
-                const reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
+                var clientName = document.getElementById('clientName').value || '';
+                var reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
                 
-                const template = report.template
+                var template = report.template
                     .replace('[CLIENT_NAME]', clientName)
                     .replace('[REPORT_DATE]', reportDate);
                 contentElement.value = template;
-                console.log('✅ Updated report content');
+                console.log('Updated report content');
             }
             
             // Reset CSV upload state
-            window.uploadedCsvData = null;
-            const aiSection = document.getElementById('aiAnalysisSection');
-            const uploadStatus = document.getElementById('uploadStatus');
+            uploadedCsvData = null;
+            var aiSection = document.getElementById('aiAnalysisSection');
+            var uploadStatus = document.getElementById('uploadStatus');
             if (aiSection) aiSection.classList.add('hidden');
             if (uploadStatus) uploadStatus.classList.add('hidden');
-        };
+        }
 
-        window.clearForm = function() {
-            console.log('🧹 Clearing form...');
+        function clearForm() {
+            console.log('Clearing form...');
             
-            const clientName = document.getElementById('clientName');
-            const reportDate = document.getElementById('reportDate');
-            const reportContent = document.getElementById('reportContent');
+            var clientName = document.getElementById('clientName');
+            var reportDate = document.getElementById('reportDate');
+            var reportContent = document.getElementById('reportContent');
             
             if (clientName) clientName.value = '';
             if (reportDate) reportDate.value = new Date().toISOString().split('T')[0];
             
             // Reset to default template
-            const report = window.reportData[window.currentReportType];
+            var report = reportData[currentReportType];
             if (reportContent && report) {
                 reportContent.value = report.template
+                    .replace('[CLIENT_NAME]', '')
+                    .replace('[REPORT_DATE]', new Date().toISOString().split('T')[0]);
+            }
+            
+            // Reset CSV upload
+            uploadedCsvData = null;
+            var aiSection = document.getElementById('aiAnalysisSection');
+            var uploadStatus = document.getElementById('uploadStatus');
+            var csvInput = document.getElementById('csvInput');
+            
+            if (aiSection) aiSection.classList.add('hidden');
+            if (uploadStatus) uploadStatus.classList.add('hidden');
+            if (csvInput) csvInput.value = '';
+            
+            console.log('Form cleared');
+        }
+
+        function handleFileUpload(file) {
+            console.log('Processing file:', file.name);
+            
+            var uploadStatus = document.getElementById('uploadStatus');
+            
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                if (uploadStatus) {
+                    uploadStatus.textContent = 'Please upload a CSV file only';
+                    uploadStatus.className = 'mt-2 text-sm text-red-400';
+                    uploadStatus.classList.remove('hidden');
+                }
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedCsvData = e.target.result;
+                console.log('CSV data loaded, length:', uploadedCsvData.length);
+                
+                if (uploadStatus) {
+                    uploadStatus.textContent = 'File uploaded: ' + file.name;
+                    uploadStatus.className = 'mt-2 text-sm text-green-400';
+                    uploadStatus.classList.remove('hidden');
+                }
+                
+                var aiSection = document.getElementById('aiAnalysisSection');
+                if (aiSection) {
+                    aiSection.classList.remove('hidden');
+                    console.log('AI analysis section shown');
+                }
+            };
+            reader.readAsText(file);
+        }
