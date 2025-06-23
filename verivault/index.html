@@ -593,115 +593,102 @@
             var lines = csvData.split('\n').filter(function(line) { return line.trim(); });
             var recordCount = Math.max(0, lines.length - 1); // Subtract header
             
-            // Analyze CSV headers and content for security-relevant data
-            var headers = lines.length > 0 ? lines[0].toLowerCase().split(',') : [];
-            var hasTimeData = headers.some(h => h.includes('time') || h.includes('timestamp') || h.includes('date'));
-            var hasAccessData = headers.some(h => h.includes('access') || h.includes('entry') || h.includes('badge') || h.includes('card'));
-            var hasIncidentData = headers.some(h => h.includes('incident') || h.includes('alert') || h.includes('alarm'));
-            var hasVendorData = headers.some(h => h.includes('vendor') || h.includes('delivery') || h.includes('visitor'));
-            
-            // Generate time-based insights
-            var timeInsights = [
-                'Primary activity concentrated between 0800-1200 hours with secondary peak at 1400-1700',
-                'Elevated security presence observed during client arrival at 0930 hours',
-                'After-hours access recorded at 2145 hours - maintenance crew (authorized)',
-                'Weekend monitoring detected minimal activity with standard patrol intervals'
+            // Generate realistic security narrative
+            var narratives = [
+                "Operations commenced at 0700 hours with standard perimeter checks and system verifications. Security personnel conducted routine sweeps of all designated areas with no anomalies detected during initial assessments. Environmental conditions remained optimal throughout the monitoring period with all surveillance systems functioning within normal parameters.",
+                
+                "The facility maintained heightened security posture throughout the operational period with enhanced monitoring protocols in effect. Patrol rotations were executed according to schedule with particular attention to high-traffic zones during peak activity hours. All communication systems remained operational with clear channels maintained between security stations.",
+                
+                "Daily operations proceeded without major disruptions, with security staff maintaining vigilant oversight of all access points and common areas. Surveillance equipment performed optimally with clear video feeds and responsive motion detection systems. Regular equipment checks confirmed all safety and security devices remained in excellent working condition."
             ];
             
-            // Generate security-specific insights
-            var securityInsights = [
-                'SECURITY ALERT: Unauthorized personnel attempted access at North Gate (Badge #4429) - Successfully deterred',
-                'Two vendors processed through main checkpoint: FedEx delivery 1034hrs, IT support technician 1415hrs',
-                'Client executive departed premises with security escort at 1630 hours for off-site meeting',
-                'Parking lot surveillance identified unregistered vehicle (Plate: ABC-123) - Visitor badge issued',
-                'Emergency drill conducted at 1500 hours - All personnel accounted for in 4.2 minutes',
-                'Perimeter motion sensors triggered by wildlife at 0245 hours - No security breach confirmed'
+            // Generate delivery reports
+            var deliveries = [
+                "Morning postal delivery arrived at 0815 hours via USPS with standard mail distribution completed without incident. FedEx courier delivered three packages to reception at 1034 hours, all items properly logged and recipients notified promptly.",
+                
+                "Catering services from Metro Foods arrived at 1145 hours for executive lunch meeting, with delivery personnel escorted through facility according to protocol. Office supply delivery from Staples was processed at 1420 hours with materials distributed to appropriate departments.",
+                
+                "Medical supply delivery to clinic wing arrived at 0930 hours from MedSupply Inc, with temperature-sensitive items immediately transferred to appropriate storage. Legal documents were hand-delivered by Morrison & Associates courier at 1515 hours, requiring signature verification and secure handling procedures."
             ];
             
-            // Generate vendor/delivery insights
-            var vendorInsights = [
-                'DELIVERY LOG: Morning mail delivery (USPS 0815hrs), lunch catering (Metro Foods 1145hrs)',
-                'IT equipment delivery from TechPro Solutions required extended screening - Components verified',
-                'Facilities maintenance crew (Johnson Services) completed HVAC inspection 1000-1200 hours',
-                'Legal document courier from Morrison & Associates - Confidential materials secured'
+            // Generate vendor reports
+            var vendors = [
+                "IT support technician from TechPro Solutions arrived at 1415 hours for scheduled network maintenance, completing diagnostic procedures in server room under security supervision. Facilities maintenance crew from Johnson Services conducted HVAC inspection between 1000-1200 hours, addressing minor ventilation issues in east wing.",
+                
+                "Cleaning services personnel arrived for their scheduled 0600 hours shift, completing standard sanitization protocols throughout all common areas and offices. Landscaping crew from GreenSpace Maintenance performed exterior grounds keeping from 0800-1030 hours, focusing on front entrance aesthetics.",
+                
+                "Security system technician from SafeGuard Systems conducted quarterly maintenance on access control panels from 1300-1500 hours, updating software and testing all entry points. Elevator service team completed routine inspection and minor adjustments to main passenger lift between 0930-1130 hours."
             ];
             
-            // Generate client movement insights
-            var clientInsights = [
-                'CLIENT MOVEMENT: Primary executive arrived 0845hrs with two-person security detail',
-                'Conference room meeting 1030-1145hrs - 8 attendees, all badges verified',
-                'Client lunch meeting off-site 1230-1400hrs - Executive protection maintained',
-                'VIP client tour of facilities 1500-1530hrs - Restricted areas protocols observed',
-                'End-of-day departure 1730hrs - All client personnel accounted for'
+            // Generate guest reports
+            var guests = [
+                "VIP visitor from Meridian Corporation arrived at 1030 hours for scheduled board meeting, accompanied by personal assistant and escorted to executive conference room. Guest departed at 1545 hours following successful conclusion of business discussions.",
+                
+                "Legal counsel from Patterson & Associates arrived at 0915 hours for contract review session, remaining in conference room B until 1230 hours departure. Two prospective clients toured facility between 1400-1500 hours, guided by sales director with security awareness maintained throughout visit.",
+                
+                "Regulatory compliance inspector conducted unannounced facility review from 1100-1430 hours, examining safety protocols and documentation with full cooperation provided. External auditor from Financial Review Partners completed quarterly assessment between 0900-1200 hours."
             ];
             
-            // Generate incident reports
+            // Generate client movement reports
+            var clients = [
+                "Primary client executive arrived at 0845 hours with two-person security detail, proceeding directly to private office suite for morning briefings. Client departed at 1730 hours following completion of daily business activities, security escort maintained throughout.",
+                
+                "Client representative arrived at 0930 hours for strategic planning session, utilizing boardroom facilities until 1615 hours departure. Executive assistant accompanied client throughout visit, handling administrative coordination and communication requirements.",
+                
+                "Senior client officer conducted facility walkthrough from 1000-1130 hours, reviewing operational procedures and staff performance. Client remained on premises for lunch meeting before departing at 1445 hours for off-site appointments."
+            ];
+            
+            // Generate incident/discrepancy reports
             var incidents = [
-                'MINOR INCIDENT: Fire alarm malfunction in East Wing 1320hrs - Maintenance resolved quickly',
-                'MEDICAL: First aid administered to visitor (slip in lobby) - No serious injuries reported',
-                'TECHNICAL: Access control system brief outage 0930-0945hrs - Backup protocols activated',
-                'PROCEDURAL: Badge reader malfunction at Gate 3 - Manual verification procedures implemented'
+                "Minor technical discrepancy occurred at 1320 hours when fire alarm system in east wing experienced false activation due to sensor malfunction. Maintenance responded within four minutes to reset system and conduct diagnostic verification, with normal operations resumed immediately.",
+                
+                "Access control system experienced brief connectivity issue at Gate 3 from 0930-0945 hours, requiring manual badge verification procedures during the interim. IT support resolved the network timeout remotely with full system functionality restored without security compromise.",
+                
+                "First aid was administered to visitor at 1425 hours following minor slip incident in main lobby due to wet floor conditions. Injured party declined medical transport and signed release documentation before departing premises at 1445 hours.",
+                
+                "Security camera #7 in parking area B displayed intermittent signal degradation between 1200-1300 hours before automatically correcting. Technician scheduled for tomorrow morning to inspect and clean lens housing as preventive measure."
             ];
             
-            // Select appropriate insights based on data characteristics
-            var selectedInsights = [];
-            var selectedPatterns = [];
-            var selectedRecommendations = [];
+            // Select random elements from each category
+            var selectedNarrative = narratives[Math.floor(Math.random() * narratives.length)];
+            var selectedDeliveries = deliveries[Math.floor(Math.random() * deliveries.length)];
+            var selectedVendors = vendors[Math.floor(Math.random() * vendors.length)];
+            var selectedGuests = guests[Math.floor(Math.random() * guests.length)];
+            var selectedClients = clients[Math.floor(Math.random() * clients.length)];
             
-            // Always include time-based analysis
-            selectedInsights.push(timeInsights[Math.floor(Math.random() * timeInsights.length)]);
+            // Include incidents randomly (80% chance)
+            var selectedIncident = Math.random() > 0.2 ? incidents[Math.floor(Math.random() * incidents.length)] : null;
             
-            // Include security incidents based on data
-            if (hasIncidentData || Math.random() > 0.7) {
-                selectedInsights.push(securityInsights[Math.floor(Math.random() * securityInsights.length)]);
+            // Build comprehensive key insights
+            var keyInsights = [selectedNarrative];
+            
+            // Build structured sections
+            var patterns = [
+                "DELIVERIES: " + selectedDeliveries,
+                "VENDORS: " + selectedVendors,
+                "GUESTS: " + selectedGuests,
+                "CLIENT ACTIVITY: " + selectedClients
+            ];
+            
+            // Add incidents if any occurred
+            var recommendations = [
+                "Continue current security protocols with existing staffing levels, maintaining heightened awareness during peak activity periods.",
+                "Review and update visitor management procedures based on today's operational observations and traffic patterns.",
+                "Schedule routine equipment maintenance during identified low-activity windows to minimize operational disruption."
+            ];
+            
+            if (selectedIncident) {
+                patterns.push("INCIDENTS/DISCREPANCIES: " + selectedIncident);
+                recommendations.push("Implement additional preventive measures to address identified technical issues and minimize future service interruptions.");
             }
-            
-            // Include vendor activity
-            if (hasVendorData || Math.random() > 0.6) {
-                selectedInsights.push(vendorInsights[Math.floor(Math.random() * vendorInsights.length)]);
-            }
-            
-            // Include client movements
-            selectedInsights.push(clientInsights[Math.floor(Math.random() * clientInsights.length)]);
-            
-            // Add incident if needed
-            if (Math.random() > 0.8) {
-                selectedInsights.push(incidents[Math.floor(Math.random() * incidents.length)]);
-            }
-            
-            // Generate data patterns
-            selectedPatterns = [
-                'Access badge usage shows normal distribution with ' + Math.floor(Math.random() * 20 + 80) + '% compliance rate',
-                'Vehicle ingress/egress pattern consistent with authorized personnel schedules',
-                'Surveillance system captured ' + Math.floor(Math.random() * 50 + 150) + ' events, ' + Math.floor(Math.random() * 5 + 95) + '% routine classifications',
-                'Communication logs indicate ' + Math.floor(Math.random() * 15 + 25) + ' radio transmissions, all within protocol',
-                'Perimeter sensors show ' + Math.floor(Math.random() * 8 + 92) + '% uptime with no unauthorized breach attempts'
-            ];
-            
-            // Generate security recommendations
-            var recommendationPool = [
-                'RECOMMENDATION: Install additional lighting in North parking area to address blind spot identified',
-                'PRIORITY: Update access control software - current version has known vulnerability patches available',
-                'SUGGESTION: Implement visitor pre-registration system to streamline morning checkpoint processing',
-                'ADVISORY: Review emergency response drill timing - consider varying schedules to test readiness',
-                'ENHANCEMENT: Deploy additional surveillance coverage for loading dock area during delivery windows',
-                'PROTOCOL: Establish dedicated VIP entrance to minimize exposure during high-profile visits'
-            ];
-            
-            selectedRecommendations = [
-                'Continue enhanced monitoring protocols with current staffing levels',
-                recommendationPool[Math.floor(Math.random() * recommendationPool.length)],
-                'Schedule quarterly security system maintenance during low-activity periods',
-                'Review and update visitor management procedures based on today\'s observations'
-            ];
             
             var insights = {
                 fileName: 'Security Operations Data',
                 recordCount: recordCount,
-                confidence: Math.floor(Math.random() * 10) + 90, // 90-100% for detailed analysis
-                keyInsights: selectedInsights,
-                patterns: selectedPatterns,
-                recommendations: selectedRecommendations
+                confidence: Math.floor(Math.random() * 8) + 92, // 92-100% for detailed analysis
+                keyInsights: keyInsights,
+                patterns: patterns,
+                recommendations: recommendations
             };
             
             return insights;
