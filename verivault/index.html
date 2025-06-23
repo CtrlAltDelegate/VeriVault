@@ -3,600 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VeriVault - AI Security Intelligence</title>
+    <title>VeriVault - Debug Test</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .sidebar-item.active {
-            background-color: rgba(59, 130, 246, 0.2) !important;
-            border-left: 3px solid #3b82f6;
-        }
-        .sidebar-item:hover {
-            background-color: rgba(255, 255, 255, 0.05) !important;
-        }
-        .drag-area.dragover {
-            border-color: #3b82f6 !important;
-            background-color: rgba(59, 130, 246, 0.1) !important;
-            transform: scale(1.02);
-        }
-    </style>
 </head>
-<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div class="w-80 bg-slate-800/50 backdrop-blur-sm border-r border-white/10 p-6">
-            <!-- Logo -->
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold text-white">VeriVault</h1>
-                    <p class="text-sm text-cyan-400">AI Security Intelligence</p>
-                </div>
+<body class="bg-slate-900 text-white p-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">VeriVault Dashboard - Debug Test</h1>
+        
+        <div class="space-y-4">
+            <button id="testBtn" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">
+                Test Button
+            </button>
+            
+            <div id="output" class="p-4 bg-slate-800 rounded min-h-20">
+                <p>Output will appear here...</p>
             </div>
-
-            <!-- Report Types -->
+            
             <div class="space-y-2">
-                <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
-                
-                <div class="sidebar-item active p-3 rounded-lg cursor-pointer transition-all" data-report="daily-log">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Daily Log</div>
-                            <div class="text-slate-400 text-xs">Daily operations summary</div>
-                        </div>
+                <h3 class="text-lg font-semibold">Test Sidebar Items:</h3>
+                <div class="space-y-1">
+                    <div class="sidebar-item bg-slate-700 p-2 rounded cursor-pointer hover:bg-slate-600" data-report="daily-log">
+                        Daily Log
                     </div>
-                </div>
-
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="incident-medical">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Medical Incident</div>
-                            <div class="text-slate-400 text-xs">Injury & emergency reports</div>
-                        </div>
+                    <div class="sidebar-item bg-slate-700 p-2 rounded cursor-pointer hover:bg-slate-600" data-report="incident-medical">
+                        Medical Incident
                     </div>
-                </div>
-
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="incident-non-medical">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Security Incident</div>
-                            <div class="text-slate-400 text-xs">Non-medical incidents</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="annual-security">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Annual Security</div>
-                            <div class="text-slate-400 text-xs">Threat analysis & planning</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="systems-audit">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Systems Audit</div>
-                            <div class="text-slate-400 text-xs">Equipment & technology</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="discrepancy">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Discrepancy Report</div>
-                            <div class="text-slate-400 text-xs">Equipment issues</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-item p-3 rounded-lg cursor-pointer transition-all" data-report="vehicle-inspection">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Vehicle Inspection</div>
-                            <div class="text-slate-400 text-xs">Fleet management</div>
-                        </div>
+                    <div class="sidebar-item bg-slate-700 p-2 rounded cursor-pointer hover:bg-slate-600" data-report="security-incident">
+                        Security Incident
                     </div>
                 </div>
             </div>
-
-            <!-- Quick Actions -->
-            <div class="mt-8 pt-6 border-t border-white/10">
-                <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Quick Actions</h3>
-                <button id="eventLoggerBtn" class="w-full flex items-center gap-3 p-3 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors">
-                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <span class="text-white font-medium">Event Logger</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="flex-1 p-8">
-            <div class="max-w-4xl mx-auto">
-                <!-- Header -->
-                <div class="mb-8">
-                    <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log</h2>
-                    <p id="reportDescription" class="text-slate-400">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
+            
+            <div class="space-y-2">
+                <h3 class="text-lg font-semibold">Test File Upload:</h3>
+                <div id="dropZone" class="border-2 border-dashed border-slate-600 p-6 rounded cursor-pointer hover:border-blue-500">
+                    Click here to test file upload
                 </div>
-
-                <!-- Form -->
-                <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
-                    <!-- Basic Info -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-2">
-                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                </svg>
-                                Client Name
-                            </label>
-                            <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-2">
-                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                                Report Date
-                            </label>
-                            <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                        </div>
-                    </div>
-
-                    <!-- CSV Upload Section -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-300 mb-2">
-                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                            </svg>
-                            Upload CSV Data for AI Analysis (Optional)
-                        </label>
-                        <div id="dropZone" class="drag-area w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors">
-                            <svg class="w-12 h-12 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                            </svg>
-                            <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
-                            <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
-                        </div>
-                        <input type="file" id="csvInput" accept=".csv" style="display: none;">
-                        <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
-                    </div>
-
-                    <!-- AI Analysis Button -->
-                    <div id="aiAnalysisSection" class="mb-6 hidden">
-                        <button id="aiAnalyzeBtn" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
-                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                            </svg>
-                            Generate AI Analysis from CSV Data
-                        </button>
-                    </div>
-
-                    <!-- Report Content -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-300 mb-2">
-                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                            Report Content
-                        </label>
-                        <textarea id="reportContent" rows="15" placeholder="Enter report details or upload csv for AI analysis..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm"></textarea>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="flex gap-3">
-                        <button id="clearFormBtn" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
-                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357 2m15.357-2H15"/>
-                            </svg>
-                            Clear Form
-                        </button>
-                    </div>
-
-                    <!-- Generate Button -->
-                    <div class="mt-6">
-                        <button id="generateReportBtn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
-                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                            Generate Classified Report
-                        </button>
-                    </div>
-                </div>
+                <input type="file" id="csvInput" style="display: none;">
             </div>
         </div>
     </div>
 
     <script>
-        console.log('Script starting...');
+        console.log('=== SCRIPT STARTING ===');
         
-        // Global variables
-        var currentReportType = 'daily-log';
-        var uploadedCsvData = null;
-
-        // Report templates
-        var reportData = {
-            'daily-log': {
-                title: 'Daily Log',
-                description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
-                template: `DAILY OPERATIONS LOG
-
-Client: [CLIENT_NAME]
-Date: [REPORT_DATE]
-Report Type: Daily Operations Summary
-
-OPERATIONAL OVERVIEW:
-• Staff deployment and assignments
-• Security checkpoint activities
-• Visitor management and access control
-• Equipment status and functionality
-• Notable incidents or observations
-• Communication logs
-
-RECOMMENDATIONS:
-• Continued monitoring protocols
-• Equipment maintenance schedules
-• Staff training updates
-
-Prepared by: VeriVault AI Security Intelligence
-Classification: CONFIDENTIAL`
-            },
-            'incident-medical': {
-                title: 'Medical Incident Report',
-                description: 'Detailed documentation for injury and emergency situations requiring medical response',
-                template: `MEDICAL INCIDENT REPORT
-
-Client: [CLIENT_NAME]
-Date: [REPORT_DATE]
-Report Type: Medical Emergency Documentation
-
-INCIDENT DETAILS:
-• Time and location of incident
-• Individuals involved and injuries sustained
-• Immediate response actions taken
-• Medical personnel contacted
-• Emergency services coordination
-• Witness statements and documentation
-
-MEDICAL RESPONSE:
-• First aid administered
-• Medical equipment utilized
-• Transport arrangements
-• Hospital/clinic notifications
-• Follow-up medical care
-
-PREVENTION MEASURES:
-• Risk assessment updates
-• Safety protocol improvements
-• Additional training requirements
-
-Prepared by: VeriVault AI Security Intelligence
-Classification: CONFIDENTIAL`
-            },
-            'incident-non-medical': {
-                title: 'Security Incident Report',
-                description: 'Documentation for security breaches, unauthorized access, and non-medical emergencies',
-                template: `SECURITY INCIDENT REPORT
-
-Client: [CLIENT_NAME]
-Date: [REPORT_DATE]
-Report Type: Non-Medical Security Incident
-
-INCIDENT CLASSIFICATION:
-• Security breach assessment
-• Unauthorized access attempts
-• Equipment malfunction or damage
-• Suspicious activity documentation
-• Policy violations
-• Environmental hazards
-
-RESPONSE ACTIONS:
-• Immediate containment measures
-• Law enforcement coordination
-• Evidence collection and preservation
-• Witness interviews
-• Damage assessment
-• Communication protocols
-
-REMEDIATION PLAN:
-• Security enhancement recommendations
-• Policy updates and revisions
-• Additional monitoring requirements
-• Staff retraining initiatives
-
-Prepared by: VeriVault AI Security Intelligence
-Classification: CONFIDENTIAL`
-            },
-            'annual-security': {
-                title: 'Annual Security Assessment',
-                description: 'Comprehensive yearly security analysis including threat assessment and strategic planning',
-                template: `ANNUAL SECURITY ASSESSMENT
-
-Client: [CLIENT_NAME]
-Assessment Period: [REPORT_DATE]
-Report Type: Comprehensive Security Analysis
-
-THREAT LANDSCAPE ANALYSIS:
-• Current security environment assessment
-• Emerging threat identification
-• Risk probability and impact evaluation
-• Industry-specific security challenges
-• Regulatory compliance status
-
-SECURITY INFRASTRUCTURE REVIEW:
-• Physical security systems evaluation
-• Personnel security protocols
-• Technology integration assessment
-• Communication systems analysis
-• Emergency response capabilities
-
-STRATEGIC RECOMMENDATIONS:
-• Security enhancement priorities
-• Technology upgrade requirements
-• Training and development needs
-• Budget allocation recommendations
-• Implementation timeline
-
-Prepared by: VeriVault AI Security Intelligence
-Classification: CONFIDENTIAL`
-            },
-            'systems-audit': {
-                title: 'Systems Audit Report',
-                description: 'Technical evaluation of security equipment, technology infrastructure, and operational systems',
-                template: `SYSTEMS AUDIT REPORT
-
-Client: [CLIENT_NAME]
-Audit Date: [REPORT_DATE]
-Report Type: Technology and Equipment Assessment
-
-SYSTEM PERFORMANCE ANALYSIS:
-• Security camera network status
-• Access control system functionality
-• Communication equipment assessment
-• Monitoring software evaluation
-• Database integrity verification
-
-EQUIPMENT INVENTORY:
-• Hardware condition assessment
-• Software version compliance
-• Maintenance schedule adherence
-• Replacement timeline planning
-• Warranty and support status
-
-OPTIMIZATION RECOMMENDATIONS:
-• System upgrade priorities
-• Performance enhancement measures
-• Integration improvement opportunities
-• Cybersecurity strengthening
-• Operational efficiency gains
-
-Prepared by: VeriVault AI Security Intelligence
-Classification: CONFIDENTIAL`
-            },
-            'discrepancy': {
-                title: 'Discrepancy Report',
-                description: 'Documentation of equipment issues, policy violations, and operational inconsistencies',
-                template: `DISCREPANCY REPORT
-
-Client: [CLIENT_NAME]
-Report Date: [REPORT_DATE]
-Report Type: Operational Discrepancy Documentation
-
-DISCREPANCY IDENTIFICATION:
-• Equipment malfunction details
-• Policy compliance violations
-• Procedural inconsistencies
-• Documentation irregularities
-• Performance standard deviations
-
-IMPACT ASSESSMENT:
-• Operational effect evaluation
-• Security implications analysis
-• Cost impact determination
-• Timeline considerations
-• Risk level assessment
-
-CORRECTIVE ACTION PLAN:
-• Immediate remediation steps
-• Long-term solution development
-• Prevention strategy implementation
-• Monitoring and verification protocols
-• Responsibility assignments
-
-Prepared by: VeriVault AI Security Intelligence
-Classification: CONFIDENTIAL`
-            },
-            'vehicle-inspection': {
-                title: 'Vehicle Inspection Report',
-                description: 'Comprehensive vehicle safety and operational readiness assessment for fleet management',
-                template: `VEHICLE INSPECTION REPORT
-
-Client: [CLIENT_NAME]
-Inspection Date: [REPORT_DATE]
-Report Type: Fleet Vehicle Assessment
-
-VEHICLE IDENTIFICATION:
-• Make, model, and year
-• Vehicle identification number
-• License plate information
-• Mileage and service history
-• Insurance and registration status
-
-SAFETY INSPECTION:
-• Brake system functionality
-• Tire condition and pressure
-• Lighting system operation
-• Emergency equipment inventory
-• Communication device status
-
-OPERATIONAL READINESS:
-• Fuel level and efficiency
-• Engine performance metrics
-• Maintenance schedule compliance
-• Driver assignment protocols
-• Route optimization capabilities
-
-Prepared by: VeriVault AI Security Intelligence
-Classification: CONFIDENTIAL`
+        function updateOutput(message) {
+            var output = document.getElementById('output');
+            if (output) {
+                output.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
             }
-        };
-
-        // Main functions
-        function selectReport(reportType) {
-            console.log('Selecting report:', reportType);
-            
-            currentReportType = reportType;
-            var report = reportData[reportType];
-            
-            if (!report) {
-                console.error('Report type not found:', reportType);
-                return;
-            }
-            
-            // Update active sidebar item
-            var sidebarItems = document.querySelectorAll('.sidebar-item');
-            for (var i = 0; i < sidebarItems.length; i++) {
-                sidebarItems[i].classList.remove('active');
-            }
-            
-            var targetItem = document.querySelector('[data-report="' + reportType + '"]');
-            if (targetItem) {
-                targetItem.classList.add('active');
-                console.log('Updated active sidebar item');
-            }
-            
-            // Update main content
-            var titleElement = document.getElementById('reportTitle');
-            var descElement = document.getElementById('reportDescription');
-            var contentElement = document.getElementById('reportContent');
-            
-            if (titleElement) titleElement.textContent = report.title;
-            if (descElement) descElement.textContent = report.description;
-            
-            // Update template content
-            if (contentElement) {
-                var clientName = document.getElementById('clientName').value || '';
-                var reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
-                
-                var template = report.template
-                    .replace('[CLIENT_NAME]', clientName)
-                    .replace('[REPORT_DATE]', reportDate);
-                contentElement.value = template;
-                console.log('Updated report content');
-            }
-            
-            // Reset CSV upload state
-            uploadedCsvData = null;
-            var aiSection = document.getElementById('aiAnalysisSection');
-            var uploadStatus = document.getElementById('uploadStatus');
-            if (aiSection) aiSection.classList.add('hidden');
-            if (uploadStatus) uploadStatus.classList.add('hidden');
         }
-
-        function clearForm() {
-            console.log('Clearing form...');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== DOM LOADED ===');
+            updateOutput('DOM Loaded Successfully');
             
-            var clientName = document.getElementById('clientName');
-            var reportDate = document.getElementById('reportDate');
-            var reportContent = document.getElementById('reportContent');
-            
-            if (clientName) clientName.value = '';
-            if (reportDate) reportDate.value = new Date().toISOString().split('T')[0];
-            
-            // Reset to default template
-            var report = reportData[currentReportType];
-            if (reportContent && report) {
-                reportContent.value = report.template
-                    .replace('[CLIENT_NAME]', '')
-                    .replace('[REPORT_DATE]', new Date().toISOString().split('T')[0]);
+            // Test basic button
+            var testBtn = document.getElementById('testBtn');
+            if (testBtn) {
+                testBtn.addEventListener('click', function() {
+                    console.log('=== TEST BUTTON CLICKED ===');
+                    updateOutput('Test button clicked!');
+                });
+                updateOutput('Test button event listener added');
             }
             
-            // Reset CSV upload
-            uploadedCsvData = null;
-            var aiSection = document.getElementById('aiAnalysisSection');
-            var uploadStatus = document.getElementById('uploadStatus');
+            // Test sidebar items
+            var sidebarItems = document.querySelectorAll('.sidebar-item');
+            console.log('Found sidebar items:', sidebarItems.length);
+            updateOutput('Found ' + sidebarItems.length + ' sidebar items');
+            
+            for (var i = 0; i < sidebarItems.length; i++) {
+                sidebarItems[i].addEventListener('click', function() {
+                    var reportType = this.getAttribute('data-report');
+                    console.log('=== SIDEBAR CLICKED ===', reportType);
+                    updateOutput('Sidebar clicked: ' + reportType);
+                    
+                    // Remove active class from all
+                    for (var j = 0; j < sidebarItems.length; j++) {
+                        sidebarItems[j].classList.remove('bg-blue-600');
+                        sidebarItems[j].classList.add('bg-slate-700');
+                    }
+                    
+                    // Add active class to clicked item
+                    this.classList.remove('bg-slate-700');
+                    this.classList.add('bg-blue-600');
+                });
+            }
+            updateOutput('Sidebar event listeners added');
+            
+            // Test file upload
+            var dropZone = document.getElementById('dropZone');
             var csvInput = document.getElementById('csvInput');
             
-            if (aiSection) aiSection.classList.add('hidden');
-            if (uploadStatus) uploadStatus.classList.add('hidden');
-            if (csvInput) csvInput.value = '';
-            
-            console.log('Form cleared');
-        }
-
-        function handleFileUpload(file) {
-            console.log('Processing file:', file.name);
-            
-            var uploadStatus = document.getElementById('uploadStatus');
-            
-            if (!file.name.toLowerCase().endsWith('.csv')) {
-                if (uploadStatus) {
-                    uploadStatus.textContent = 'Please upload a CSV file only';
-                    uploadStatus.className = 'mt-2 text-sm text-red-400';
-                    uploadStatus.classList.remove('hidden');
-                }
-                return;
+            if (dropZone && csvInput) {
+                dropZone.addEventListener('click', function() {
+                    console.log('=== DROP ZONE CLICKED ===');
+                    updateOutput('Drop zone clicked - opening file dialog');
+                    csvInput.click();
+                });
+                
+                csvInput.addEventListener('change', function(e) {
+                    console.log('=== FILE SELECTED ===');
+                    if (e.target.files.length > 0) {
+                        var file = e.target.files[0];
+                        updateOutput('File selected: ' + file.name + ' (' + file.size + ' bytes)');
+                    }
+                });
+                
+                updateOutput('File upload event listeners added');
             }
-
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedCsvData = e.target.result;
-                console.log('CSV data loaded, length:', uploadedCsvData.length);
-                
-                if (uploadStatus) {
-                    uploadStatus.textContent = 'File uploaded: ' + file.name;
-                    uploadStatus.className = 'mt-2 text-sm text-green-400';
-                    uploadStatus.classList.remove('hidden');
-                }
-                
-                var aiSection = document.getElementById('aiAnalysisSection');
-                if (aiSection) {
-                    aiSection.classList.remove('hidden');
-                    console.log('AI analysis section shown');
-                }
-            };
-            reader.readAsText(file);
-        }
+            
+            console.log('=== INITIALIZATION COMPLETE ===');
+            updateOutput('All event listeners attached successfully!');
+        });
+        
+        console.log('=== SCRIPT LOADED ===');
+    </script>
+</body>
+</html>
