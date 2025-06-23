@@ -3,122 +3,457 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VeriVault - Debug Test</title>
+    <title>VeriVault - AI Security Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-900 text-white p-8">
-    <div class="max-w-2xl mx-auto">
-        <h1 class="text-2xl font-bold mb-6">VeriVault Dashboard - Debug Test</h1>
-        
-        <div class="space-y-4">
-            <button id="testBtn" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">
-                Test Button
-            </button>
-            
-            <div id="output" class="p-4 bg-slate-800 rounded min-h-20">
-                <p>Output will appear here...</p>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-80 bg-slate-800/50 backdrop-blur-sm border-r border-white/10 p-6">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">V</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-white">VeriVault</h1>
+                    <p class="text-sm text-cyan-400">AI Security Intelligence</p>
+                </div>
             </div>
-            
+
+            <!-- Report Types -->
             <div class="space-y-2">
-                <h3 class="text-lg font-semibold">Test Sidebar Items:</h3>
-                <div class="space-y-1">
-                    <div class="sidebar-item bg-slate-700 p-2 rounded cursor-pointer hover:bg-slate-600" data-report="daily-log">
-                        Daily Log
+                <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
+                
+                <div class="sidebar-item active bg-blue-600 p-3 rounded-lg cursor-pointer transition-all hover:bg-blue-700" data-report="daily-log">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white text-sm">📅</span>
+                        </div>
+                        <div>
+                            <div class="text-white font-medium">Daily Log</div>
+                            <div class="text-blue-200 text-xs">Daily operations summary</div>
+                        </div>
                     </div>
-                    <div class="sidebar-item bg-slate-700 p-2 rounded cursor-pointer hover:bg-slate-600" data-report="incident-medical">
-                        Medical Incident
+                </div>
+
+                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="incident-medical">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white text-sm">🏥</span>
+                        </div>
+                        <div>
+                            <div class="text-white font-medium">Medical Incident</div>
+                            <div class="text-slate-400 text-xs">Injury & emergency reports</div>
+                        </div>
                     </div>
-                    <div class="sidebar-item bg-slate-700 p-2 rounded cursor-pointer hover:bg-slate-600" data-report="security-incident">
-                        Security Incident
+                </div>
+
+                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="incident-non-medical">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white text-sm">⚠️</span>
+                        </div>
+                        <div>
+                            <div class="text-white font-medium">Security Incident</div>
+                            <div class="text-slate-400 text-xs">Non-medical incidents</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="annual-security">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white text-sm">🛡️</span>
+                        </div>
+                        <div>
+                            <div class="text-white font-medium">Annual Security</div>
+                            <div class="text-slate-400 text-xs">Threat analysis & planning</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="systems-audit">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white text-sm">⚙️</span>
+                        </div>
+                        <div>
+                            <div class="text-white font-medium">Systems Audit</div>
+                            <div class="text-slate-400 text-xs">Equipment & technology</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="discrepancy">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white text-sm">🔍</span>
+                        </div>
+                        <div>
+                            <div class="text-white font-medium">Discrepancy Report</div>
+                            <div class="text-slate-400 text-xs">Equipment issues</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="vehicle-inspection">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white text-sm">🚗</span>
+                        </div>
+                        <div>
+                            <div class="text-white font-medium">Vehicle Inspection</div>
+                            <div class="text-slate-400 text-xs">Fleet management</div>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="space-y-2">
-                <h3 class="text-lg font-semibold">Test File Upload:</h3>
-                <div id="dropZone" class="border-2 border-dashed border-slate-600 p-6 rounded cursor-pointer hover:border-blue-500">
-                    Click here to test file upload
+
+            <!-- Quick Actions -->
+            <div class="mt-8 pt-6 border-t border-white/10">
+                <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Quick Actions</h3>
+                <button id="eventLoggerBtn" class="w-full flex items-center gap-3 p-3 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors">
+                    <span class="text-cyan-400 text-lg">⏰</span>
+                    <span class="text-white font-medium">Event Logger</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-8 overflow-y-auto">
+            <div class="max-w-4xl mx-auto">
+                <!-- Header -->
+                <div class="mb-8">
+                    <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log</h2>
+                    <p id="reportDescription" class="text-slate-400">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
                 </div>
-                <input type="file" id="csvInput" style="display: none;">
+
+                <!-- Form -->
+                <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                    <!-- Basic Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">
+                                👤 Client Name
+                            </label>
+                            <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">
+                                📅 Report Date
+                            </label>
+                            <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                        </div>
+                    </div>
+
+                    <!-- CSV Upload Section -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-300 mb-2">
+                            📊 Upload CSV Data for AI Analysis (Optional)
+                        </label>
+                        <div id="dropZone" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed">
+                            <div class="text-4xl mb-4">📁</div>
+                            <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
+                            <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
+                        </div>
+                        <input type="file" id="csvInput" accept=".csv" style="display: none;">
+                        <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
+                    </div>
+
+                    <!-- AI Analysis Button -->
+                    <div id="aiAnalysisSection" class="mb-6 hidden">
+                        <button id="aiAnalyzeBtn" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
+                            🤖 Generate AI Analysis from CSV Data
+                        </button>
+                    </div>
+
+                    <!-- Report Content -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-300 mb-2">
+                            📝 Report Content
+                        </label>
+                        <textarea id="reportContent" rows="15" placeholder="Enter report details or upload CSV for AI analysis..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm"></textarea>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex gap-3 mb-6">
+                        <button id="clearFormBtn" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
+                            🧹 Clear Form
+                        </button>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <div>
+                        <button id="generateReportBtn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
+                            📄 Generate Classified Report
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        console.log('=== SCRIPT STARTING ===');
+        console.log('=== VeriVault Dashboard Starting ===');
         
-        function updateOutput(message) {
-            var output = document.getElementById('output');
-            if (output) {
-                output.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+        // Global variables
+        var currentReportType = 'daily-log';
+        var uploadedCsvData = null;
+
+        // Report templates
+        var reportData = {
+            'daily-log': {
+                title: 'Daily Log',
+                description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
+                template: 'DAILY OPERATIONS LOG\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Daily Operations Summary\n\nOPERATIONAL OVERVIEW:\n• Staff deployment and assignments\n• Security checkpoint activities\n• Visitor management and access control\n• Equipment status and functionality\n• Notable incidents or observations\n• Communication logs\n\nRECOMMENDATIONS:\n• Continued monitoring protocols\n• Equipment maintenance schedules\n• Staff training updates\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'incident-medical': {
+                title: 'Medical Incident Report',
+                description: 'Detailed documentation for injury and emergency situations requiring medical response',
+                template: 'MEDICAL INCIDENT REPORT\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Medical Emergency Documentation\n\nINCIDENT DETAILS:\n• Time and location of incident\n• Individuals involved and injuries sustained\n• Immediate response actions taken\n• Medical personnel contacted\n• Emergency services coordination\n• Witness statements and documentation\n\nMEDICAL RESPONSE:\n• First aid administered\n• Medical equipment utilized\n• Transport arrangements\n• Hospital/clinic notifications\n• Follow-up medical care\n\nPREVENTION MEASURES:\n• Risk assessment updates\n• Safety protocol improvements\n• Additional training requirements\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'incident-non-medical': {
+                title: 'Security Incident Report',
+                description: 'Documentation for security breaches, unauthorized access, and non-medical emergencies',
+                template: 'SECURITY INCIDENT REPORT\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Non-Medical Security Incident\n\nINCIDENT CLASSIFICATION:\n• Security breach assessment\n• Unauthorized access attempts\n• Equipment malfunction or damage\n• Suspicious activity documentation\n• Policy violations\n• Environmental hazards\n\nRESPONSE ACTIONS:\n• Immediate containment measures\n• Law enforcement coordination\n• Evidence collection and preservation\n• Witness interviews\n• Damage assessment\n• Communication protocols\n\nREMEDIATION PLAN:\n• Security enhancement recommendations\n• Policy updates and revisions\n• Additional monitoring requirements\n• Staff retraining initiatives\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'annual-security': {
+                title: 'Annual Security Assessment',
+                description: 'Comprehensive yearly security analysis including threat assessment and strategic planning',
+                template: 'ANNUAL SECURITY ASSESSMENT\n\nClient: [CLIENT_NAME]\nAssessment Period: [REPORT_DATE]\nReport Type: Comprehensive Security Analysis\n\nTHREAT LANDSCAPE ANALYSIS:\n• Current security environment assessment\n• Emerging threat identification\n• Risk probability and impact evaluation\n• Industry-specific security challenges\n• Regulatory compliance status\n\nSECURITY INFRASTRUCTURE REVIEW:\n• Physical security systems evaluation\n• Personnel security protocols\n• Technology integration assessment\n• Communication systems analysis\n• Emergency response capabilities\n\nSTRATEGIC RECOMMENDATIONS:\n• Security enhancement priorities\n• Technology upgrade requirements\n• Training and development needs\n• Budget allocation recommendations\n• Implementation timeline\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'systems-audit': {
+                title: 'Systems Audit Report',
+                description: 'Technical evaluation of security equipment, technology infrastructure, and operational systems',
+                template: 'SYSTEMS AUDIT REPORT\n\nClient: [CLIENT_NAME]\nAudit Date: [REPORT_DATE]\nReport Type: Technology and Equipment Assessment\n\nSYSTEM PERFORMANCE ANALYSIS:\n• Security camera network status\n• Access control system functionality\n• Communication equipment assessment\n• Monitoring software evaluation\n• Database integrity verification\n\nEQUIPMENT INVENTORY:\n• Hardware condition assessment\n• Software version compliance\n• Maintenance schedule adherence\n• Replacement timeline planning\n• Warranty and support status\n\nOPTIMIZATION RECOMMENDATIONS:\n• System upgrade priorities\n• Performance enhancement measures\n• Integration improvement opportunities\n• Cybersecurity strengthening\n• Operational efficiency gains\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'discrepancy': {
+                title: 'Discrepancy Report',
+                description: 'Documentation of equipment issues, policy violations, and operational inconsistencies',
+                template: 'DISCREPANCY REPORT\n\nClient: [CLIENT_NAME]\nReport Date: [REPORT_DATE]\nReport Type: Operational Discrepancy Documentation\n\nDISCREPANCY IDENTIFICATION:\n• Equipment malfunction details\n• Policy compliance violations\n• Procedural inconsistencies\n• Documentation irregularities\n• Performance standard deviations\n\nIMPACT ASSESSMENT:\n• Operational effect evaluation\n• Security implications analysis\n• Cost impact determination\n• Timeline considerations\n• Risk level assessment\n\nCORRECTIVE ACTION PLAN:\n• Immediate remediation steps\n• Long-term solution development\n• Prevention strategy implementation\n• Monitoring and verification protocols\n• Responsibility assignments\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'vehicle-inspection': {
+                title: 'Vehicle Inspection Report',
+                description: 'Comprehensive vehicle safety and operational readiness assessment for fleet management',
+                template: 'VEHICLE INSPECTION REPORT\n\nClient: [CLIENT_NAME]\nInspection Date: [REPORT_DATE]\nReport Type: Fleet Vehicle Assessment\n\nVEHICLE IDENTIFICATION:\n• Make, model, and year\n• Vehicle identification number\n• License plate information\n• Mileage and service history\n• Insurance and registration status\n\nSAFETY INSPECTION:\n• Brake system functionality\n• Tire condition and pressure\n• Lighting system operation\n• Emergency equipment inventory\n• Communication device status\n\nOPERATIONAL READINESS:\n• Fuel level and efficiency\n• Engine performance metrics\n• Maintenance schedule compliance\n• Driver assignment protocols\n• Route optimization capabilities\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
             }
+        };
+
+        function selectReport(reportType) {
+            console.log('=== Selecting report:', reportType, '===');
+            
+            currentReportType = reportType;
+            var report = reportData[reportType];
+            
+            if (!report) {
+                console.error('Report type not found:', reportType);
+                return;
+            }
+            
+            // Update active sidebar item
+            var sidebarItems = document.querySelectorAll('.sidebar-item');
+            for (var i = 0; i < sidebarItems.length; i++) {
+                sidebarItems[i].classList.remove('active', 'bg-blue-600');
+                sidebarItems[i].classList.add('bg-slate-700');
+            }
+            
+            var targetItem = document.querySelector('[data-report="' + reportType + '"]');
+            if (targetItem) {
+                targetItem.classList.remove('bg-slate-700');
+                targetItem.classList.add('active', 'bg-blue-600');
+                console.log('Updated active sidebar item');
+            }
+            
+            // Update main content
+            var titleElement = document.getElementById('reportTitle');
+            var descElement = document.getElementById('reportDescription');
+            var contentElement = document.getElementById('reportContent');
+            
+            if (titleElement) titleElement.textContent = report.title;
+            if (descElement) descElement.textContent = report.description;
+            
+            // Update template content
+            if (contentElement) {
+                var clientName = document.getElementById('clientName').value || '';
+                var reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
+                
+                var template = report.template
+                    .replace(/\[CLIENT_NAME\]/g, clientName)
+                    .replace(/\[REPORT_DATE\]/g, reportDate);
+                contentElement.value = template;
+                console.log('Updated report content');
+            }
+            
+            // Reset CSV upload state
+            uploadedCsvData = null;
+            var aiSection = document.getElementById('aiAnalysisSection');
+            var uploadStatus = document.getElementById('uploadStatus');
+            if (aiSection) aiSection.classList.add('hidden');
+            if (uploadStatus) uploadStatus.classList.add('hidden');
         }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('=== DOM LOADED ===');
-            updateOutput('DOM Loaded Successfully');
+
+        function clearForm() {
+            console.log('=== Clearing form ===');
             
-            // Test basic button
-            var testBtn = document.getElementById('testBtn');
-            if (testBtn) {
-                testBtn.addEventListener('click', function() {
-                    console.log('=== TEST BUTTON CLICKED ===');
-                    updateOutput('Test button clicked!');
-                });
-                updateOutput('Test button event listener added');
+            var clientName = document.getElementById('clientName');
+            var reportDate = document.getElementById('reportDate');
+            var reportContent = document.getElementById('reportContent');
+            
+            if (clientName) clientName.value = '';
+            if (reportDate) reportDate.value = new Date().toISOString().split('T')[0];
+            
+            // Reset to default template
+            var report = reportData[currentReportType];
+            if (reportContent && report) {
+                reportContent.value = report.template
+                    .replace(/\[CLIENT_NAME\]/g, '')
+                    .replace(/\[REPORT_DATE\]/g, new Date().toISOString().split('T')[0]);
             }
             
-            // Test sidebar items
+            // Reset CSV upload
+            uploadedCsvData = null;
+            var aiSection = document.getElementById('aiAnalysisSection');
+            var uploadStatus = document.getElementById('uploadStatus');
+            var csvInput = document.getElementById('csvInput');
+            
+            if (aiSection) aiSection.classList.add('hidden');
+            if (uploadStatus) uploadStatus.classList.add('hidden');
+            if (csvInput) csvInput.value = '';
+            
+            console.log('Form cleared');
+        }
+
+        function handleFileUpload(file) {
+            console.log('=== Processing file:', file.name, '===');
+            
+            var uploadStatus = document.getElementById('uploadStatus');
+            
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                if (uploadStatus) {
+                    uploadStatus.textContent = '❌ Please upload a CSV file only';
+                    uploadStatus.className = 'mt-2 text-sm text-red-400';
+                    uploadStatus.classList.remove('hidden');
+                }
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedCsvData = e.target.result;
+                console.log('CSV data loaded, length:', uploadedCsvData.length);
+                
+                if (uploadStatus) {
+                    uploadStatus.textContent = '✅ File uploaded: ' + file.name;
+                    uploadStatus.className = 'mt-2 text-sm text-green-400';
+                    uploadStatus.classList.remove('hidden');
+                }
+                
+                var aiSection = document.getElementById('aiAnalysisSection');
+                if (aiSection) {
+                    aiSection.classList.remove('hidden');
+                    console.log('AI analysis section shown');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== VeriVault Dashboard Loading ===');
+            
+            // Set default date
+            var reportDateEl = document.getElementById('reportDate');
+            if (reportDateEl) {
+                reportDateEl.value = new Date().toISOString().split('T')[0];
+            }
+            
+            // Load default template
+            var defaultReport = reportData[currentReportType];
+            var reportContentEl = document.getElementById('reportContent');
+            if (reportContentEl && defaultReport) {
+                reportContentEl.value = defaultReport.template
+                    .replace(/\[CLIENT_NAME\]/g, '')
+                    .replace(/\[REPORT_DATE\]/g, new Date().toISOString().split('T')[0]);
+            }
+            
+            // Setup sidebar click handlers
             var sidebarItems = document.querySelectorAll('.sidebar-item');
             console.log('Found sidebar items:', sidebarItems.length);
-            updateOutput('Found ' + sidebarItems.length + ' sidebar items');
             
             for (var i = 0; i < sidebarItems.length; i++) {
-                sidebarItems[i].addEventListener('click', function() {
+                sidebarItems[i].addEventListener('click', function(e) {
+                    e.preventDefault();
                     var reportType = this.getAttribute('data-report');
-                    console.log('=== SIDEBAR CLICKED ===', reportType);
-                    updateOutput('Sidebar clicked: ' + reportType);
-                    
-                    // Remove active class from all
-                    for (var j = 0; j < sidebarItems.length; j++) {
-                        sidebarItems[j].classList.remove('bg-blue-600');
-                        sidebarItems[j].classList.add('bg-slate-700');
+                    console.log('Sidebar clicked:', reportType);
+                    if (reportType) {
+                        selectReport(reportType);
                     }
-                    
-                    // Add active class to clicked item
-                    this.classList.remove('bg-slate-700');
-                    this.classList.add('bg-blue-600');
                 });
             }
-            updateOutput('Sidebar event listeners added');
             
-            // Test file upload
+            // Setup CSV upload
             var dropZone = document.getElementById('dropZone');
             var csvInput = document.getElementById('csvInput');
             
             if (dropZone && csvInput) {
-                dropZone.addEventListener('click', function() {
-                    console.log('=== DROP ZONE CLICKED ===');
-                    updateOutput('Drop zone clicked - opening file dialog');
+                // Click to upload
+                dropZone.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Drop zone clicked - opening file dialog');
                     csvInput.click();
                 });
-                
+
+                // File input change
                 csvInput.addEventListener('change', function(e) {
-                    console.log('=== FILE SELECTED ===');
+                    console.log('File selected:', e.target.files.length);
                     if (e.target.files.length > 0) {
-                        var file = e.target.files[0];
-                        updateOutput('File selected: ' + file.name + ' (' + file.size + ' bytes)');
+                        handleFileUpload(e.target.files[0]);
                     }
                 });
-                
-                updateOutput('File upload event listeners added');
             }
             
-            console.log('=== INITIALIZATION COMPLETE ===');
-            updateOutput('All event listeners attached successfully!');
+            // Setup other button handlers
+            var eventLoggerBtn = document.getElementById('eventLoggerBtn');
+            if (eventLoggerBtn) {
+                eventLoggerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Opening Event Logger');
+                    window.open('logger.html', '_blank');
+                });
+            }
+            
+            var clearFormBtn = document.getElementById('clearFormBtn');
+            if (clearFormBtn) {
+                clearFormBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Clear form clicked');
+                    clearForm();
+                });
+            }
+            
+            var aiAnalyzeBtn = document.getElementById('aiAnalyzeBtn');
+            if (aiAnalyzeBtn) {
+                aiAnalyzeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('AI Analysis clicked');
+                    alert('AI Analysis feature will be connected to your backend API');
+                });
+            }
+            
+            var generateReportBtn = document.getElementById('generateReportBtn');
+            if (generateReportBtn) {
+                generateReportBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Generate report clicked');
+                    alert('PDF generation feature will be connected to your backend API');
+                });
+            }
+            
+            console.log('=== VeriVault Dashboard Ready ===');
         });
         
-        console.log('=== SCRIPT LOADED ===');
+        console.log('=== Script loaded successfully ===');
     </script>
 </body>
 </html>
