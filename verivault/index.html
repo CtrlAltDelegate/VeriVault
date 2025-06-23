@@ -473,7 +473,7 @@
         };
 
         function selectReport(reportType) {
-            console.log('Selecting report:', reportType);
+            console.log('=== Selecting report:', reportType, '===');
             
             currentReportType = reportType;
             var report = reportData[reportType];
@@ -494,6 +494,7 @@
             if (targetItem) {
                 targetItem.classList.remove('bg-slate-700');
                 targetItem.classList.add('active', 'bg-blue-600');
+                console.log('Updated active sidebar item for:', reportType);
             }
             
             // Update main content
@@ -501,19 +502,37 @@
             var descElement = document.getElementById('reportDescription');
             var contentElement = document.getElementById('reportContent');
             
-            if (titleElement) titleElement.textContent = report.title;
-            if (descElement) descElement.textContent = report.description;
+            if (titleElement) {
+                titleElement.textContent = report.title;
+                console.log('Updated title to:', report.title);
+            }
+            if (descElement) {
+                descElement.textContent = report.description;
+                console.log('Updated description');
+            }
             
             // Update template content
             if (contentElement) {
-                var clientName = document.getElementById('clientName').value || '';
-                var reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
+                var clientNameEl = document.getElementById('clientName');
+                var reportDateEl = document.getElementById('reportDate');
+                var clientName = clientNameEl ? clientNameEl.value : '';
+                var reportDate = reportDateEl ? reportDateEl.value : new Date().toISOString().split('T')[0];
                 
                 var template = report.template
-                    .replace(/\[CLIENT_NAME\]/g, clientName)
+                    .replace(/\[CLIENT_NAME\]/g, clientName || 'CLIENT_NAME')
                     .replace(/\[REPORT_DATE\]/g, reportDate);
                 contentElement.value = template.replace(/\\n/g, '\n');
+                console.log('Updated report content template');
             }
+            
+            // Reset CSV upload state
+            uploadedCsvData = null;
+            var aiSection = document.getElementById('aiEnhancedSection');
+            var uploadStatus = document.getElementById('uploadStatus');
+            if (aiSection) aiSection.classList.add('hidden');
+            if (uploadStatus) uploadStatus.classList.add('hidden');
+            
+            console.log('=== Report selection complete ===');
         }
 
         function handleFileUpload(file) {
@@ -550,27 +569,40 @@
         }
 
         function switchTab(tabName) {
+            console.log('=== Switching to tab:', tabName, '===');
+            
+            // Hide all tab contents
             document.querySelectorAll('.tab-content').forEach(function(content) {
                 content.classList.add('hidden');
             });
             
+            // Remove active class from all tab buttons
             document.querySelectorAll('.tab-button').forEach(function(btn) {
                 btn.classList.remove('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
                 btn.classList.add('text-slate-400', 'border-transparent');
             });
             
+            // Show selected tab content
             var targetContent = document.getElementById(tabName + 'Content');
             if (targetContent) {
                 targetContent.classList.remove('hidden');
+                console.log('Showed content for:', tabName);
+            } else {
+                console.error('Could not find content for tab:', tabName);
             }
             
+            // Activate selected tab button
             var targetButton = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
             if (targetButton) {
                 targetButton.classList.add('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
                 targetButton.classList.remove('text-slate-400', 'border-transparent');
+                console.log('Activated button for:', tabName);
+            } else {
+                console.error('Could not find button for tab:', tabName);
             }
             
             currentTab = tabName;
+            console.log('=== Tab switch complete ===');
         }
 
         function selectEventType(eventType) {
@@ -1302,11 +1334,12 @@ This comprehensive security audit represents a strategic investment in protectin
             });
             
             // Setup sidebar click handlers (for reports tab)
-            var sidebarItems = document.querySelectorAll('.sidebar-item');
+            var sidebarItems = document.querySelectorAll('.sidebar-item[data-report]');
             for (var i = 0; i < sidebarItems.length; i++) {
                 sidebarItems[i].addEventListener('click', function(e) {
                     e.preventDefault();
                     var reportType = this.getAttribute('data-report');
+                    console.log('Sidebar clicked:', reportType);
                     if (reportType) {
                         selectReport(reportType);
                     }
@@ -1427,15 +1460,16 @@ This comprehensive security audit represents a strategic investment in protectin
                 });
             }
             
+            // Initialize audit package selection
             selectAuditPackage('premium');
             
-            // Set default date
+            // Set default date and load template
             var reportDateEl = document.getElementById('reportDate');
             if (reportDateEl) {
                 reportDateEl.value = new Date().toISOString().split('T')[0];
             }
             
-            // Load default template
+            // Load default template for Daily Log
             var defaultReport = reportData[currentReportType];
             var reportContentEl = document.getElementById('reportContent');
             if (reportContentEl && defaultReport) {
@@ -1444,6 +1478,12 @@ This comprehensive security audit represents a strategic investment in protectin
                     .replace(/\[REPORT_DATE\]/g, new Date().toISOString().split('T')[0])
                     .replace(/\\n/g, '\n');
             }
+            
+            // Test navigation on load
+            console.log('Testing navigation elements...');
+            console.log('Tab buttons found:', document.querySelectorAll('.tab-button').length);
+            console.log('Tab contents found:', document.querySelectorAll('.tab-content').length);
+            console.log('Sidebar items found:', document.querySelectorAll('.sidebar-item[data-report]').length);
             
             console.log('VeriVault Dashboard Ready');
         });
