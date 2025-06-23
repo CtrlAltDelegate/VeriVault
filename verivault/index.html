@@ -1,207 +1,228 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VeriVault - AI Security Intelligence</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div class="w-80 bg-slate-800/50 backdrop-blur-sm border-r border-white/10 p-6">
-            <!-- Logo -->
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
-                    <span class="text-white font-bold text-lg">V</span>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold text-white">VeriVault</h1>
-                    <p class="text-sm text-cyan-400">AI Security Intelligence</p>
-                </div>
-            </div>
-
-            <!-- Report Types -->
-            <div class="space-y-2">
-                <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
-                
-                <div class="sidebar-item active bg-blue-600 p-3 rounded-lg cursor-pointer transition-all hover:bg-blue-700" data-report="daily-log">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                            <span class="text-white text-sm">📅</span>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Daily Log</div>
-                            <div class="text-blue-200 text-xs">Daily operations summary</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="incident-medical">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
-                            <span class="text-white text-sm">🏥</span>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Medical Incident</div>
-                            <div class="text-slate-400 text-xs">Injury & emergency reports</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="incident-non-medical">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                            <span class="text-white text-sm">⚠️</span>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Security Incident</div>
-                            <div class="text-slate-400 text-xs">Non-medical incidents</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="annual-security">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                            <span class="text-white text-sm">🛡️</span>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Annual Security</div>
-                            <div class="text-slate-400 text-xs">Threat analysis & planning</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="systems-audit">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                            <span class="text-white text-sm">⚙️</span>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Systems Audit</div>
-                            <div class="text-slate-400 text-xs">Equipment & technology</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="discrepancy">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
-                            <span class="text-white text-sm">🔍</span>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Discrepancy Report</div>
-                            <div class="text-slate-400 text-xs">Equipment issues</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="vehicle-inspection">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
-                            <span class="text-white text-sm">🚗</span>
-                        </div>
-                        <div>
-                            <div class="text-white font-medium">Vehicle Inspection</div>
-                            <div class="text-slate-400 text-xs">Fleet management</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="mt-8 pt-6 border-t border-white/10">
-                <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Quick Actions</h3>
-                <button id="eventLoggerBtn" class="w-full flex items-center gap-3 p-3 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors">
-                    <span class="text-cyan-400 text-lg">⏰</span>
-                    <span class="text-white font-medium">Event Logger</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="flex-1 p-8 overflow-y-auto">
-            <div class="max-w-4xl mx-auto">
-                <!-- Header -->
-                <div class="mb-8">
-                    <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log</h2>
-                    <p id="reportDescription" class="text-slate-400">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
-                </div>
-
-                <!-- Form -->
-                <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
-                    <!-- Basic Info -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-2">
-                                👤 Client Name
-                            </label>
-                            <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-2">
-                                📅 Report Date
-                            </label>
-                            <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                        </div>
-                    </div>
-
-                    <!-- CSV Upload Section -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-300 mb-2">
-                            📊 Upload CSV Data for AI Analysis (Optional)
-                        </label>
-                        <div id="dropZone" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed">
-                            <div class="text-4xl mb-4">📁</div>
-                            <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
-                            <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
-                        </div>
-                        <input type="file" id="csvInput" accept=".csv" style="display: none;">
-                        <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
-                    </div>
-
-                    <!-- AI Enhanced Section -->
-                    <div id="aiEnhancedSection" class="mb-6 hidden">
-                        <div class="bg-gradient-to-r from-purple-500/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-4 mb-4">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-purple-400 text-lg">🤖</span>
-                                <h3 class="text-purple-300 font-semibold">AI Enhancement Ready</h3>
+<ul class="text-slate-300 text-sm space-y-2">
+                                        <li>✅ Property layout analysis</li>
+                                        <li>✅ Basic camera placement plan</li>
+                                        <li>✅ Equipment recommendations</li>
+                                        <li>✅ PDF security report</li>
+                                        <li>✅ 48-hour delivery</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <p class="text-purple-200 text-sm">CSV data detected! The AI will analyze your data and enhance the report with intelligent insights, patterns, and recommendations.</p>
+                            
+                            <div class="bg-gradient-to-br from-cyan-600 to-blue-700 p-6 rounded-xl border-2 border-cyan-400 hover:border-cyan-300 transition-all cursor-pointer audit-package popular" data-package="premium">
+                                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                    <span class="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold">MOST POPULAR</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl mb-3">🏢</div>
+                                    <h4 class="text-xl font-bold text-white mb-2">Premium Audit</h4>
+                                    <div class="text-3xl font-bold text-white mb-4">$2,499</div>
+                                    <ul class="text-blue-100 text-sm space-y-2">
+                                        <li>✅ Everything in Starter</li>
+                                        <li>✅ Detailed threat analysis</li>
+                                        <li>✅ 3D visualization mockups</li>
+                                        <li>✅ Budget-tier recommendations</li>
+                                        <li>✅ Installation partner referrals</li>
+                                        <li>✅ 24-hour delivery</li>
+                                        <li>✅ 30-min consultation call</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-br from-purple-600 to-pink-700 p-6 rounded-xl border border-white/10 hover:border-purple-400/50 transition-all cursor-pointer audit-package" data-package="enterprise">
+                                <div class="text-center">
+                                    <div class="text-3xl mb-3">🏰</div>
+                                    <h4 class="text-xl font-bold text-white mb-2">Enterprise Audit</h4>
+                                    <div class="text-3xl font-bold text-white mb-4">$5,999</div>
+                                    <ul class="text-purple-100 text-sm space-y-2">
+                                        <li>✅ Everything in Premium</li>
+                                        <li>✅ On-site visit option</li>
+                                        <li>✅ Multi-building analysis</li>
+                                        <li>✅ Advanced threat modeling</li>
+                                        <li>✅ Custom security protocols</li>
+                                        <li>✅ Implementation timeline</li>
+                                        <li>✅ 1-hour strategy session</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Report Content -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-300 mb-2">
-                            📝 Report Content
-                        </label>
-                        <textarea id="reportContent" rows="15" placeholder="Enter report details or upload CSV for AI analysis..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm"></textarea>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="flex gap-3 mb-6">
-                        <button id="clearFormBtn" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
-                            🧹 Clear Form
-                        </button>
-                    </div>
-
-                    <!-- Generate Button -->
-                    <div>
-                        <button id="generateReportBtn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg relative overflow-hidden">
-                            <span id="generateBtnText">
-                                📄 Generate Daily Summary
-                            </span>
-                            <div id="generateBtnLoading" class="hidden">
-                                <span class="inline-block animate-spin">⚡</span>
-                                <span class="ml-2">AI Processing...</span>
+                    <!-- Intake Form -->
+                    <div class="space-y-8">
+                        <!-- Property Information -->
+                        <div class="bg-white/5 rounded-lg p-6">
+                            <h4 class="text-xl font-bold text-white mb-4">🏠 Property Information</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Address</label>
+                                    <input type="text" placeholder="123 Main St, City, State, ZIP" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Type</label>
+                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="">Select property type</option>
+                                        <option value="residential">Residential Estate</option>
+                                        <option value="commercial">Commercial Building</option>
+                                        <option value="industrial">Industrial Facility</option>
+                                        <option value="retail">Retail Location</option>
+                                        <option value="mixed">Mixed Use</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Size (sq ft)</label>
+                                    <input type="number" placeholder="e.g., 5000" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Lot Size (acres)</label>
+                                    <input type="number" step="0.1" placeholder="e.g., 2.5" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
                             </div>
-                        </button>
-                        <p class="text-slate-400 text-sm mt-2 text-center">
-                            <span id="generateBtnSubtext">Creates professional PDF report with AI-enhanced insights when CSV data is available</span>
-                        </p>
+                        </div>
+
+                        <!-- File Uploads -->
+                        <div class="bg-white/5 rounded-lg p-6">
+                            <h4 class="text-xl font-bold text-white mb-4">📸 Property Documentation</h4>
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Aerial/Satellite View</label>
+                                    <div class="border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-cyan-400/50 transition-colors cursor-pointer">
+                                        <div class="text-4xl mb-2">🛰️</div>
+                                        <p class="text-slate-300">Upload Google Earth screenshot or aerial photo</p>
+                                        <p class="text-slate-400 text-sm mt-1">PNG, JPG up to 10MB</p>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Perimeter Photos</label>
+                                    <div class="border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-cyan-400/50 transition-colors cursor-pointer">
+                                        <div class="text-4xl mb-2">📷</div>
+                                        <p class="text-slate-300">Upload photos of gates, walls, entry points</p>
+                                        <p class="text-slate-400 text-sm mt-1">Multiple files accepted</p>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Existing Security Plan (Optional)</label>
+                                    <div class="border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-cyan-400/50 transition-colors cursor-pointer">
+                                        <div class="text-4xl mb-2">📋</div>
+                                        <p class="text-slate-300">Current camera locations, blueprints, etc.</p>
+                                        <p class="text-slate-400 text-sm mt-1">PDF, PNG, JPG accepted</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Current Security -->
+                        <div class="bg-white/5 rounded-lg p-6">
+                            <h4 class="text-xl font-bold text-white mb-4">🛡️ Current Security Setup</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Existing Cameras</label>
+                                    <input type="number" placeholder="Number of current cameras" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Security Concerns</label>
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                        <label class="flex items-center space-x-2 text-slate-300">
+                                            <input type="checkbox" class="rounded bg-white/10 border-white/20 text-cyan-500 focus:ring-cyan-400">
+                                            <span>Blind spots</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2 text-slate-300">
+                                            <input type="checkbox" class="rounded bg-white/10 border-white/20 text-cyan-500 focus:ring-cyan-400">
+                                            <span>Poor lighting</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2 text-slate-300">
+                                            <input type="checkbox" class="rounded bg-white/10 border-white/20 text-cyan-500 focus:ring-cyan-400">
+                                            <span>Access control</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2 text-slate-300">
+                                            <input type="checkbox" class="rounded bg-white/10 border-white/20 text-cyan-500 focus:ring-cyan-400">
+                                            <span>Perimeter breach</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2 text-slate-300">
+                                            <input type="checkbox" class="rounded bg-white/10 border-white/20 text-cyan-500 focus:ring-cyan-400">
+                                            <span>Vehicle monitoring</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2 text-slate-300">
+                                            <input type="checkbox" class="rounded bg-white/10 border-white/20 text-cyan-500 focus:ring-cyan-400">
+                                            <span>Remote monitoring</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Budget & Timeline -->
+                        <div class="bg-white/5 rounded-lg p-6">
+                            <h4 class="text-xl font-bold text-white mb-4">💰 Budget & Timeline</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Security System Budget</label>
+                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="">Select budget range</option>
+                                        <option value="5k">$2,500 - $5,000</option>
+                                        <option value="10k">$5,000 - $10,000</option>
+                                        <option value="25k">$10,000 - $25,000</option>
+                                        <option value="50k">$25,000 - $50,000</option>
+                                        <option value="100k">$50,000 - $100,000</option>
+                                        <option value="100k+">$100,000+</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Implementation Timeline</label>
+                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="">Select timeline</option>
+                                        <option value="immediate">ASAP (1-2 weeks)</option>
+                                        <option value="month">Within 1 month</option>
+                                        <option value="quarter">Within 3 months</option>
+                                        <option value="flexible">Flexible timing</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="bg-white/5 rounded-lg p-6">
+                            <h4 class="text-xl font-bold text-white mb-4">📞 Contact Information</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+                                    <input type="text" placeholder="Your name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+                                    <input type="email" placeholder="your.email@domain.com" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
+                                    <input type="tel" placeholder="(555) 123-4567" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Preferred Contact Method</label>
+                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="email">Email</option>
+                                        <option value="phone">Phone</option>
+                                        <option value="text">Text Message</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Notes -->
+                        <div class="bg-white/5 rounded-lg p-6">
+                            <h4 class="text-xl font-bold text-white mb-4">📝 Additional Information</h4>
+                            <textarea rows="4" placeholder="Any specific security concerns, special requirements, or additional context..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button id="submitAuditBtn" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-12 rounded-lg font-bold text-lg hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105">
+                                🔐 Submit Security Audit Request
+                            </button>
+                            <p class="text-slate-400 text-sm mt-3">
+                                Our AI security experts will analyze your property and deliver your comprehensive audit report within 24-48 hours
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -214,8 +235,85 @@
         // Global variables
         var currentReportType = 'daily-log';
         var uploadedCsvData = null;
+        var currentTab = 'reports';
+        var selectedPackage = 'premium';
 
-        // Report templates
+        // Tab Management
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(function(content) {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(function(btn) {
+                btn.classList.remove('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
+                btn.classList.add('text-slate-400', 'border-transparent');
+            });
+            
+            // Show selected tab content
+            var targetContent = document.getElementById(tabName + 'Content');
+            if (targetContent) {
+                targetContent.classList.remove('hidden');
+            }
+            
+            // Activate selected tab button
+            var targetButton = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+            if (targetButton) {
+                targetButton.classList.add('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
+                targetButton.classList.remove('text-slate-400', 'border-transparent');
+            }
+            
+            currentTab = tabName;
+        }
+
+        // Event Type Management for Logger
+        function selectEventType(eventType) {
+            // Hide all forms
+            document.querySelectorAll('.event-form').forEach(function(form) {
+                form.classList.add('hidden');
+            });
+            
+            // Show selected form
+            var targetForm = document.getElementById(eventType + 'Form');
+            if (targetForm) {
+                targetForm.classList.remove('hidden');
+            }
+            
+            // Update button states
+            document.querySelectorAll('.event-type-btn').forEach(function(btn) {
+                var btnDiv = btn.querySelector('div');
+                if (btn.dataset.type === eventType) {
+                    btnDiv.classList.remove('bg-slate-600');
+                    btnDiv.classList.add('bg-blue-600');
+                    btn.classList.add('active');
+                } else {
+                    btnDiv.classList.remove('bg-blue-600');
+                    btnDiv.classList.add('bg-slate-600');
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Package Selection for Audit Intake
+        function selectAuditPackage(packageType) {
+            document.querySelectorAll('.audit-package').forEach(function(pkg) {
+                if (pkg.dataset.package === packageType) {
+                    if (packageType === 'premium') {
+                        pkg.classList.add('ring-2', 'ring-cyan-400');
+                    } else if (packageType === 'enterprise') {
+                        pkg.classList.add('ring-2', 'ring-purple-400');
+                    } else {
+                        pkg.classList.add('ring-2', 'ring-slate-400');
+                    }
+                } else {
+                    pkg.classList.remove('ring-2', 'ring-cyan-400', 'ring-purple-400', 'ring-slate-400');
+                }
+            });
+            selectedPackage = packageType;
+        }
+
+        // Report templates (keeping existing functionality)
         var reportData = {
             'daily-log': {
                 title: 'Daily Log',
@@ -347,474 +445,439 @@
             
             // Show loading state
             var generateBtn = document.getElementById('generateReportBtn');
-            var btnText = document.getElementById('generateBtnText');
-            var btnLoading = document.getElementById('generateBtnLoading');
-            
-            if (generateBtn && btnText && btnLoading) {
-                generateBtn.disabled = true;
-                generateBtn.classList.add('opacity-75', 'cursor-not-allowed');
-                btnText.classList.add('hidden');
-                btnLoading.classList.remove('hidden');
-            }
-            
-            // Simulate AI processing with realistic timing
-            setTimeout(function() {
-                if (uploadedCsvData) {
-                    generateAIEnhancedReport(clientName, reportDate, reportContent, uploadedCsvData);
-                } else {
-                    generateStandardReport(clientName, reportDate, reportContent);
-                }
-                
-                // Reset button state
-                if (generateBtn && btnText && btnLoading) {
-                    generateBtn.disabled = false;
-                    generateBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-                    btnText.classList.remove('hidden');
-                    btnLoading.classList.add('hidden');
-                }
-            }, 2000); // 2 second AI processing simulation
-        }
+            var btnText = document.getElementById('generateBtnText');<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeriVault - AI Security Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
+    <!-- Top Navigation Tabs -->
+    <div class="bg-slate-800/50 backdrop-blur-sm border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex space-x-8">
+                <button id="tabReports" class="tab-button active py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400/10">
+                    📊 Report Generation
+                </button>
+                <button id="tabLogger" class="tab-button py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                    📝 Event Logger
+                </button>
+                <button id="tabIntake" class="tab-button py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                    🔐 Security Audit Intake
+                </button>
+            </div>
+        </div>
+    </div>
 
-        function generateAIEnhancedReport(clientName, reportDate, baseContent, csvData) {
-            console.log('=== Generating AI-Enhanced PDF Report ===');
-            
-            // Parse CSV data for insights
-            var insights = analyzeCSVData(csvData);
-            
-            // Enhanced report with AI insights
-            var enhancedContent = baseContent
-                .replace(/\[CLIENT_NAME\]/g, clientName)
-                .replace(/\[REPORT_DATE\]/g, reportDate);
-            
-            // Add AI analysis section
-            enhancedContent += '\n\n=== AI INTELLIGENCE ANALYSIS ===\n';
-            enhancedContent += 'Data Source: ' + insights.fileName + '\n';
-            enhancedContent += 'Records Processed: ' + insights.recordCount + '\n';
-            enhancedContent += 'Analysis Generated: ' + new Date().toLocaleString() + '\n\n';
-            
-            enhancedContent += 'KEY INSIGHTS:\n';
-            insights.keyInsights.forEach(function(insight, index) {
-                enhancedContent += '• ' + insight + '\n';
-            });
-            
-            enhancedContent += '\nDATA PATTERNS:\n';
-            insights.patterns.forEach(function(pattern, index) {
-                enhancedContent += '• ' + pattern + '\n';
-            });
-            
-            enhancedContent += '\nAI RECOMMENDATIONS:\n';
-            insights.recommendations.forEach(function(rec, index) {
-                enhancedContent += '• ' + rec + '\n';
-            });
-            
-            enhancedContent += '\n=== END AI ANALYSIS ===\n';
-            enhancedContent += '\nThis report has been enhanced with artificial intelligence analysis.';
-            enhancedContent += '\nAI Confidence Level: ' + insights.confidence + '%';
-            
-            // Update the report content
-            document.getElementById('reportContent').value = enhancedContent;
-            
-            // Generate PDF
-            generatePDF(enhancedContent, clientName, reportDate, insights);
-        }
+    <div class="flex h-screen">
+        <!-- REPORTS TAB CONTENT -->
+        <div id="reportsContent" class="tab-content flex w-full">
+            <!-- Sidebar -->
+            <div class="w-80 bg-slate-800/50 backdrop-blur-sm border-r border-white/10 p-6">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">V</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">VeriVault</h1>
+                        <p class="text-sm text-cyan-400">AI Security Intelligence</p>
+                    </div>
+                </div>
 
-        function generateStandardReport(clientName, reportDate, baseContent) {
-            console.log('=== Generating Standard PDF Report ===');
-            
-            var finalContent = baseContent
-                .replace(/\[CLIENT_NAME\]/g, clientName)
-                .replace(/\[REPORT_DATE\]/g, reportDate);
-            
-            // Update the report content
-            document.getElementById('reportContent').value = finalContent;
-            
-            // Generate PDF
-            generatePDF(finalContent, clientName, reportDate, null);
-        }
-
-        function generatePDF(content, clientName, reportDate, aiInsights) {
-            console.log('=== Creating PDF Document ===');
-            
-            try {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                // PDF styling
-                const pageWidth = doc.internal.pageSize.getWidth();
-                const pageHeight = doc.internal.pageSize.getHeight();
-                const margin = 20;
-                const lineHeight = 6;
-                let yPosition = margin;
-                
-                // Header with logo and branding
-                doc.setFillColor(30, 41, 59); // slate-800
-                doc.rect(0, 0, pageWidth, 40, 'F');
-                
-                // VeriVault logo and title
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(24);
-                doc.setFont('helvetica', 'bold');
-                doc.text('VeriVault', margin, 20);
-                
-                doc.setFontSize(12);
-                doc.setFont('helvetica', 'normal');
-                doc.text('AI Security Intelligence Platform', margin, 30);
-                
-                // Date and classification
-                doc.setTextColor(34, 197, 94); // green-500
-                doc.setFontSize(10);
-                doc.text('Generated: ' + new Date().toLocaleString(), pageWidth - 80, 20);
-                doc.setTextColor(239, 68, 68); // red-500
-                doc.text('CONFIDENTIAL', pageWidth - 80, 30);
-                
-                yPosition = 60;
-                
-                // Report title
-                doc.setTextColor(0, 0, 0);
-                doc.setFontSize(18);
-                doc.setFont('helvetica', 'bold');
-                var reportTitle = reportData[currentReportType].title;
-                if (aiInsights) reportTitle += ' - AI Enhanced';
-                doc.text(reportTitle, margin, yPosition);
-                yPosition += 15;
-                
-                // Client and date info
-                doc.setFontSize(12);
-                doc.setFont('helvetica', 'normal');
-                doc.text('Client: ' + clientName, margin, yPosition);
-                doc.text('Report Date: ' + reportDate, pageWidth/2, yPosition);
-                yPosition += 15;
-                
-                // AI enhancement badge if applicable
-                if (aiInsights) {
-                    doc.setFillColor(147, 51, 234); // purple-600
-                    doc.roundedRect(margin, yPosition, 60, 12, 3, 3, 'F');
-                    doc.setTextColor(255, 255, 255);
-                    doc.setFontSize(10);
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('🤖 AI ENHANCED', margin + 5, yPosition + 8);
+                <!-- Report Types -->
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
                     
-                    doc.setTextColor(147, 51, 234);
-                    doc.setFont('helvetica', 'normal');
-                    doc.text('Confidence: ' + aiInsights.confidence + '%', margin + 70, yPosition + 8);
-                    yPosition += 20;
-                }
-                
-                // Content processing
-                doc.setTextColor(0, 0, 0);
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-                
-                var lines = content.split('\n');
-                var maxWidth = pageWidth - (2 * margin);
-                
-                for (var i = 0; i < lines.length; i++) {
-                    var line = lines[i];
-                    
-                    // Check for page break
-                    if (yPosition > pageHeight - 30) {
-                        doc.addPage();
-                        yPosition = margin;
-                        
-                        // Add page header
-                        doc.setFillColor(248, 250, 252); // slate-50
-                        doc.rect(0, 0, pageWidth, 20, 'F');
-                        doc.setTextColor(71, 85, 105); // slate-600
-                        doc.setFontSize(8);
-                        doc.text('VeriVault Security Report - Page ' + doc.getNumberOfPages(), margin, 12);
-                        doc.text('CONFIDENTIAL', pageWidth - 40, 12);
-                        yPosition = 30;
-                        doc.setTextColor(0, 0, 0);
-                        doc.setFontSize(10);
-                    }
-                    
-                    // Style different sections
-                    if (line.includes('===')) {
-                        doc.setFont('helvetica', 'bold');
-                        doc.setTextColor(59, 130, 246); // blue-500
-                        yPosition += 5;
-                    } else if (line.startsWith('•')) {
-                        doc.setFont('helvetica', 'normal');
-                        doc.setTextColor(0, 0, 0);
-                        line = '  ' + line; // Indent bullets
-                    } else if (line.trim() === '') {
-                        yPosition += 2;
-                        continue;
-                    } else {
-                        doc.setFont('helvetica', 'normal');
-                        doc.setTextColor(0, 0, 0);
-                    }
-                    
-                    // Split long lines
-                    var splitLines = doc.splitTextToSize(line, maxWidth);
-                    for (var j = 0; j < splitLines.length; j++) {
-                        doc.text(splitLines[j], margin, yPosition);
-                        yPosition += lineHeight;
-                    }
-                }
-                
-                // Footer on last page
-                yPosition = pageHeight - 20;
-                doc.setFillColor(248, 250, 252); // slate-50
-                doc.rect(0, yPosition - 5, pageWidth, 25, 'F');
-                doc.setTextColor(71, 85, 105); // slate-600
-                doc.setFontSize(8);
-                doc.setFont('helvetica', 'italic');
-                doc.text('This report was generated by VeriVault AI Security Intelligence Platform', margin, yPosition + 5);
-                doc.text('© 2025 VeriVault Systems - All Rights Reserved', margin, yPosition + 12);
-                
-                // Generate filename
-                var fileName = 'VeriVault_' + currentReportType.replace('-', '_') + '_' + 
-                              (clientName || 'Report') + '_' + reportDate + '.pdf';
-                
-                // Save the PDF
-                doc.save(fileName);
-                
-                // Show success message
-                setTimeout(function() {
-                    alert('📄 PDF Report Generated Successfully!\n\n' +
-                          '✅ File: ' + fileName + '\n' +
-                          '✅ Pages: ' + doc.getNumberOfPages() + '\n' +
-                          (aiInsights ? '✅ AI Enhanced with ' + aiInsights.recordCount + ' records analyzed\n' : '') +
-                          '✅ Status: Ready for download\n\n' +
-                          'Your professional security report has been saved to your Downloads folder.');
-                }, 500);
-                
-            } catch (error) {
-                console.error('PDF generation error:', error);
-                alert('❌ PDF Generation Error\n\nThere was an issue creating the PDF. Please try again or check the console for details.');
-            }
-        }
+                    <div class="sidebar-item active bg-blue-600 p-3 rounded-lg cursor-pointer transition-all hover:bg-blue-700" data-report="daily-log">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">📅</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Daily Log</div>
+                                <div class="text-blue-200 text-xs">Daily operations summary</div>
+                            </div>
+                        </div>
+                    </div>
 
-        function analyzeCSVData(csvData) {
-            console.log('=== Analyzing CSV Data ===');
-            
-            // Parse CSV data for real analysis
-            var lines = csvData.split('\n').filter(function(line) { return line.trim(); });
-            var recordCount = Math.max(0, lines.length - 1); // Subtract header
-            
-            // Generate realistic security narrative
-            var narratives = [
-                "Operations commenced at 0700 hours with standard perimeter checks and system verifications. Security personnel conducted routine sweeps of all designated areas with no anomalies detected during initial assessments. Environmental conditions remained optimal throughout the monitoring period with all surveillance systems functioning within normal parameters.",
-                
-                "The facility maintained heightened security posture throughout the operational period with enhanced monitoring protocols in effect. Patrol rotations were executed according to schedule with particular attention to high-traffic zones during peak activity hours. All communication systems remained operational with clear channels maintained between security stations.",
-                
-                "Daily operations proceeded without major disruptions, with security staff maintaining vigilant oversight of all access points and common areas. Surveillance equipment performed optimally with clear video feeds and responsive motion detection systems. Regular equipment checks confirmed all safety and security devices remained in excellent working condition."
-            ];
-            
-            // Generate delivery reports
-            var deliveries = [
-                "Morning postal delivery arrived at 0815 hours via USPS with standard mail distribution completed without incident. FedEx courier delivered three packages to reception at 1034 hours, all items properly logged and recipients notified promptly.",
-                
-                "Catering services from Metro Foods arrived at 1145 hours for executive lunch meeting, with delivery personnel escorted through facility according to protocol. Office supply delivery from Staples was processed at 1420 hours with materials distributed to appropriate departments.",
-                
-                "Medical supply delivery to clinic wing arrived at 0930 hours from MedSupply Inc, with temperature-sensitive items immediately transferred to appropriate storage. Legal documents were hand-delivered by Morrison & Associates courier at 1515 hours, requiring signature verification and secure handling procedures."
-            ];
-            
-            // Generate vendor reports
-            var vendors = [
-                "IT support technician from TechPro Solutions arrived at 1415 hours for scheduled network maintenance, completing diagnostic procedures in server room under security supervision. Facilities maintenance crew from Johnson Services conducted HVAC inspection between 1000-1200 hours, addressing minor ventilation issues in east wing.",
-                
-                "Cleaning services personnel arrived for their scheduled 0600 hours shift, completing standard sanitization protocols throughout all common areas and offices. Landscaping crew from GreenSpace Maintenance performed exterior grounds keeping from 0800-1030 hours, focusing on front entrance aesthetics.",
-                
-                "Security system technician from SafeGuard Systems conducted quarterly maintenance on access control panels from 1300-1500 hours, updating software and testing all entry points. Elevator service team completed routine inspection and minor adjustments to main passenger lift between 0930-1130 hours."
-            ];
-            
-            // Generate guest reports
-            var guests = [
-                "VIP visitor from Meridian Corporation arrived at 1030 hours for scheduled board meeting, accompanied by personal assistant and escorted to executive conference room. Guest departed at 1545 hours following successful conclusion of business discussions.",
-                
-                "Legal counsel from Patterson & Associates arrived at 0915 hours for contract review session, remaining in conference room B until 1230 hours departure. Two prospective clients toured facility between 1400-1500 hours, guided by sales director with security awareness maintained throughout visit.",
-                
-                "Regulatory compliance inspector conducted unannounced facility review from 1100-1430 hours, examining safety protocols and documentation with full cooperation provided. External auditor from Financial Review Partners completed quarterly assessment between 0900-1200 hours."
-            ];
-            
-            // Generate client movement reports
-            var clients = [
-                "Primary client executive arrived at 0845 hours with two-person security detail, proceeding directly to private office suite for morning briefings. Client departed at 1730 hours following completion of daily business activities, security escort maintained throughout.",
-                
-                "Client representative arrived at 0930 hours for strategic planning session, utilizing boardroom facilities until 1615 hours departure. Executive assistant accompanied client throughout visit, handling administrative coordination and communication requirements.",
-                
-                "Senior client officer conducted facility walkthrough from 1000-1130 hours, reviewing operational procedures and staff performance. Client remained on premises for lunch meeting before departing at 1445 hours for off-site appointments."
-            ];
-            
-            // Generate incident/discrepancy reports
-            var incidents = [
-                "Minor technical discrepancy occurred at 1320 hours when fire alarm system in east wing experienced false activation due to sensor malfunction. Maintenance responded within four minutes to reset system and conduct diagnostic verification, with normal operations resumed immediately.",
-                
-                "Access control system experienced brief connectivity issue at Gate 3 from 0930-0945 hours, requiring manual badge verification procedures during the interim. IT support resolved the network timeout remotely with full system functionality restored without security compromise.",
-                
-                "First aid was administered to visitor at 1425 hours following minor slip incident in main lobby due to wet floor conditions. Injured party declined medical transport and signed release documentation before departing premises at 1445 hours.",
-                
-                "Security camera #7 in parking area B displayed intermittent signal degradation between 1200-1300 hours before automatically correcting. Technician scheduled for tomorrow morning to inspect and clean lens housing as preventive measure."
-            ];
-            
-            // Select random elements from each category
-            var selectedNarrative = narratives[Math.floor(Math.random() * narratives.length)];
-            var selectedDeliveries = deliveries[Math.floor(Math.random() * deliveries.length)];
-            var selectedVendors = vendors[Math.floor(Math.random() * vendors.length)];
-            var selectedGuests = guests[Math.floor(Math.random() * guests.length)];
-            var selectedClients = clients[Math.floor(Math.random() * clients.length)];
-            
-            // Include incidents randomly (80% chance)
-            var selectedIncident = Math.random() > 0.2 ? incidents[Math.floor(Math.random() * incidents.length)] : null;
-            
-            // Build comprehensive key insights
-            var keyInsights = [selectedNarrative];
-            
-            // Build structured sections
-            var patterns = [
-                "DELIVERIES: " + selectedDeliveries,
-                "VENDORS: " + selectedVendors,
-                "GUESTS: " + selectedGuests,
-                "CLIENT ACTIVITY: " + selectedClients
-            ];
-            
-            // Add incidents if any occurred
-            var recommendations = [
-                "Continue current security protocols with existing staffing levels, maintaining heightened awareness during peak activity periods.",
-                "Review and update visitor management procedures based on today's operational observations and traffic patterns.",
-                "Schedule routine equipment maintenance during identified low-activity windows to minimize operational disruption."
-            ];
-            
-            if (selectedIncident) {
-                patterns.push("INCIDENTS/DISCREPANCIES: " + selectedIncident);
-                recommendations.push("Implement additional preventive measures to address identified technical issues and minimize future service interruptions.");
-            }
-            
-            var insights = {
-                fileName: 'Security Operations Data',
-                recordCount: recordCount,
-                confidence: Math.floor(Math.random() * 8) + 92, // 92-100% for detailed analysis
-                keyInsights: keyInsights,
-                patterns: patterns,
-                recommendations: recommendations
-            };
-            
-            return insights;
-        }
+                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="incident-medical">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">🏥</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Medical Incident</div>
+                                <div class="text-slate-400 text-xs">Injury & emergency reports</div>
+                            </div>
+                        </div>
+                    </div>
 
-        function handleFileUpload(file) {
-            console.log('=== Processing file:', file.name, '===');
-            
-            var uploadStatus = document.getElementById('uploadStatus');
-            
-            if (!file.name.toLowerCase().endsWith('.csv')) {
-                if (uploadStatus) {
-                    uploadStatus.textContent = '❌ Please upload a CSV file only';
-                    uploadStatus.className = 'mt-2 text-sm text-red-400';
-                    uploadStatus.classList.remove('hidden');
-                }
-                return;
-            }
+                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="incident-non-medical">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">⚠️</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Security Incident</div>
+                                <div class="text-slate-400 text-xs">Non-medical incidents</div>
+                            </div>
+                        </div>
+                    </div>
 
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedCsvData = e.target.result;
-                console.log('CSV data loaded, length:', uploadedCsvData.length);
-                
-                if (uploadStatus) {
-                    uploadStatus.textContent = '✅ File uploaded: ' + file.name;
-                    uploadStatus.className = 'mt-2 text-sm text-green-400';
-                    uploadStatus.classList.remove('hidden');
-                }
-                
-                var aiSection = document.getElementById('aiEnhancedSection');
-                if (aiSection) {
-                    aiSection.classList.remove('hidden');
-                    console.log('AI enhanced section shown');
-                }
-            };
-            reader.readAsText(file);
-        }
+                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="annual-security">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">🛡️</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Annual Security</div>
+                                <div class="text-slate-400 text-xs">Threat analysis & planning</div>
+                            </div>
+                        </div>
+                    </div>
 
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('=== VeriVault Dashboard Loading ===');
-            
-            // Set default date
-            var reportDateEl = document.getElementById('reportDate');
-            if (reportDateEl) {
-                reportDateEl.value = new Date().toISOString().split('T')[0];
-            }
-            
-            // Load default template
-            var defaultReport = reportData[currentReportType];
-            var reportContentEl = document.getElementById('reportContent');
-            if (reportContentEl && defaultReport) {
-                reportContentEl.value = defaultReport.template
-                    .replace(/\[CLIENT_NAME\]/g, '')
-                    .replace(/\[REPORT_DATE\]/g, new Date().toISOString().split('T')[0]);
-            }
-            
-            // Setup sidebar click handlers
-            var sidebarItems = document.querySelectorAll('.sidebar-item');
-            console.log('Found sidebar items:', sidebarItems.length);
-            
-            for (var i = 0; i < sidebarItems.length; i++) {
-                sidebarItems[i].addEventListener('click', function(e) {
-                    e.preventDefault();
-                    var reportType = this.getAttribute('data-report');
-                    console.log('Sidebar clicked:', reportType);
-                    if (reportType) {
-                        selectReport(reportType);
-                    }
-                });
-            }
-            
-            // Setup CSV upload
-            var dropZone = document.getElementById('dropZone');
-            var csvInput = document.getElementById('csvInput');
-            
-            if (dropZone && csvInput) {
-                // Click to upload
-                dropZone.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Drop zone clicked - opening file dialog');
-                    csvInput.click();
-                });
+                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="systems-audit">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">⚙️</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Systems Audit</div>
+                                <div class="text-slate-400 text-xs">Equipment & technology</div>
+                            </div>
+                        </div>
+                    </div>
 
-                // File input change
-                csvInput.addEventListener('change', function(e) {
-                    console.log('File selected:', e.target.files.length);
-                    if (e.target.files.length > 0) {
-                        handleFileUpload(e.target.files[0]);
-                    }
-                });
-            }
-            
-            // Setup other button handlers
-            var eventLoggerBtn = document.getElementById('eventLoggerBtn');
-            if (eventLoggerBtn) {
-                eventLoggerBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Opening Event Logger');
-                    window.open('logger.html', '_blank');
-                });
-            }
-            
-            var clearFormBtn = document.getElementById('clearFormBtn');
-            if (clearFormBtn) {
-                clearFormBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Clear form clicked');
-                    clearForm();
-                });
-            }
-            
-            var generateReportBtn = document.getElementById('generateReportBtn');
-            if (generateReportBtn) {
-                generateReportBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Generate intelligent report clicked');
-                    generateIntelligentReport();
-                });
-            }
-            
-            console.log('=== VeriVault Dashboard Ready ===');
-        });
-        
-        console.log('=== Script loaded successfully ===');
-    </script>
-</body>
-</html>
+                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="discrepancy">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">🔍</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Discrepancy Report</div>
+                                <div class="text-slate-400 text-xs">Equipment issues</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="vehicle-inspection">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">🚗</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Vehicle Inspection</div>
+                                <div class="text-slate-400 text-xs">Fleet management</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1 p-8 overflow-y-auto">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Header -->
+                    <div class="mb-8">
+                        <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log</h2>
+                        <p id="reportDescription" class="text-slate-400">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
+                    </div>
+
+                    <!-- Form -->
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                        <!-- Basic Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">
+                                    👤 Client Name
+                                </label>
+                                <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">
+                                    📅 Report Date
+                                </label>
+                                <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                            </div>
+                        </div>
+
+                        <!-- CSV Upload Section -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">
+                                📊 Upload CSV Data for AI Analysis (Optional)
+                            </label>
+                            <div id="dropZone" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed">
+                                <div class="text-4xl mb-4">📁</div>
+                                <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
+                                <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
+                            </div>
+                            <input type="file" id="csvInput" accept=".csv" style="display: none;">
+                            <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
+                        </div>
+
+                        <!-- AI Enhanced Section -->
+                        <div id="aiEnhancedSection" class="mb-6 hidden">
+                            <div class="bg-gradient-to-r from-purple-500/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-4 mb-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-purple-400 text-lg">🤖</span>
+                                    <h3 class="text-purple-300 font-semibold">AI Enhancement Ready</h3>
+                                </div>
+                                <p class="text-purple-200 text-sm">CSV data detected! The AI will analyze your data and enhance the report with intelligent insights, patterns, and recommendations.</p>
+                            </div>
+                        </div>
+
+                        <!-- Report Content -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">
+                                📝 Report Content
+                            </label>
+                            <textarea id="reportContent" rows="15" placeholder="Enter report details or upload CSV for AI analysis..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm"></textarea>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex gap-3 mb-6">
+                            <button id="clearFormBtn" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors">
+                                🧹 Clear Form
+                            </button>
+                        </div>
+
+                        <!-- Generate Button -->
+                        <div>
+                            <button id="generateReportBtn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg relative overflow-hidden">
+                                <span id="generateBtnText">
+                                    📄 Generate Daily Summary
+                                </span>
+                                <div id="generateBtnLoading" class="hidden">
+                                    <span class="inline-block animate-spin">⚡</span>
+                                    <span class="ml-2">AI Processing...</span>
+                                </div>
+                            </button>
+                            <p class="text-slate-400 text-sm mt-2 text-center">
+                                <span id="generateBtnSubtext">Creates professional PDF report with AI-enhanced insights when CSV data is available</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EVENT LOGGER TAB CONTENT -->
+        <div id="loggerContent" class="tab-content hidden w-full p-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">Event Logger</h2>
+                    <p class="text-slate-400">Real-time event logging for staff, vendors, deliveries, and guests</p>
+                </div>
+
+                <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                    <!-- Event Type Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-300 mb-3">Event Type</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <button class="event-type-btn active" data-type="staff">
+                                <div class="bg-blue-600 p-4 rounded-lg text-center hover:bg-blue-700 transition-colors">
+                                    <div class="text-2xl mb-2">👥</div>
+                                    <div class="text-white font-medium">Staff</div>
+                                </div>
+                            </button>
+                            <button class="event-type-btn" data-type="vendor">
+                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
+                                    <div class="text-2xl mb-2">🔧</div>
+                                    <div class="text-white font-medium">Vendor</div>
+                                </div>
+                            </button>
+                            <button class="event-type-btn" data-type="delivery">
+                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
+                                    <div class="text-2xl mb-2">📦</div>
+                                    <div class="text-white font-medium">Delivery</div>
+                                </div>
+                            </button>
+                            <button class="event-type-btn" data-type="guest">
+                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
+                                    <div class="text-2xl mb-2">🏃</div>
+                                    <div class="text-white font-medium">Guest</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Form Fields -->
+                    <div id="eventForm">
+                        <!-- Staff Form (Default) -->
+                        <div id="staffForm" class="event-form">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Staff Name</label>
+                                    <input type="text" placeholder="Enter staff member name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
+                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="">Select action</option>
+                                        <option value="arrived">Arrived</option>
+                                        <option value="departed">Departed</option>
+                                        <option value="break">Break Started</option>
+                                        <option value="return">Returned from Break</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Time</label>
+                                    <input type="time" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Badge/ID</label>
+                                    <input type="text" placeholder="Badge number or ID" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Vendor Form -->
+                        <div id="vendorForm" class="event-form hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Company Name</label>
+                                    <input type="text" placeholder="Vendor company name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Contact Person</label>
+                                    <input type="text" placeholder="Representative name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
+                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="">Select action</option>
+                                        <option value="arrived">Arrived</option>
+                                        <option value="departed">Departed</option>
+                                        <option value="working">Work in Progress</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Time</label>
+                                    <input type="time" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Service Type</label>
+                                    <input type="text" placeholder="e.g., HVAC, IT, Cleaning" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delivery Form -->
+                        <div id="deliveryForm" class="event-form hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Delivery Company</label>
+                                    <input type="text" placeholder="e.g., FedEx, UPS, USPS" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Driver/Courier</label>
+                                    <input type="text" placeholder="Delivery person name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Time</label>
+                                    <input type="time" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Package Count</label>
+                                    <input type="number" placeholder="Number of packages" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Recipient</label>
+                                    <input type="text" placeholder="Delivered to" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Guest Form -->
+                        <div id="guestForm" class="event-form hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Guest Name</label>
+                                    <input type="text" placeholder="Visitor name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Company/Affiliation</label>
+                                    <input type="text" placeholder="Organization or personal visit" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
+                                    <select class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="">Select action</option>
+                                        <option value="arrived">Arrived</option>
+                                        <option value="departed">Departed</option>
+                                        <option value="meeting">In Meeting</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Time</label>
+                                    <input type="time" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Meeting With</label>
+                                    <input type="text" placeholder="Host/Contact person" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Common Notes Field -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Notes</label>
+                            <textarea rows="3" placeholder="Additional observations or details..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"></textarea>
+                        </div>
+
+                        <!-- Log Entry Button -->
+                        <button id="logEventBtn" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                            ✅ Log Event
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Events -->
+                <div class="mt-8 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">Recent Events</h3>
+                    <div id="eventsList" class="space-y-3">
+                        <div class="bg-white/5 p-3 rounded-lg">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-cyan-400 font-medium">👥 Staff:</span>
+                                    <span class="text-white">John Smith arrived at 08:30</span>
+                                </div>
+                                <span class="text-slate-400 text-sm">2 mins ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECURITY AUDIT INTAKE TAB -->
+        <div id="intakeContent" class="tab-content hidden w-full p-8">
+            <div class="max-w-5xl mx-auto">
+                <div class="mb-8 text-center">
+                    <h2 class="text-4xl font-bold text-white mb-4">🔐 VeriVault SecureScope</h2>
+                    <p class="text-xl text-cyan-400 mb-2">AI-Powered Security Audit & Camera Placement Analysis</p>
+                    <p class="text-slate-400">Get professional security recommendations tailored to your property and budget</p>
+                </div>
+
+                <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-8">
+                    <!-- Pricing Tiers -->
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold text-white mb-6 text-center">Choose Your Security Audit Package</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-gradient-to-br from-slate-700 to-slate-800 p-6 rounded-xl border border-white/10 hover:border-cyan-400/50 transition-all cursor-pointer audit-package" data-package="starter">
+                                <div class="text-center">
+                                    <div class="text-3xl mb-3">🏠</div>
+                                    <h4 class="text-xl font-bold text-white mb-2">Starter Audit</h4>
+                                    <div class="text-3xl font-bold text-cyan-400 mb-4">$799</div>
