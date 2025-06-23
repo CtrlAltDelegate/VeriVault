@@ -161,6 +161,31 @@
                             </div>
                         </div>
 
+                        <!-- CSV Upload Section -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">
+                                📊 Upload CSV Data for AI Analysis (Optional)
+                            </label>
+                            <div id="dropZone" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed">
+                                <div class="text-4xl mb-4">📁</div>
+                                <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
+                                <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
+                            </div>
+                            <input type="file" id="csvInput" accept=".csv" style="display: none;">
+                            <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
+                        </div>
+
+                        <!-- AI Enhanced Section -->
+                        <div id="aiEnhancedSection" class="mb-6 hidden">
+                            <div class="bg-gradient-to-r from-purple-500/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-4 mb-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-purple-400 text-lg">🤖</span>
+                                    <h3 class="text-purple-300 font-semibold">AI Enhancement Ready</h3>
+                                </div>
+                                <p class="text-purple-200 text-sm">CSV data detected! The AI will analyze your data and enhance the report with intelligent insights, patterns, and recommendations.</p>
+                            </div>
+                        </div>
+
                         <!-- Report Content -->
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-slate-300 mb-2">
@@ -405,6 +430,124 @@
         
         var currentTab = 'reports';
         var selectedPackage = 'premium';
+        var currentReportType = 'daily-log';
+        var uploadedCsvData = null;
+
+        // Report templates
+        var reportData = {
+            'daily-log': {
+                title: 'Daily Log',
+                description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
+                template: 'DAILY OPERATIONS LOG\\n\\nClient: [CLIENT_NAME]\\nDate: [REPORT_DATE]\\nReport Type: Daily Operations Summary\\n\\nOPERATIONAL OVERVIEW:\\n• Staff deployment and assignments\\n• Security checkpoint activities\\n• Visitor management and access control\\n• Equipment status and functionality\\n• Notable incidents or observations\\n• Communication logs\\n\\nRECOMMENDATIONS:\\n• Continued monitoring protocols\\n• Equipment maintenance schedules\\n• Staff training updates\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
+            },
+            'incident-medical': {
+                title: 'Medical Incident Report',
+                description: 'Detailed documentation for injury and emergency situations requiring medical response',
+                template: 'MEDICAL INCIDENT REPORT\\n\\nClient: [CLIENT_NAME]\\nDate: [REPORT_DATE]\\nReport Type: Medical Emergency Documentation\\n\\nINCIDENT DETAILS:\\n• Time and location of incident\\n• Individuals involved and injuries sustained\\n• Immediate response actions taken\\n• Medical personnel contacted\\n• Emergency services coordination\\n• Witness statements and documentation\\n\\nMEDICAL RESPONSE:\\n• First aid administered\\n• Medical equipment utilized\\n• Transport arrangements\\n• Hospital/clinic notifications\\n• Follow-up medical care\\n\\nPREVENTION MEASURES:\\n• Risk assessment updates\\n• Safety protocol improvements\\n• Additional training requirements\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
+            },
+            'incident-non-medical': {
+                title: 'Security Incident Report',
+                description: 'Documentation for security breaches, unauthorized access, and non-medical emergencies',
+                template: 'SECURITY INCIDENT REPORT\\n\\nClient: [CLIENT_NAME]\\nDate: [REPORT_DATE]\\nReport Type: Non-Medical Security Incident\\n\\nINCIDENT CLASSIFICATION:\\n• Security breach assessment\\n• Unauthorized access attempts\\n• Equipment malfunction or damage\\n• Suspicious activity documentation\\n• Policy violations\\n• Environmental hazards\\n\\nRESPONSE ACTIONS:\\n• Immediate containment measures\\n• Law enforcement coordination\\n• Evidence collection and preservation\\n• Witness interviews\\n• Damage assessment\\n• Communication protocols\\n\\nREMEDIATION PLAN:\\n• Security enhancement recommendations\\n• Policy updates and revisions\\n• Additional monitoring requirements\\n• Staff retraining initiatives\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
+            },
+            'annual-security': {
+                title: 'Annual Security Assessment',
+                description: 'Comprehensive yearly security analysis including threat assessment and strategic planning',
+                template: 'ANNUAL SECURITY ASSESSMENT\\n\\nClient: [CLIENT_NAME]\\nAssessment Period: [REPORT_DATE]\\nReport Type: Comprehensive Security Analysis\\n\\nTHREAT LANDSCAPE ANALYSIS:\\n• Current security environment assessment\\n• Emerging threat identification\\n• Risk probability and impact evaluation\\n• Industry-specific security challenges\\n• Regulatory compliance status\\n\\nSECURITY INFRASTRUCTURE REVIEW:\\n• Physical security systems evaluation\\n• Personnel security protocols\\n• Technology integration assessment\\n• Communication systems analysis\\n• Emergency response capabilities\\n\\nSTRATEGIC RECOMMENDATIONS:\\n• Security enhancement priorities\\n• Technology upgrade requirements\\n• Training and development needs\\n• Budget allocation recommendations\\n• Implementation timeline\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
+            },
+            'systems-audit': {
+                title: 'Systems Audit Report',
+                description: 'Technical evaluation of security equipment, technology infrastructure, and operational systems',
+                template: 'SYSTEMS AUDIT REPORT\\n\\nClient: [CLIENT_NAME]\\nAudit Date: [REPORT_DATE]\\nReport Type: Technology and Equipment Assessment\\n\\nSYSTEM PERFORMANCE ANALYSIS:\\n• Security camera network status\\n• Access control system functionality\\n• Communication equipment assessment\\n• Monitoring software evaluation\\n• Database integrity verification\\n\\nEQUIPMENT INVENTORY:\\n• Hardware condition assessment\\n• Software version compliance\\n• Maintenance schedule adherence\\n• Replacement timeline planning\\n• Warranty and support status\\n\\nOPTIMIZATION RECOMMENDATIONS:\\n• System upgrade priorities\\n• Performance enhancement measures\\n• Integration improvement opportunities\\n• Cybersecurity strengthening\\n• Operational efficiency gains\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
+            },
+            'discrepancy': {
+                title: 'Discrepancy Report',
+                description: 'Documentation of equipment issues, policy violations, and operational inconsistencies',
+                template: 'DISCREPANCY REPORT\\n\\nClient: [CLIENT_NAME]\\nReport Date: [REPORT_DATE]\\nReport Type: Operational Discrepancy Documentation\\n\\nDISCREPANCY IDENTIFICATION:\\n• Equipment malfunction details\\n• Policy compliance violations\\n• Procedural inconsistencies\\n• Documentation irregularities\\n• Performance standard deviations\\n\\nIMPACT ASSESSMENT:\\n• Operational effect evaluation\\n• Security implications analysis\\n• Cost impact determination\\n• Timeline considerations\\n• Risk level assessment\\n\\nCORRECTIVE ACTION PLAN:\\n• Immediate remediation steps\\n• Long-term solution development\\n• Prevention strategy implementation\\n• Monitoring and verification protocols\\n• Responsibility assignments\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
+            },
+            'vehicle-inspection': {
+                title: 'Vehicle Inspection Report',
+                description: 'Comprehensive vehicle safety and operational readiness assessment for fleet management',
+                template: 'VEHICLE INSPECTION REPORT\\n\\nClient: [CLIENT_NAME]\\nInspection Date: [REPORT_DATE]\\nReport Type: Fleet Vehicle Assessment\\n\\nVEHICLE IDENTIFICATION:\\n• Make, model, and year\\n• Vehicle identification number\\n• License plate information\\n• Mileage and service history\\n• Insurance and registration status\\n\\nSAFETY INSPECTION:\\n• Brake system functionality\\n• Tire condition and pressure\\n• Lighting system operation\\n• Emergency equipment inventory\\n• Communication device status\\n\\nOPERATIONAL READINESS:\\n• Fuel level and efficiency\\n• Engine performance metrics\\n• Maintenance schedule compliance\\n• Driver assignment protocols\\n• Route optimization capabilities\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
+            }
+        };
+
+        function selectReport(reportType) {
+            console.log('Selecting report:', reportType);
+            
+            currentReportType = reportType;
+            var report = reportData[reportType];
+            
+            if (!report) {
+                console.error('Report type not found:', reportType);
+                return;
+            }
+            
+            // Update active sidebar item
+            var sidebarItems = document.querySelectorAll('.sidebar-item');
+            for (var i = 0; i < sidebarItems.length; i++) {
+                sidebarItems[i].classList.remove('active', 'bg-blue-600');
+                sidebarItems[i].classList.add('bg-slate-700');
+            }
+            
+            var targetItem = document.querySelector('[data-report="' + reportType + '"]');
+            if (targetItem) {
+                targetItem.classList.remove('bg-slate-700');
+                targetItem.classList.add('active', 'bg-blue-600');
+            }
+            
+            // Update main content
+            var titleElement = document.getElementById('reportTitle');
+            var descElement = document.getElementById('reportDescription');
+            var contentElement = document.getElementById('reportContent');
+            
+            if (titleElement) titleElement.textContent = report.title;
+            if (descElement) descElement.textContent = report.description;
+            
+            // Update template content
+            if (contentElement) {
+                var clientName = document.getElementById('clientName').value || '';
+                var reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
+                
+                var template = report.template
+                    .replace(/\[CLIENT_NAME\]/g, clientName)
+                    .replace(/\[REPORT_DATE\]/g, reportDate);
+                contentElement.value = template.replace(/\\n/g, '\n');
+            }
+        }
+
+        function handleFileUpload(file) {
+            console.log('Processing file:', file.name);
+            
+            var uploadStatus = document.getElementById('uploadStatus');
+            
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                if (uploadStatus) {
+                    uploadStatus.textContent = '❌ Please upload a CSV file only';
+                    uploadStatus.className = 'mt-2 text-sm text-red-400';
+                    uploadStatus.classList.remove('hidden');
+                }
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedCsvData = e.target.result;
+                console.log('CSV data loaded, length:', uploadedCsvData.length);
+                
+                if (uploadStatus) {
+                    uploadStatus.textContent = '✅ File uploaded: ' + file.name;
+                    uploadStatus.className = 'mt-2 text-sm text-green-400';
+                    uploadStatus.classList.remove('hidden');
+                }
+                
+                var aiSection = document.getElementById('aiEnhancedSection');
+                if (aiSection) {
+                    aiSection.classList.remove('hidden');
+                }
+            };
+            reader.readAsText(file);
+        }
 
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(function(content) {
@@ -511,6 +654,35 @@
                 switchTab('auditTool');
             });
             
+            // Setup sidebar click handlers (for reports tab)
+            var sidebarItems = document.querySelectorAll('.sidebar-item');
+            for (var i = 0; i < sidebarItems.length; i++) {
+                sidebarItems[i].addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var reportType = this.getAttribute('data-report');
+                    if (reportType) {
+                        selectReport(reportType);
+                    }
+                });
+            }
+            
+            // Setup CSV upload
+            var dropZone = document.getElementById('dropZone');
+            var csvInput = document.getElementById('csvInput');
+            
+            if (dropZone && csvInput) {
+                dropZone.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    csvInput.click();
+                });
+
+                csvInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        handleFileUpload(e.target.files[0]);
+                    }
+                });
+            }
+            
             var eventTypeButtons = document.querySelectorAll('.event-type-btn');
             for (var i = 0; i < eventTypeButtons.length; i++) {
                 eventTypeButtons[i].addEventListener('click', function(e) {
@@ -609,6 +781,22 @@
             }
             
             selectAuditPackage('premium');
+            
+            // Set default date
+            var reportDateEl = document.getElementById('reportDate');
+            if (reportDateEl) {
+                reportDateEl.value = new Date().toISOString().split('T')[0];
+            }
+            
+            // Load default template
+            var defaultReport = reportData[currentReportType];
+            var reportContentEl = document.getElementById('reportContent');
+            if (reportContentEl && defaultReport) {
+                reportContentEl.value = defaultReport.template
+                    .replace(/\[CLIENT_NAME\]/g, '')
+                    .replace(/\[REPORT_DATE\]/g, new Date().toISOString().split('T')[0])
+                    .replace(/\\n/g, '\n');
+            }
             
             console.log('VeriVault Dashboard Ready');
         });
