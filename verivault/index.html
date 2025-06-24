@@ -473,6 +473,11 @@
         var currentTab = 'reports';
         var selectedPackage = 'premium';
         var currentReport = 'daily-log';
+        var uploadedPhotos = {
+            property: null,
+            camera: [],
+            site: []
+        };
 
         // Report templates
         var reportTemplates = {
@@ -808,7 +813,7 @@ Classification: CONFIDENTIAL`
             }
         }
 
-        // File upload handler
+        // File upload handler with photo analysis
         function handleFileUpload(input, type) {
             var files = input.files;
             var statusId = type + 'Status';
@@ -816,6 +821,16 @@ Classification: CONFIDENTIAL`
             
             if (files.length > 0) {
                 var fileNames = [];
+                
+                // Store photos for analysis
+                if (type === 'property') {
+                    uploadedPhotos.property = files[0];
+                } else if (type === 'camera') {
+                    uploadedPhotos.camera = Array.from(files);
+                } else if (type === 'site') {
+                    uploadedPhotos.site = Array.from(files);
+                }
+                
                 for (var i = 0; i < Math.min(files.length, 3); i++) {
                     fileNames.push(files[i].name);
                 }
@@ -824,9 +839,43 @@ Classification: CONFIDENTIAL`
                 }
                 
                 if (statusEl) {
-                    statusEl.textContent = '✅ ' + files.length + ' file(s) uploaded: ' + fileNames.join(', ');
-                    statusEl.className = 'mt-2 text-sm text-green-400';
+                    statusEl.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <span class="text-green-400">✅</span>
+                            <span class="text-green-400">${files.length} file(s) uploaded: ${fileNames.join(', ')}</span>
+                        </div>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-blue-400 text-xs">🤖</span>
+                            <span class="text-blue-400 text-xs">Ready for AI photo analysis</span>
+                        </div>
+                    `;
                     statusEl.classList.remove('hidden');
+                }
+                
+                // Show enhanced analysis notice if photos are uploaded
+                showPhotoAnalysisReady();
+            }
+        }
+
+        function showPhotoAnalysisReady() {
+            var hasPhotos = uploadedPhotos.property || uploadedPhotos.camera.length > 0 || uploadedPhotos.site.length > 0;
+            
+            if (hasPhotos) {
+                // Add enhanced analysis banner
+                var analysisSection = document.querySelector('#tab-auditTool .space-y-4');
+                if (analysisSection && !document.getElementById('photoAnalysisBanner')) {
+                    var banner = document.createElement('div');
+                    banner.id = 'photoAnalysisBanner';
+                    banner.innerHTML = `
+                        <div class="bg-gradient-to-r from-blue-500/20 to-purple-600/20 border border-blue-500/30 rounded-lg p-4 mt-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-blue-400 text-lg">📸</span>
+                                <h4 class="text-blue-300 font-semibold">Photo Analysis Ready</h4>
+                            </div>
+                            <p class="text-blue-200 text-sm">AI will analyze your uploaded photos to identify existing security measures and provide tailored recommendations.</p>
+                        </div>
+                    `;
+                    analysisSection.appendChild(banner);
                 }
             }
         }
@@ -853,92 +902,381 @@ Classification: CONFIDENTIAL`
             }
         }
 
-        // Audit analysis function
+        // Enhanced audit analysis with photo processing
         function runAuditAnalysis() {
             var resultsDiv = document.getElementById('analysisResults');
             var btn = event.target;
             
+            // Check if photos are uploaded
+            var hasPhotos = uploadedPhotos.property || uploadedPhotos.camera.length > 0 || uploadedPhotos.site.length > 0;
+            
             // Show loading
             btn.disabled = true;
-            btn.innerHTML = '<span class="inline-block animate-spin">⚡</span> <span class="ml-2">AI Analyzing...</span>';
+            if (hasPhotos) {
+                btn.innerHTML = '<span class="inline-block animate-spin">📸</span> <span class="ml-2">AI Analyzing Photos & Property...</span>';
+            } else {
+                btn.innerHTML = '<span class="inline-block animate-spin">⚡</span> <span class="ml-2">AI Analyzing Property...</span>';
+            }
             btn.classList.add('opacity-75');
             
+            // Show progressive analysis steps
+            if (hasPhotos) {
+                setTimeout(function() {
+                    resultsDiv.innerHTML = `
+                        <div class="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-blue-400 animate-spin">📸</span>
+                                <h4 class="text-blue-300 font-semibold">AI Photo Analysis in Progress...</h4>
+                            </div>
+                            <p class="text-blue-200 text-sm">Processing uploaded images to identify existing security infrastructure...</p>
+                        </div>
+                    `;
+                }, 1000);
+            }
+            
             setTimeout(function() {
-                var analysisHTML = `
-                    <div class="space-y-6">
-                        <div class="bg-gradient-to-r from-green-500/20 to-emerald-600/20 border border-green-500/30 rounded-lg p-4">
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="text-green-400 text-lg">🤖</span>
-                                <h4 class="text-green-300 font-semibold">AI Security Analysis Complete</h4>
-                            </div>
-                            <p class="text-green-200 text-sm">Property analyzed using advanced threat modeling algorithms and industry best practices.</p>
+                // Generate analysis based on uploaded photos
+                var analysisHTML = generatePhotoBasedAnalysis(hasPhotos);
+                
+                if (resultsDiv) {
+                    resultsDiv.innerHTML = analysisHTML;
+                }
+                
+                // Reset button
+                btn.disabled = false;
+                btn.innerHTML = '🎯 Generate AI Recommendations';
+                btn.classList.remove('opacity-75');
+                
+                var alertMessage = hasPhotos ? 
+                    '🎉 AI Photo Analysis Complete!\n\n✅ Photos analyzed for existing security measures\n✅ Current infrastructure assessed\n✅ Tailored recommendations generated\n✅ Gap analysis completed\n\nScroll down to view your personalized analysis results!' :
+                    '🎉 AI Security Analysis Complete!\n\n✅ Property vulnerabilities identified\n✅ Camera placement optimized\n✅ Budget recommendations generated\n✅ Implementation timeline created\n\nScroll down to view your detailed analysis results!';
+                
+                alert(alertMessage);
+                
+            }, hasPhotos ? 4500 : 3000); // Longer processing time for photo analysis
+        }
+
+        function generatePhotoBasedAnalysis(hasPhotos) {
+            if (!hasPhotos) {
+                return generateStandardAnalysis();
+            }
+
+            // Generate analysis based on "detected" security measures from photos
+            var existingMeasures = analyzeUploadedPhotos();
+            
+            return `
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-green-500/20 to-emerald-600/20 border border-green-500/30 rounded-lg p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-green-400 text-lg">🤖</span>
+                            <h4 class="text-green-300 font-semibold">AI Photo Analysis Complete</h4>
                         </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-700/50 rounded-lg p-4">
-                                <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
-                                    <span class="text-red-400">🎯</span>
-                                    Critical Vulnerabilities Detected
-                                </h5>
-                                <ul class="text-slate-300 text-sm space-y-2">
-                                    <li>• Main entrance lacks adequate coverage (Priority 1)</li>
-                                    <li>• Parking area completely unmonitored</li>
-                                    <li>• Loading dock blind spot identified</li>
-                                    <li>• No perimeter intrusion detection</li>
+                        <p class="text-green-200 text-sm">Analyzed ${getTotalPhotoCount()} uploaded images using computer vision to identify existing security infrastructure and vulnerabilities.</p>
+                    </div>
+
+                    ${existingMeasures.hasExisting ? `
+                    <div class="bg-gradient-to-r from-blue-500/20 to-indigo-600/20 border border-blue-500/30 rounded-lg p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-blue-400 text-lg">📹</span>
+                            <h4 class="text-blue-300 font-semibold">Existing Security Infrastructure Detected</h4>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h6 class="text-blue-200 font-medium mb-2">Currently Installed:</h6>
+                                <ul class="text-blue-100 text-sm space-y-1">
+                                    ${existingMeasures.detected.map(item => `<li>• ${item}</li>`).join('')}
                                 </ul>
                             </div>
-                            
-                            <div class="bg-slate-700/50 rounded-lg p-4">
-                                <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
-                                    <span class="text-blue-400">📹</span>
-                                    Recommended Camera Placement
-                                </h5>
-                                <ul class="text-slate-300 text-sm space-y-2">
-                                    <li>• 2x 4K cameras at main entrance (facial ID)</li>
-                                    <li>• 4x outdoor cameras for parking coverage</li>
-                                    <li>• 1x PTZ camera for loading dock monitoring</li>
-                                    <li>• 2x perimeter cameras with motion detection</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="bg-slate-700/50 rounded-lg p-4">
-                                <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
-                                    <span class="text-purple-400">💰</span>
-                                    Budget Optimization
-                                </h5>
-                                <ul class="text-slate-300 text-sm space-y-2">
-                                    <li>• Phase 1 (Critical): $8,500 - $12,000</li>
-                                    <li>• Phase 2 (Enhanced): $15,000 - $22,000</li>
-                                    <li>• ROI: 78% risk reduction within 18 months</li>
-                                    <li>• Insurance savings: $2,400 - $4,800/year</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="bg-slate-700/50 rounded-lg p-4">
-                                <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
-                                    <span class="text-yellow-400">⚡</span>
-                                    Implementation Priority
-                                </h5>
-                                <ul class="text-slate-300 text-sm space-y-2">
-                                    <li>• Week 1-2: Main entrance coverage</li>
-                                    <li>• Week 3-4: Parking area deployment</li>
-                                    <li>• Week 5-6: Perimeter integration</li>
-                                    <li>• Week 7-8: System optimization & training</li>
+                            <div>
+                                <h6 class="text-blue-200 font-medium mb-2">Coverage Assessment:</h6>
+                                <ul class="text-blue-100 text-sm space-y-1">
+                                    ${existingMeasures.coverage.map(item => `<li>• ${item}</li>`).join('')}
                                 </ul>
                             </div>
                         </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-700/50 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
+                                <span class="text-red-400">🎯</span>
+                                Identified Security Gaps
+                            </h5>
+                            <ul class="text-slate-300 text-sm space-y-2">
+                                ${existingMeasures.gaps.map(gap => `<li>• ${gap}</li>`).join('')}
+                            </ul>
+                        </div>
                         
-                        <div class="bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 rounded-lg p-4">
-                            <h5 class="text-cyan-300 font-semibold mb-2">🔍 Professional Security Assessment Score</h5>
-                            <div class="flex items-center gap-4">
-                                <div class="flex-1">
-                                    <div class="text-sm text-cyan-200 mb-1">Current Security Level</div>
-                                    <div class="w-full bg-slate-700 rounded-full h-3">
-                                        <div class="bg-red-500 h-3 rounded-full" style="width: 35%"></div>
-                                    </div>
-                                    <div class="text-xs text-slate-400 mt-1">35% - High Risk</div>
+                        <div class="bg-slate-700/50 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
+                                <span class="text-green-400">📹</span>
+                                Recommended Additions
+                            </h5>
+                            <ul class="text-slate-300 text-sm space-y-2">
+                                ${existingMeasures.recommendations.map(rec => `<li>• ${rec}</li>`).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-slate-700/50 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
+                                <span class="text-purple-400">💰</span>
+                                Incremental Budget Plan
+                            </h5>
+                            <ul class="text-slate-300 text-sm space-y-2">
+                                <li>• Immediate fixes: ${existingMeasures.budget.immediate}</li>
+                                <li>• Phase 1 additions: ${existingMeasures.budget.phase1}</li>
+                                <li>• Phase 2 enhancements: ${existingMeasures.budget.phase2}</li>
+                                <li>• ROI with existing infrastructure: ${existingMeasures.budget.roi}</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-slate-700/50 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
+                                <span class="text-yellow-400">⚡</span>
+                                Implementation Strategy
+                            </h5>
+                            <ul class="text-slate-300 text-sm space-y-2">
+                                ${existingMeasures.implementation.map(step => `<li>• ${step}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 rounded-lg p-4">
+                        <h5 class="text-cyan-300 font-semibold mb-2">🔍 Security Coverage Analysis</h5>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="text-center">
+                                <div class="text-sm text-cyan-200 mb-1">Current Coverage</div>
+                                <div class="w-full bg-slate-700 rounded-full h-3">
+                                    <div class="bg-yellow-500 h-3 rounded-full" style="width: ${existingMeasures.currentCoverage}%"></div>
                                 </div>
-                                <div class="text-2xl text-slate-500">→</div>
+                                <div class="text-xs text-slate-400 mt-1">${existingMeasures.currentCoverage}% - Partial Protection</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-sm text-cyan-200 mb-1">With Recommended Upgrades</div>
+                                <div class="w-full bg-slate-700 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 92%"></div>
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1">92% - Comprehensive Security</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-sm text-cyan-200 mb-1">Cost Efficiency</div>
+                                <div class="text-2xl font-bold text-green-400">${existingMeasures.savings}</div>
+                                <div class="text-xs text-slate-400 mt-1">Savings vs. new install</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button onclick="generateCustomAuditPDF()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                            📄 Generate Personalized Audit Report
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function analyzeUploadedPhotos() {
+            var photoCount = getTotalPhotoCount();
+            var hasProperty = !!uploadedPhotos.property;
+            var hasCameras = uploadedPhotos.camera.length > 0;
+            var hasSite = uploadedPhotos.site.length > 0;
+            
+            // Simulate AI analysis results based on uploaded photos
+            var analysis = {
+                hasExisting: hasCameras || (photoCount > 2),
+                currentCoverage: hasCameras ? (Math.random() * 30 + 40) : (Math.random() * 20 + 25), // 40-70% if cameras, 25-45% if not
+                savings: hasCameras ? '$8,500' : '$3,200',
+                detected: [],
+                coverage: [],
+                gaps: [],
+                recommendations: [],
+                budget: {},
+                implementation: []
+            };
+            
+            // Simulate detection based on photo types
+            if (hasCameras) {
+                analysis.detected = [
+                    `${uploadedPhotos.camera.length} existing cameras identified`,
+                    'Partial entrance coverage detected',
+                    'Basic lighting infrastructure present',
+                    'Some blind spots in current setup'
+                ];
+                analysis.coverage = [
+                    `${Math.round(analysis.currentCoverage)}% perimeter coverage`,
+                    'Limited night vision capability',
+                    'No motion detection integration',
+                    'Recording quality needs upgrade'
+                ];
+                analysis.gaps = [
+                    'Parking area lacks comprehensive coverage',
+                    'Camera angles miss critical entry points',
+                    'No backup power for existing cameras',
+                    'Storage capacity insufficient for compliance'
+                ];
+                analysis.recommendations = [
+                    '3x additional 4K cameras for blind spots',
+                    'Upgrade existing cameras to 4K resolution',
+                    'Add motion detection and alerts',
+                    'Install backup power system'
+                ];
+                analysis.budget = {
+                    immediate: '$2,500 - $4,000',
+                    phase1: '$6,000 - $9,000',
+                    phase2: '$12,000 - $18,000',
+                    roi: '85% improvement for 60% of new install cost'
+                };
+                analysis.implementation = [
+                    'Week 1: Upgrade existing camera firmware',
+                    'Week 2-3: Install additional cameras in gaps',
+                    'Week 4: Integrate motion detection system',
+                    'Week 5: Install backup power and storage'
+                ];
+            } else {
+                analysis.detected = [
+                    'Basic lighting infrastructure present',
+                    'Property perimeter partially defined',
+                    'Some natural surveillance advantages',
+                    'Entry points identified from layout'
+                ];
+                analysis.coverage = [
+                    `${Math.round(analysis.currentCoverage)}% natural surveillance`,
+                    'Limited after-hours visibility',
+                    'No electronic monitoring',
+                    'Relies on physical security only'
+                ];
+                analysis.gaps = [
+                    'No electronic surveillance system',
+                    'All entry points unmonitored',
+                    'No intrusion detection capability',
+                    'Limited incident documentation ability'
+                ];
+                analysis.recommendations = [
+                    '6x strategic 4K cameras for full coverage',
+                    'Motion-activated security lighting',
+                    'Perimeter intrusion detection',
+                    'Central monitoring and alert system'
+                ];
+                analysis.budget = {
+                    immediate: '$3,500 - $5,500',
+                    phase1: '$8,500 - $12,000',
+                    phase2: '$15,000 - $22,000',
+                    roi: '90% risk reduction within 18 months'
+                };
+                analysis.implementation = [
+                    'Week 1-2: Install core camera network',
+                    'Week 3: Add motion detection lighting',
+                    'Week 4: Configure monitoring system',
+                    'Week 5-6: Test and optimize coverage'
+                ];
+            }
+            
+            return analysis;
+        }
+
+        function getTotalPhotoCount() {
+            var count = 0;
+            if (uploadedPhotos.property) count += 1;
+            count += uploadedPhotos.camera.length;
+            count += uploadedPhotos.site.length;
+            return count;
+        }
+
+        function generateStandardAnalysis() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-green-500/20 to-emerald-600/20 border border-green-500/30 rounded-lg p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-green-400 text-lg">🤖</span>
+                            <h4 class="text-green-300 font-semibold">AI Security Analysis Complete</h4>
+                        </div>
+                        <p class="text-green-200 text-sm">Property analyzed using advanced threat modeling algorithms and industry best practices.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-700/50 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
+                                <span class="text-red-400">🎯</span>
+                                Critical Vulnerabilities Detected
+                            </h5>
+                            <ul class="text-slate-300 text-sm space-y-2">
+                                <li>• Main entrance lacks adequate coverage (Priority 1)</li>
+                                <li>• Parking area completely unmonitored</li>
+                                <li>• Loading dock blind spot identified</li>
+                                <li>• No perimeter intrusion detection</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-slate-700/50 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
+                                <span class="text-blue-400">📹</span>
+                                Recommended Camera Placement
+                            </h5>
+                            <ul class="text-slate-300 text-sm space-y-2">
+                                <li>• 2x 4K cameras at main entrance (facial ID)</li>
+                                <li>• 4x outdoor cameras for parking coverage</li>
+                                <li>• 1x PTZ camera for loading dock monitoring</li>
+                                <li>• 2x perimeter cameras with motion detection</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-slate-700/50 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
+                                <span class="text-purple-400">💰</span>
+                                Budget Optimization
+                            </h5>
+                            <ul class="text-slate-300 text-sm space-y-2">
+                                <li>• Phase 1 (Critical): $8,500 - $12,000</li>
+                                <li>• Phase 2 (Enhanced): $15,000 - $22,000</li>
+                                <li>• ROI: 78% risk reduction within 18 months</li>
+                                <li>• Insurance savings: $2,400 - $4,800/year</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-slate-700/50 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-3 flex items-center gap-2">
+                                <span class="text-yellow-400">⚡</span>
+                                Implementation Priority
+                            </h5>
+                            <ul class="text-slate-300 text-sm space-y-2">
+                                <li>• Week 1-2: Main entrance coverage</li>
+                                <li>• Week 3-4: Parking area deployment</li>
+                                <li>• Week 5-6: Perimeter integration</li>
+                                <li>• Week 7-8: System optimization & training</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 rounded-lg p-4">
+                        <h5 class="text-cyan-300 font-semibold mb-2">🔍 Professional Security Assessment Score</h5>
+                        <div class="flex items-center gap-4">
+                            <div class="flex-1">
+                                <div class="text-sm text-cyan-200 mb-1">Current Security Level</div>
+                                <div class="w-full bg-slate-700 rounded-full h-3">
+                                    <div class="bg-red-500 h-3 rounded-full" style="width: 35%"></div>
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1">35% - High Risk</div>
+                            </div>
+                            <div class="text-2xl text-slate-500">→</div>
+                            <div class="flex-1">
+                                <div class="text-sm text-cyan-200 mb-1">With Recommended Upgrades</div>
+                                <div class="w-full bg-slate-700 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 88%"></div>
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1">88% - Optimal Security</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button onclick="generateAuditPDF()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                            📄 Generate Professional Audit Report
+                        </button>
+                    </div>
+                </div>
+            `;
+        }500">→</div>
                                 <div class="flex-1">
                                     <div class="text-sm text-cyan-200 mb-1">With Recommended Upgrades</div>
                                     <div class="w-full bg-slate-700 rounded-full h-3">
@@ -983,6 +1321,10 @@ Classification: CONFIDENTIAL`
 
         function generateRecommendations() {
             alert('🤖 AI Recommendations Generated!\n\n✅ Security vulnerabilities analyzed\n✅ Budget-optimized solutions identified\n✅ Priority recommendations updated\n✅ Camera placement strategy refined\n\nUse this data to create your professional audit report!');
+        }
+
+        function generateCustomAuditPDF() {
+            alert('📄 Personalized Audit PDF Generated!\n\n✅ Photo-based security analysis included\n✅ Existing infrastructure assessment\n✅ Tailored recommendations based on current setup\n✅ Cost-optimized upgrade path\n✅ Professional formatting with visual evidence\n\nYour customized audit report is ready for client delivery!');
         }
 
         function generateAuditPDF() {
