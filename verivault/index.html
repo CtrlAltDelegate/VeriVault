@@ -12,16 +12,16 @@
     <div class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex space-x-8">
-                <button id="tabReports" class="tab-button active py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400/10">
+                <button onclick="showTab('reports')" class="tab-btn active py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400/10">
                     📊 Report Generation
                 </button>
-                <button id="tabLogger" class="tab-button py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                <button onclick="showTab('logger')" class="tab-btn py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
                     📝 Event Logger
                 </button>
-                <button id="tabIntake" class="tab-button py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                <button onclick="showTab('intake')" class="tab-btn py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
                     🔐 Security Audit Intake
                 </button>
-                <button id="tabAuditTool" class="tab-button py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                <button onclick="showTab('auditTool')" class="tab-btn py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
                     🔍 Audit Analysis Tool
                 </button>
             </div>
@@ -29,7 +29,7 @@
     </div>
 
     <!-- REPORTS TAB CONTENT -->
-    <div id="reportsContent" class="tab-content">
+    <div id="tab-reports" class="tab-content">
         <div class="flex h-screen">
             <!-- Sidebar -->
             <div class="w-80 bg-slate-800/50 backdrop-blur-sm border-r border-white/10 p-6">
@@ -48,7 +48,7 @@
                 <div class="space-y-2">
                     <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
                     
-                    <div class="sidebar-item active bg-blue-600 p-3 rounded-lg cursor-pointer transition-all hover:bg-blue-700" data-report="daily-log">
+                    <div onclick="selectReport('daily-log')" class="report-item active bg-blue-600 p-3 rounded-lg cursor-pointer transition-all hover:bg-blue-700">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">📅</span>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
 
-                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="incident-medical">
+                    <div onclick="selectReport('incident-medical')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">🏥</span>
@@ -72,7 +72,7 @@
                         </div>
                     </div>
 
-                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="incident-non-medical">
+                    <div onclick="selectReport('incident-non-medical')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">⚠️</span>
@@ -84,7 +84,7 @@
                         </div>
                     </div>
 
-                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="annual-security">
+                    <div onclick="selectReport('annual-security')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">🛡️</span>
@@ -96,7 +96,7 @@
                         </div>
                     </div>
 
-                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="systems-audit">
+                    <div onclick="selectReport('systems-audit')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">⚙️</span>
@@ -108,7 +108,7 @@
                         </div>
                     </div>
 
-                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="discrepancy">
+                    <div onclick="selectReport('discrepancy')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">🔍</span>
@@ -120,7 +120,7 @@
                         </div>
                     </div>
 
-                    <div class="sidebar-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600" data-report="vehicle-inspection">
+                    <div onclick="selectReport('vehicle-inspection')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">🚗</span>
@@ -166,24 +166,13 @@
                             <label class="block text-sm font-medium text-slate-300 mb-2">
                                 📊 Upload CSV Data for AI Analysis (Optional)
                             </label>
-                            <div id="dropZone" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed">
+                            <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed">
                                 <div class="text-4xl mb-4">📁</div>
                                 <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
                                 <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
                             </div>
-                            <input type="file" id="csvInput" accept=".csv" style="display: none;">
+                            <input type="file" id="csvInput" accept=".csv" style="display: none;" onchange="handleCSVUpload(this)">
                             <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
-                        </div>
-
-                        <!-- AI Enhanced Section -->
-                        <div id="aiEnhancedSection" class="mb-6 hidden">
-                            <div class="bg-gradient-to-r from-purple-500/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-4 mb-4">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="text-purple-400 text-lg">🤖</span>
-                                    <h3 class="text-purple-300 font-semibold">AI Enhancement Ready</h3>
-                                </div>
-                                <p class="text-purple-200 text-sm">CSV data detected! The AI will analyze your data and enhance the report with intelligent insights, patterns, and recommendations.</p>
-                            </div>
                         </div>
 
                         <!-- Report Content -->
@@ -196,7 +185,7 @@
 
                         <!-- Generate Button -->
                         <div>
-                            <button id="generateReportBtn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
+                            <button onclick="generateReport()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
                                 📄 Generate Report
                             </button>
                         </div>
@@ -207,7 +196,7 @@
     </div>
 
     <!-- EVENT LOGGER TAB CONTENT -->
-    <div id="loggerContent" class="tab-content hidden">
+    <div id="tab-logger" class="tab-content hidden">
         <div class="w-full p-8">
             <div class="max-w-4xl mx-auto">
                 <div class="mb-8">
@@ -220,25 +209,25 @@
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-slate-300 mb-3">Event Type</label>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <button class="event-type-btn active" data-type="staff">
+                            <button onclick="selectEventType('staff')" class="event-btn active">
                                 <div class="bg-blue-600 p-4 rounded-lg text-center hover:bg-blue-700 transition-colors">
                                     <div class="text-2xl mb-2">👥</div>
                                     <div class="text-white font-medium">Staff</div>
                                 </div>
                             </button>
-                            <button class="event-type-btn" data-type="vendor">
+                            <button onclick="selectEventType('vendor')" class="event-btn">
                                 <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
                                     <div class="text-2xl mb-2">🔧</div>
                                     <div class="text-white font-medium">Vendor</div>
                                 </div>
                             </button>
-                            <button class="event-type-btn" data-type="delivery">
+                            <button onclick="selectEventType('delivery')" class="event-btn">
                                 <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
                                     <div class="text-2xl mb-2">📦</div>
                                     <div class="text-white font-medium">Delivery</div>
                                 </div>
                             </button>
-                            <button class="event-type-btn" data-type="guest">
+                            <button onclick="selectEventType('guest')" class="event-btn">
                                 <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
                                     <div class="text-2xl mb-2">🏃</div>
                                     <div class="text-white font-medium">Guest</div>
@@ -247,46 +236,41 @@
                         </div>
                     </div>
 
-                    <!-- Dynamic Form Fields -->
-                    <div id="eventForm">
-                        <!-- Staff Form (Default) -->
-                        <div id="staffForm" class="event-form">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Staff Name</label>
-                                    <input type="text" placeholder="Enter staff member name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
-                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                                        <option value="">Select action</option>
-                                        <option value="arrived">Arrived</option>
-                                        <option value="departed">Departed</option>
-                                        <option value="break">Break Started</option>
-                                        <option value="return">Returned from Break</option>
-                                    </select>
-                                </div>
-                            </div>
+                    <!-- Form Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Name</label>
+                            <input type="text" placeholder="Enter name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                         </div>
-
-                        <!-- Common Notes Field -->
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium text-slate-300 mb-2">Notes</label>
-                            <textarea rows="3" placeholder="Additional observations or details..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"></textarea>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
+                            <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <option value="">Select action</option>
+                                <option value="arrived">Arrived</option>
+                                <option value="departed">Departed</option>
+                                <option value="break">Break Started</option>
+                                <option value="return">Returned from Break</option>
+                            </select>
                         </div>
-
-                        <!-- Log Entry Button -->
-                        <button id="logEventBtn" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
-                            ✅ Log Event
-                        </button>
                     </div>
+
+                    <!-- Notes Field -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Notes</label>
+                        <textarea rows="3" placeholder="Additional observations or details..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"></textarea>
+                    </div>
+
+                    <!-- Log Entry Button -->
+                    <button onclick="logEvent()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                        ✅ Log Event
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- SECURITY AUDIT INTAKE TAB -->
-    <div id="intakeContent" class="tab-content hidden">
+    <div id="tab-intake" class="tab-content hidden">
         <div class="w-full p-8">
             <div class="max-w-5xl mx-auto">
                 <div class="mb-8 text-center">
@@ -300,7 +284,7 @@
                     <div class="mb-8">
                         <h3 class="text-2xl font-bold text-white mb-6 text-center">Choose Your Security Audit Package</h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div class="relative bg-gradient-to-br from-slate-700 to-slate-800 p-6 rounded-xl border border-white/10 hover:border-cyan-400/50 transition-all cursor-pointer audit-package" data-package="starter">
+                            <div onclick="selectPackage('starter')" class="package-item cursor-pointer relative bg-gradient-to-br from-slate-700 to-slate-800 p-6 rounded-xl border border-white/10 hover:border-cyan-400/50 transition-all">
                                 <div class="text-center">
                                     <div class="text-3xl mb-3">🏠</div>
                                     <h4 class="text-xl font-bold text-white mb-2">Starter Audit</h4>
@@ -315,7 +299,7 @@
                                 </div>
                             </div>
                             
-                            <div class="relative bg-gradient-to-br from-cyan-600 to-blue-700 p-6 rounded-xl border-2 border-cyan-400 hover:border-cyan-300 transition-all cursor-pointer audit-package popular" data-package="premium">
+                            <div onclick="selectPackage('premium')" class="package-item cursor-pointer active relative bg-gradient-to-br from-cyan-600 to-blue-700 p-6 rounded-xl border-2 border-cyan-400 hover:border-cyan-300 transition-all">
                                 <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
                                     <span class="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold">MOST POPULAR</span>
                                 </div>
@@ -335,7 +319,7 @@
                                 </div>
                             </div>
                             
-                            <div class="relative bg-gradient-to-br from-purple-600 to-pink-700 p-6 rounded-xl border border-white/10 hover:border-purple-400/50 transition-all cursor-pointer audit-package" data-package="enterprise">
+                            <div onclick="selectPackage('enterprise')" class="package-item cursor-pointer relative bg-gradient-to-br from-purple-600 to-pink-700 p-6 rounded-xl border border-white/10 hover:border-purple-400/50 transition-all">
                                 <div class="text-center">
                                     <div class="text-3xl mb-3">🏰</div>
                                     <h4 class="text-xl font-bold text-white mb-2">Enterprise Audit</h4>
@@ -382,7 +366,7 @@
                                 </select>
                             </div>
 
-                            <button id="generateRecommendationsBtn" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                            <button onclick="generateRecommendations()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
                                 🔄 Generate AI Recommendations
                             </button>
                         </div>
@@ -393,7 +377,7 @@
     </div>
 
     <!-- AUDIT ANALYSIS TOOL TAB -->
-    <div id="auditToolContent" class="tab-content hidden">
+    <div id="tab-auditTool" class="tab-content hidden">
         <div class="w-full p-8">
             <div class="max-w-6xl mx-auto">
                 <div class="mb-8">
@@ -414,63 +398,14 @@
                             
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Type</label>
-                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                                        <option value="">Select type</option>
-                                        <option value="residential_estate">Residential Estate</option>
-                                        <option value="commercial">Commercial Building</option>
-                                        <option value="industrial">Industrial Facility</option>
-                                        <option value="retail">Retail Location</option>
-                                        <option value="mixed_use">Mixed Use</option>
-                                        <option value="government">Government Building</option>
-                                        <option value="educational">Educational Facility</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Risk Level</label>
-                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                                        <option value="">Assess risk</option>
-                                        <option value="low">Low Risk</option>
-                                        <option value="medium">Medium Risk</option>
-                                        <option value="high">High Risk</option>
-                                        <option value="critical">Critical Risk</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Photo Upload Sections -->
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Layout/Aerial View</label>
-                                    <div id="propertyLayoutDrop" class="border-2 border-dashed border-cyan-400/30 rounded-lg p-4 text-center hover:border-cyan-400/50 transition-colors cursor-pointer bg-white/5">
-                                        <div class="text-3xl mb-2">🛰️</div>
-                                        <p class="text-slate-300 text-sm mb-1">Upload aerial view, Google Earth screenshot, or property layout</p>
-                                        <p class="text-slate-400 text-xs">PNG, JPG, PDF up to 10MB</p>
-                                    </div>
-                                    <input type="file" id="propertyLayoutUpload" accept="image/*,.pdf" class="hidden">
-                                    <div id="propertyLayoutStatus" class="mt-2 text-sm hidden"></div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Current Camera Locations & Views</label>
-                                    <div id="cameraLocationsDrop" class="border-2 border-dashed border-green-400/30 rounded-lg p-4 text-center hover:border-green-400/50 transition-colors cursor-pointer bg-white/5">
-                                        <div class="text-3xl mb-2">📹</div>
-                                        <p class="text-slate-300 text-sm mb-1">Upload photos of existing cameras and their current views</p>
-                                        <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
-                                    </div>
-                                    <input type="file" id="cameraLocationsUpload" accept="image/*" multiple class="hidden">
-                                    <div id="cameraLocationsStatus" class="mt-2 text-sm hidden"></div>
-                                </div>
-
-                                <div>
                                     <label class="block text-sm font-medium text-slate-300 mb-2">Site Photos (Optional)</label>
-                                    <div id="sitePhotosDrop" class="border-2 border-dashed border-purple-400/30 rounded-lg p-4 text-center hover:border-purple-400/50 transition-colors cursor-pointer bg-white/5">
+                                    <div onclick="document.getElementById('sitePhotos').click()" class="border-2 border-dashed border-purple-400/30 rounded-lg p-4 text-center hover:border-purple-400/50 transition-colors cursor-pointer bg-white/5">
                                         <div class="text-3xl mb-2">📸</div>
                                         <p class="text-slate-300 text-sm mb-1">Upload additional site photos for context</p>
                                         <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
                                     </div>
-                                    <input type="file" id="sitePhotosUpload" accept="image/*" multiple class="hidden">
-                                    <div id="sitePhotosStatus" class="mt-2 text-sm hidden"></div>
+                                    <input type="file" id="sitePhotos" accept="image/*" multiple class="hidden" onchange="handleFileUpload(this, 'site')">
+                                    <div id="siteStatus" class="mt-2 text-sm hidden"></div>
                                 </div>
                             </div>
                         </div>
@@ -515,7 +450,7 @@
                                 </div>
                             </div>
 
-                            <button id="generateAuditRecommendations" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
+                            <button onclick="runAuditAnalysis()" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
                                 🎯 Generate AI Recommendations
                             </button>
                         </div>
@@ -535,13 +470,12 @@
 
     <script>
         // Global variables
-        let currentTab = 'reports';
-        let selectedPackage = 'premium';
-        let currentReportType = 'daily-log';
-        let uploadedCsvData = null;
+        var currentTab = 'reports';
+        var selectedPackage = 'premium';
+        var currentReport = 'daily-log';
 
         // Report templates
-        const reportData = {
+        var reportTemplates = {
             'daily-log': {
                 title: 'Daily Log',
                 description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
@@ -767,229 +701,170 @@ Classification: CONFIDENTIAL`
             }
         };
 
-        // Functions
-        function switchTab(tabName) {
-            console.log('=== Switching to tab:', tabName, '===');
+        // Tab switching function
+        function showTab(tabName) {
+            console.log('Switching to tab:', tabName);
             
             // Hide all tab contents
-            const tabContents = document.querySelectorAll('.tab-content');
-            console.log('Found tab contents:', tabContents.length);
-            tabContents.forEach(content => {
-                content.classList.add('hidden');
-            });
-            
-            // Remove active class from all tab buttons
-            const tabButtons = document.querySelectorAll('.tab-button');
-            console.log('Found tab buttons:', tabButtons.length);
-            tabButtons.forEach(btn => {
-                btn.classList.remove('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
-                btn.classList.add('text-slate-400', 'border-transparent');
-            });
-            
-            // Show selected tab content
-            const targetContent = document.getElementById(tabName + 'Content');
-            console.log('Target content element:', targetContent);
-            if (targetContent) {
-                targetContent.classList.remove('hidden');
-                console.log('Showed content for:', tabName);
-            } else {
-                console.error('Could not find content for tab:', tabName);
+            var tabs = document.querySelectorAll('.tab-content');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.add('hidden');
             }
             
-            // Activate selected tab button
-            const targetButton = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
-            console.log('Target button element:', targetButton);
-            if (targetButton) {
-                targetButton.classList.add('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
-                targetButton.classList.remove('text-slate-400', 'border-transparent');
-                console.log('Activated button for:', tabName);
-            } else {
-                console.error('Could not find button for tab:', tabName);
+            // Remove active class from all tab buttons
+            var buttons = document.querySelectorAll('.tab-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
+                buttons[i].classList.add('text-slate-400', 'border-transparent');
+            }
+            
+            // Show selected tab
+            var targetTab = document.getElementById('tab-' + tabName);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+            }
+            
+            // Activate selected button
+            var activeBtn = event.target;
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
+                activeBtn.classList.remove('text-slate-400', 'border-transparent');
             }
             
             currentTab = tabName;
-            console.log('=== Tab switch complete. Current tab:', currentTab, '===');
         }
 
+        // Report selection function
         function selectReport(reportType) {
             console.log('Selecting report:', reportType);
             
-            currentReportType = reportType;
-            const report = reportData[reportType];
+            currentReport = reportType;
+            var report = reportTemplates[reportType];
             
             if (!report) {
-                console.error('Report type not found:', reportType);
+                console.error('Report not found:', reportType);
                 return;
             }
             
-            // Update active sidebar item
-            document.querySelectorAll('.sidebar-item').forEach(item => {
-                item.classList.remove('active', 'bg-blue-600');
-                item.classList.add('bg-slate-700');
-            });
-            
-            const targetItem = document.querySelector(`[data-report="${reportType}"]`);
-            if (targetItem) {
-                targetItem.classList.remove('bg-slate-700');
-                targetItem.classList.add('active', 'bg-blue-600');
+            // Update sidebar active state
+            var reportItems = document.querySelectorAll('.report-item');
+            for (var i = 0; i < reportItems.length; i++) {
+                reportItems[i].classList.remove('active', 'bg-blue-600');
+                reportItems[i].classList.add('bg-slate-700');
             }
             
-            // Update main content
-            const titleElement = document.getElementById('reportTitle');
-            const descElement = document.getElementById('reportDescription');
-            const contentElement = document.getElementById('reportContent');
+            // Make clicked item active
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.remove('bg-slate-700');
+                event.currentTarget.classList.add('active', 'bg-blue-600');
+            }
             
-            if (titleElement) titleElement.textContent = report.title;
-            if (descElement) descElement.textContent = report.description;
+            // Update content
+            var titleEl = document.getElementById('reportTitle');
+            var descEl = document.getElementById('reportDescription');
+            var contentEl = document.getElementById('reportContent');
             
-            // Update template content
-            if (contentElement) {
-                const clientNameEl = document.getElementById('clientName');
-                const reportDateEl = document.getElementById('reportDate');
-                const clientName = clientNameEl ? clientNameEl.value : '';
-                const reportDate = reportDateEl ? reportDateEl.value : new Date().toISOString().split('T')[0];
+            if (titleEl) titleEl.textContent = report.title;
+            if (descEl) descEl.textContent = report.description;
+            
+            if (contentEl) {
+                var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : '';
+                var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
                 
-                const template = report.template
+                var template = report.template
                     .replace(/\[CLIENT_NAME\]/g, clientName || 'CLIENT_NAME')
                     .replace(/\[REPORT_DATE\]/g, reportDate);
-                contentElement.value = template;
+                contentEl.value = template;
             }
-            
-            // Reset CSV upload state
-            uploadedCsvData = null;
-            const aiSection = document.getElementById('aiEnhancedSection');
-            const uploadStatus = document.getElementById('uploadStatus');
-            if (aiSection) aiSection.classList.add('hidden');
-            if (uploadStatus) uploadStatus.classList.add('hidden');
         }
 
-        function handleFileUpload(file) {
-            console.log('Processing file:', file.name);
-            
-            const uploadStatus = document.getElementById('uploadStatus');
-            
-            if (!file.name.toLowerCase().endsWith('.csv')) {
-                if (uploadStatus) {
-                    uploadStatus.textContent = '❌ Please upload a CSV file only';
-                    uploadStatus.className = 'mt-2 text-sm text-red-400';
-                    uploadStatus.classList.remove('hidden');
-                }
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedCsvData = e.target.result;
-                console.log('CSV data loaded, length:', uploadedCsvData.length);
-                
-                if (uploadStatus) {
-                    uploadStatus.textContent = '✅ File uploaded: ' + file.name;
-                    uploadStatus.className = 'mt-2 text-sm text-green-400';
-                    uploadStatus.classList.remove('hidden');
-                }
-                
-                const aiSection = document.getElementById('aiEnhancedSection');
-                if (aiSection) {
-                    aiSection.classList.remove('hidden');
-                }
-            };
-            reader.readAsText(file);
-        }
-
+        // Event type selection
         function selectEventType(eventType) {
-            document.querySelectorAll('.event-form').forEach(form => {
-                form.classList.add('hidden');
-            });
-            
-            const targetForm = document.getElementById(eventType + 'Form');
-            if (targetForm) {
-                targetForm.classList.remove('hidden');
-            }
-            
-            document.querySelectorAll('.event-type-btn').forEach(btn => {
-                const btnDiv = btn.querySelector('div');
-                if (btn.dataset.type === eventType) {
-                    btnDiv.classList.remove('bg-slate-600');
-                    btnDiv.classList.add('bg-blue-600');
+            var eventBtns = document.querySelectorAll('.event-btn');
+            for (var i = 0; i < eventBtns.length; i++) {
+                var btn = eventBtns[i];
+                var div = btn.querySelector('div');
+                if (btn === event.currentTarget) {
+                    div.classList.remove('bg-slate-600');
+                    div.classList.add('bg-blue-600');
                     btn.classList.add('active');
                 } else {
-                    btnDiv.classList.remove('bg-blue-600');
-                    btnDiv.classList.add('bg-slate-600');
+                    div.classList.remove('bg-blue-600');
+                    div.classList.add('bg-slate-600');
                     btn.classList.remove('active');
                 }
-            });
+            }
         }
 
-        function selectAuditPackage(packageType) {
-            document.querySelectorAll('.audit-package').forEach(pkg => {
-                pkg.classList.remove('ring-2', 'ring-cyan-400', 'ring-purple-400', 'ring-slate-400');
-                if (pkg.dataset.package === packageType) {
-                    if (packageType === 'premium') {
-                        pkg.classList.add('ring-2', 'ring-cyan-400');
-                    } else if (packageType === 'enterprise') {
-                        pkg.classList.add('ring-2', 'ring-purple-400');
-                    } else {
-                        pkg.classList.add('ring-2', 'ring-slate-400');
+        // Package selection
+        function selectPackage(packageType) {
+            selectedPackage = packageType;
+            var packages = document.querySelectorAll('.package-item');
+            for (var i = 0; i < packages.length; i++) {
+                packages[i].classList.remove('active');
+            }
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        // File upload handler
+        function handleFileUpload(input, type) {
+            var files = input.files;
+            var statusId = type + 'Status';
+            var statusEl = document.getElementById(statusId);
+            
+            if (files.length > 0) {
+                var fileNames = [];
+                for (var i = 0; i < Math.min(files.length, 3); i++) {
+                    fileNames.push(files[i].name);
+                }
+                if (files.length > 3) {
+                    fileNames.push('... and ' + (files.length - 3) + ' more');
+                }
+                
+                if (statusEl) {
+                    statusEl.textContent = '✅ ' + files.length + ' file(s) uploaded: ' + fileNames.join(', ');
+                    statusEl.className = 'mt-2 text-sm text-green-400';
+                    statusEl.classList.remove('hidden');
+                }
+            }
+        }
+
+        // CSV upload handler
+        function handleCSVUpload(input) {
+            var file = input.files[0];
+            var statusEl = document.getElementById('uploadStatus');
+            
+            if (file) {
+                if (file.name.toLowerCase().endsWith('.csv')) {
+                    if (statusEl) {
+                        statusEl.textContent = '✅ File uploaded: ' + file.name;
+                        statusEl.className = 'mt-2 text-sm text-green-400';
+                        statusEl.classList.remove('hidden');
+                    }
+                } else {
+                    if (statusEl) {
+                        statusEl.textContent = '❌ Please upload a CSV file only';
+                        statusEl.className = 'mt-2 text-sm text-red-400';
+                        statusEl.classList.remove('hidden');
                     }
                 }
-            });
-            selectedPackage = packageType;
-        }
-
-        function logEvent() {
-            const timestamp = new Date().toLocaleTimeString();
-            alert('✅ Event logged successfully at ' + timestamp);
-        }
-
-        function generateReport() {
-            alert('📄 Report generated successfully!');
-        }
-
-        function handleAuditFileUpload(files, statusElement, dropElement) {
-            const fileCount = files.length;
-            let fileNames = [];
-            
-            for (let i = 0; i < Math.min(fileCount, 3); i++) {
-                fileNames.push(files[i].name);
             }
-            
-            if (fileCount > 3) {
-                fileNames.push(`... and ${fileCount - 3} more`);
-            }
-            
-            statusElement.textContent = `✅ ${fileCount} file(s) uploaded: ${fileNames.join(', ')}`;
-            statusElement.className = 'mt-2 text-sm text-green-400';
-            statusElement.classList.remove('hidden');
-            
-            // Update drop zone appearance
-            dropElement.innerHTML = `
-                <div class="text-3xl mb-2">✅</div>
-                <p class="text-green-400 text-sm mb-1">${fileCount} file(s) uploaded</p>
-                <p class="text-slate-400 text-xs">Click to change files</p>
-            `;
         }
 
-        function generateAIRecommendations() {
-            alert('🤖 AI Recommendations Generated!\n\n✅ Security vulnerabilities analyzed\n✅ Budget-optimized solutions identified\n✅ Priority recommendations updated\n✅ Camera placement strategy refined\n\nUse this data to create your professional audit report!');
-        }
-
-        function generateAuditAnalysis() {
-            console.log('Generating audit analysis...');
+        // Audit analysis function
+        function runAuditAnalysis() {
+            var resultsDiv = document.getElementById('analysisResults');
+            var btn = event.target;
             
-            const button = document.getElementById('generateAuditRecommendations');
-            const resultsDiv = document.getElementById('analysisResults');
+            // Show loading
+            btn.disabled = true;
+            btn.innerHTML = '<span class="inline-block animate-spin">⚡</span> <span class="ml-2">AI Analyzing...</span>';
+            btn.classList.add('opacity-75');
             
-            // Show loading state
-            if (button) {
-                button.disabled = true;
-                button.innerHTML = '<span class="inline-block animate-spin">⚡</span> <span class="ml-2">AI Analyzing...</span>';
-                button.classList.add('opacity-75');
-            }
-            
-            // Simulate AI processing time
-            setTimeout(() => {
-                // Generate realistic AI analysis results
-                const analysisContent = `
+            setTimeout(function() {
+                var analysisHTML = `
                     <div class="space-y-6">
                         <div class="bg-gradient-to-r from-green-500/20 to-emerald-600/20 border border-green-500/30 rounded-lg p-4">
                             <div class="flex items-center gap-2 mb-3">
@@ -1075,7 +950,7 @@ Classification: CONFIDENTIAL`
                         </div>
                         
                         <div class="text-center">
-                            <button class="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                            <button onclick="generateAuditPDF()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
                                 📄 Generate Professional Audit Report
                             </button>
                         </div>
@@ -1083,248 +958,101 @@ Classification: CONFIDENTIAL`
                 `;
                 
                 if (resultsDiv) {
-                    resultsDiv.innerHTML = analysisContent;
+                    resultsDiv.innerHTML = analysisHTML;
                 }
                 
                 // Reset button
-                if (button) {
-                    button.disabled = false;
-                    button.innerHTML = '🎯 Generate AI Recommendations';
-                    button.classList.remove('opacity-75');
-                }
+                btn.disabled = false;
+                btn.innerHTML = '🎯 Generate AI Recommendations';
+                btn.classList.remove('opacity-75');
                 
-                // Show success notification
-                setTimeout(() => {
-                    alert('🎉 AI Security Analysis Complete!\n\n✅ Property vulnerabilities identified\n✅ Camera placement optimized\n✅ Budget recommendations generated\n✅ Implementation timeline created\n\nScroll down to view your detailed analysis results!');
-                }, 500);
+                alert('🎉 AI Security Analysis Complete!\n\n✅ Property vulnerabilities identified\n✅ Camera placement optimized\n✅ Budget recommendations generated\n✅ Implementation timeline created\n\nScroll down to view your detailed analysis results!');
                 
-            }, 3000); // 3 second realistic AI processing time
-        }<div class="text-xs text-slate-400 mt-1">35% - High Risk</div>
-                                </div>
-                                <div class="text-2xl text-slate-500">→</div>
-                                <div class="flex-1">
-                                    <div class="text-sm text-cyan-200 mb-1">With Recommended Upgrades</div>
-                                    <div class="w-full bg-slate-700 rounded-full h-3">
-                                        <div class="bg-green-500 h-3 rounded-full" style="width: 88%"></div>
-                                    </div>
-                                    <div class="text-xs text-slate-400 mt-1">88% - Optimal Security</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="text-center">
-                            <button class="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
-                                📄 Generate Professional Audit Report
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                if (resultsDiv) {
-                    resultsDiv.innerHTML = analysisContent;
-                }
-                
-                // Reset button
-                if (button) {
-                    button.disabled = false;
-                    button.innerHTML = '🎯 Generate AI Recommendations';
-                    button.classList.remove('opacity-75');
-                }
-                
-                // Show success notification
-                setTimeout(() => {
-                    alert('🎉 AI Security Analysis Complete!\n\n✅ Property vulnerabilities identified\n✅ Camera placement optimized\n✅ Budget recommendations generated\n✅ Implementation timeline created\n\nScroll down to view your detailed analysis results!');
-                }, 500);
-                
-            }, 3000); // 3 second realistic AI processing time
+            }, 3000);
         }
 
-        // Event listeners
+        // Button functions
+        function generateReport() {
+            alert('📄 Report generated successfully!');
+        }
+
+        function logEvent() {
+            var timestamp = new Date().toLocaleTimeString();
+            alert('✅ Event logged successfully at ' + timestamp);
+        }
+
+        function generateRecommendations() {
+            alert('🤖 AI Recommendations Generated!\n\n✅ Security vulnerabilities analyzed\n✅ Budget-optimized solutions identified\n✅ Priority recommendations updated\n✅ Camera placement strategy refined\n\nUse this data to create your professional audit report!');
+        }
+
+        function generateAuditPDF() {
+            alert('📄 Professional Audit PDF Generated!\n\n✅ Comprehensive security analysis\n✅ Camera placement diagrams\n✅ Budget recommendations\n✅ Implementation timeline\n✅ Professional formatting\n\nYour audit report is ready for client delivery!');
+        }
+
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('VeriVault Dashboard Loading');
-            
-            // Tab navigation - Fixed event handlers
-            const tabReports = document.getElementById('tabReports');
-            const tabLogger = document.getElementById('tabLogger');
-            const tabIntake = document.getElementById('tabIntake');
-            const tabAuditTool = document.getElementById('tabAuditTool');
-            
-            if (tabReports) {
-                tabReports.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Reports tab clicked');
-                    switchTab('reports');
-                });
-            }
-            
-            if (tabLogger) {
-                tabLogger.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Logger tab clicked');
-                    switchTab('logger');
-                });
-            }
-            
-            if (tabIntake) {
-                tabIntake.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Intake tab clicked');
-                    switchTab('intake');
-                });
-            }
-            
-            if (tabAuditTool) {
-                tabAuditTool.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Audit Tool tab clicked');
-                    switchTab('auditTool');
-                });
-            }
-            
-            // Sidebar click handlers - Fixed to work properly
-            const sidebarItems = document.querySelectorAll('.sidebar-item[data-report]');
-            console.log('Found sidebar items:', sidebarItems.length);
-            
-            sidebarItems.forEach(function(item) {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const reportType = this.getAttribute('data-report');
-                    console.log('Sidebar item clicked:', reportType);
-                    if (reportType) {
-                        selectReport(reportType);
-                    }
-                });
-            });
-            
-            // CSV upload
-            const dropZone = document.getElementById('dropZone');
-            const csvInput = document.getElementById('csvInput');
-            
-            if (dropZone && csvInput) {
-                dropZone.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    csvInput.click();
-                });
-
-                csvInput.addEventListener('change', (e) => {
-                    if (e.target.files.length > 0) {
-                        handleFileUpload(e.target.files[0]);
-                    }
-                });
-            }
-            
-            // Event type buttons
-            document.querySelectorAll('.event-type-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const eventType = this.dataset.type;
-                    selectEventType(eventType);
-                });
-            });
-            
-            // Audit packages
-            document.querySelectorAll('.audit-package').forEach(pkg => {
-                pkg.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const packageType = this.dataset.package;
-                    selectAuditPackage(packageType);
-                });
-            });
-
-            // Button handlers
-            const generateRecommendationsBtn = document.getElementById('generateRecommendationsBtn');
-            if (generateRecommendationsBtn) {
-                generateRecommendationsBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    generateAIRecommendations();
-                });
-            }
-
-            // Photo upload handlers for audit tool
-            const auditUploads = [
-                { dropId: 'propertyLayoutDrop', inputId: 'propertyLayoutUpload', statusId: 'propertyLayoutStatus' },
-                { dropId: 'cameraLocationsDrop', inputId: 'cameraLocationsUpload', statusId: 'cameraLocationsStatus' },
-                { dropId: 'sitePhotosDrop', inputId: 'sitePhotosUpload', statusId: 'sitePhotosStatus' }
-            ];
-
-            auditUploads.forEach(upload => {
-                const dropZone = document.getElementById(upload.dropId);
-                const fileInput = document.getElementById(upload.inputId);
-                const statusDiv = document.getElementById(upload.statusId);
-
-                if (dropZone && fileInput && statusDiv) {
-                    dropZone.addEventListener('click', () => fileInput.click());
-                    
-                    fileInput.addEventListener('change', (e) => {
-                        if (e.target.files.length > 0) {
-                            handleAuditFileUpload(e.target.files, statusDiv, dropZone);
-                        }
-                    });
-                }
-            });
-
-            // Generate AI recommendations for audit tool
-            const generateAuditRecommendationsBtn = document.getElementById('generateAuditRecommendations');
-            if (generateAuditRecommendationsBtn) {
-                generateAuditRecommendationsBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    generateAuditAnalysis();
-                });
-            }
-
-            const logEventBtn = document.getElementById('logEventBtn');
-            if (logEventBtn) {
-                logEventBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    logEvent();
-                });
-            }
-
-            const generateReportBtn = document.getElementById('generateReportBtn');
-            if (generateReportBtn) {
-                generateReportBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    generateReport();
-                });
-            }
-
-            // Initialize audit package selection
-            selectAuditPackage('premium');
+            console.log('VeriVault Dashboard Loaded');
             
             // Set default date
-            const reportDateEl = document.getElementById('reportDate');
-            if (reportDateEl) {
-                reportDateEl.value = new Date().toISOString().split('T')[0];
+            var dateInput = document.getElementById('reportDate');
+            if (dateInput) {
+                dateInput.value = new Date().toISOString().split('T')[0];
             }
             
-            // Load default template
-            const defaultReport = reportData[currentReportType];
-            const reportContentEl = document.getElementById('reportContent');
-            if (reportContentEl && defaultReport) {
-                reportContentEl.value = defaultReport.template
-                    .replace(/\[CLIENT_NAME\]/g, '')
-                    .replace(/\[REPORT_DATE\]/g, new Date().toISOString().split('T')[0]);
-            }
+            // Load default report template
+            selectReport('daily-log');
             
-            
-            console.log('=== Testing Elements ===');
-            console.log('Tab buttons found:', document.querySelectorAll('.tab-button').length);
-            console.log('Tab contents found:', document.querySelectorAll('.tab-content').length);
-            console.log('Sidebar items found:', document.querySelectorAll('.sidebar-item[data-report]').length);
-            
-            // Test if elements exist
-            const testElements = [
-                'tabReports', 'tabLogger', 'tabIntake', 'tabAuditTool',
-                'reportsContent', 'loggerContent', 'intakeContent', 'auditToolContent'
-            ];
-            
-            testElements.forEach(id => {
-                const element = document.getElementById(id);
-                console.log(`Element ${id}:`, element ? 'Found' : 'NOT FOUND');
-            });
-            
-            console.log('VeriVault Dashboard Ready');
+            console.log('Dashboard ready!');
         });
     </script>
 </body>
-</html>
+</html> text-slate-300 mb-2">Property Type</label>
+                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="">Select type</option>
+                                        <option value="residential_estate">Residential Estate</option>
+                                        <option value="commercial">Commercial Building</option>
+                                        <option value="industrial">Industrial Facility</option>
+                                        <option value="retail">Retail Location</option>
+                                        <option value="mixed_use">Mixed Use</option>
+                                        <option value="government">Government Building</option>
+                                        <option value="educational">Educational Facility</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Risk Level</label>
+                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="">Assess risk</option>
+                                        <option value="low">Low Risk</option>
+                                        <option value="medium">Medium Risk</option>
+                                        <option value="high">High Risk</option>
+                                        <option value="critical">Critical Risk</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Photo Upload Sections -->
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Layout/Aerial View</label>
+                                    <div onclick="document.getElementById('propertyLayout').click()" class="border-2 border-dashed border-cyan-400/30 rounded-lg p-4 text-center hover:border-cyan-400/50 transition-colors cursor-pointer bg-white/5">
+                                        <div class="text-3xl mb-2">🛰️</div>
+                                        <p class="text-slate-300 text-sm mb-1">Upload aerial view, Google Earth screenshot, or property layout</p>
+                                        <p class="text-slate-400 text-xs">PNG, JPG, PDF up to 10MB</p>
+                                    </div>
+                                    <input type="file" id="propertyLayout" accept="image/*,.pdf" class="hidden" onchange="handleFileUpload(this, 'property')">
+                                    <div id="propertyStatus" class="mt-2 text-sm hidden"></div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Current Camera Locations & Views</label>
+                                    <div onclick="document.getElementById('cameraPhotos').click()" class="border-2 border-dashed border-green-400/30 rounded-lg p-4 text-center hover:border-green-400/50 transition-colors cursor-pointer bg-white/5">
+                                        <div class="text-3xl mb-2">📹</div>
+                                        <p class="text-slate-300 text-sm mb-1">Upload photos of existing cameras and their current views</p>
+                                        <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
+                                    </div>
+                                    <input type="file" id="cameraPhotos" accept="image/*" multiple class="hidden" onchange="handleFileUpload(this, 'camera')">
+                                    <div id="cameraStatus" class="mt-2 text-sm hidden"></div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium
