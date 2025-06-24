@@ -769,33 +769,46 @@ Classification: CONFIDENTIAL`
 
         // Functions
         function switchTab(tabName) {
-            console.log('Switching to tab:', tabName);
+            console.log('=== Switching to tab:', tabName, '===');
             
             // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(content => {
+            const tabContents = document.querySelectorAll('.tab-content');
+            console.log('Found tab contents:', tabContents.length);
+            tabContents.forEach(content => {
                 content.classList.add('hidden');
             });
             
             // Remove active class from all tab buttons
-            document.querySelectorAll('.tab-button').forEach(btn => {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            console.log('Found tab buttons:', tabButtons.length);
+            tabButtons.forEach(btn => {
                 btn.classList.remove('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
                 btn.classList.add('text-slate-400', 'border-transparent');
             });
             
             // Show selected tab content
             const targetContent = document.getElementById(tabName + 'Content');
+            console.log('Target content element:', targetContent);
             if (targetContent) {
                 targetContent.classList.remove('hidden');
+                console.log('Showed content for:', tabName);
+            } else {
+                console.error('Could not find content for tab:', tabName);
             }
             
             // Activate selected tab button
             const targetButton = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+            console.log('Target button element:', targetButton);
             if (targetButton) {
                 targetButton.classList.add('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
                 targetButton.classList.remove('text-slate-400', 'border-transparent');
+                console.log('Activated button for:', tabName);
+            } else {
+                console.error('Could not find button for tab:', tabName);
             }
             
             currentTab = tabName;
+            console.log('=== Tab switch complete. Current tab:', currentTab, '===');
         }
 
         function selectReport(reportType) {
@@ -1130,17 +1143,53 @@ Classification: CONFIDENTIAL`
         document.addEventListener('DOMContentLoaded', function() {
             console.log('VeriVault Dashboard Loading');
             
-            // Tab navigation
-            document.getElementById('tabReports').addEventListener('click', () => switchTab('reports'));
-            document.getElementById('tabLogger').addEventListener('click', () => switchTab('logger'));
-            document.getElementById('tabIntake').addEventListener('click', () => switchTab('intake'));
-            document.getElementById('tabAuditTool').addEventListener('click', () => switchTab('auditTool'));
+            // Tab navigation - Fixed event handlers
+            const tabReports = document.getElementById('tabReports');
+            const tabLogger = document.getElementById('tabLogger');
+            const tabIntake = document.getElementById('tabIntake');
+            const tabAuditTool = document.getElementById('tabAuditTool');
             
-            // Sidebar click handlers
-            document.querySelectorAll('.sidebar-item[data-report]').forEach(item => {
+            if (tabReports) {
+                tabReports.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Reports tab clicked');
+                    switchTab('reports');
+                });
+            }
+            
+            if (tabLogger) {
+                tabLogger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Logger tab clicked');
+                    switchTab('logger');
+                });
+            }
+            
+            if (tabIntake) {
+                tabIntake.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Intake tab clicked');
+                    switchTab('intake');
+                });
+            }
+            
+            if (tabAuditTool) {
+                tabAuditTool.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Audit Tool tab clicked');
+                    switchTab('auditTool');
+                });
+            }
+            
+            // Sidebar click handlers - Fixed to work properly
+            const sidebarItems = document.querySelectorAll('.sidebar-item[data-report]');
+            console.log('Found sidebar items:', sidebarItems.length);
+            
+            sidebarItems.forEach(function(item) {
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
                     const reportType = this.getAttribute('data-report');
+                    console.log('Sidebar item clicked:', reportType);
                     if (reportType) {
                         selectReport(reportType);
                     }
@@ -1256,6 +1305,23 @@ Classification: CONFIDENTIAL`
                     .replace(/\[CLIENT_NAME\]/g, '')
                     .replace(/\[REPORT_DATE\]/g, new Date().toISOString().split('T')[0]);
             }
+            
+            
+            console.log('=== Testing Elements ===');
+            console.log('Tab buttons found:', document.querySelectorAll('.tab-button').length);
+            console.log('Tab contents found:', document.querySelectorAll('.tab-content').length);
+            console.log('Sidebar items found:', document.querySelectorAll('.sidebar-item[data-report]').length);
+            
+            // Test if elements exist
+            const testElements = [
+                'tabReports', 'tabLogger', 'tabIntake', 'tabAuditTool',
+                'reportsContent', 'loggerContent', 'intakeContent', 'auditToolContent'
+            ];
+            
+            testElements.forEach(id => {
+                const element = document.getElementById(id);
+                console.log(`Element ${id}:`, element ? 'Found' : 'NOT FOUND');
+            });
             
             console.log('VeriVault Dashboard Ready');
         });
