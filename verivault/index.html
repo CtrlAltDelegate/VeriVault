@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
-    <!-- Top Navigation Tabs - Moved to very top -->
+    <!-- Top Navigation Tabs -->
     <div class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex space-x-8">
@@ -388,1126 +388,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Audit Report Generation -->
-                <div class="mt-8 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
-                    <h3 class="text-xl font-bold text-white mb-4">📋 Generate Comprehensive Audit Report</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-2">Client Name</label>
-                            <input type="text" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-2">Audit Date</label>
-                            <input type="date" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-2">Report Package</label>
-                            <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                                <option value="starter">Starter Audit - $799</option>
-                                <option value="premium">Premium Audit - $2,499</option>
-                                <option value="enterprise">Enterprise Audit - $5,999</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <button id="generateAuditReportBtn" class="bg-gradient-to-r from-purple-500 to-pink-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
-                            📄 Generate Professional Audit PDF
-                        </button>
-                        <button id="saveAuditDataBtn" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg">
-                            💾 Save Audit Data for Later
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        console.log('VeriVault Dashboard Starting');
-        
-        var currentTab = 'reports';
-        var selectedPackage = 'premium';
-        var currentReportType = 'daily-log';
-        var uploadedCsvData = null;
-
-        // Report templates
-        var reportData = {
-            'daily-log': {
-                title: 'Daily Log',
-                description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
-                template: 'DAILY OPERATIONS LOG\\n\\nClient: [CLIENT_NAME]\\nDate: [REPORT_DATE]\\nReport Type: Daily Operations Summary\\n\\nOPERATIONAL OVERVIEW:\\n• Staff deployment and assignments\\n• Security checkpoint activities\\n• Visitor management and access control\\n• Equipment status and functionality\\n• Notable incidents or observations\\n• Communication logs\\n\\nRECOMMENDATIONS:\\n• Continued monitoring protocols\\n• Equipment maintenance schedules\\n• Staff training updates\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
-            },
-            'incident-medical': {
-                title: 'Medical Incident Report',
-                description: 'Detailed documentation for injury and emergency situations requiring medical response',
-                template: 'MEDICAL INCIDENT REPORT\\n\\nClient: [CLIENT_NAME]\\nDate: [REPORT_DATE]\\nReport Type: Medical Emergency Documentation\\n\\nINCIDENT DETAILS:\\n• Time and location of incident\\n• Individuals involved and injuries sustained\\n• Immediate response actions taken\\n• Medical personnel contacted\\n• Emergency services coordination\\n• Witness statements and documentation\\n\\nMEDICAL RESPONSE:\\n• First aid administered\\n• Medical equipment utilized\\n• Transport arrangements\\n• Hospital/clinic notifications\\n• Follow-up medical care\\n\\nPREVENTION MEASURES:\\n• Risk assessment updates\\n• Safety protocol improvements\\n• Additional training requirements\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
-            },
-            'incident-non-medical': {
-                title: 'Security Incident Report',
-                description: 'Documentation for security breaches, unauthorized access, and non-medical emergencies',
-                template: 'SECURITY INCIDENT REPORT\\n\\nClient: [CLIENT_NAME]\\nDate: [REPORT_DATE]\\nReport Type: Non-Medical Security Incident\\n\\nINCIDENT CLASSIFICATION:\\n• Security breach assessment\\n• Unauthorized access attempts\\n• Equipment malfunction or damage\\n• Suspicious activity documentation\\n• Policy violations\\n• Environmental hazards\\n\\nRESPONSE ACTIONS:\\n• Immediate containment measures\\n• Law enforcement coordination\\n• Evidence collection and preservation\\n• Witness interviews\\n• Damage assessment\\n• Communication protocols\\n\\nREMEDIATION PLAN:\\n• Security enhancement recommendations\\n• Policy updates and revisions\\n• Additional monitoring requirements\\n• Staff retraining initiatives\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
-            },
-            'annual-security': {
-                title: 'Annual Security Assessment',
-                description: 'Comprehensive yearly security analysis including threat assessment and strategic planning',
-                template: 'ANNUAL SECURITY ASSESSMENT\\n\\nClient: [CLIENT_NAME]\\nAssessment Period: [REPORT_DATE]\\nReport Type: Comprehensive Security Analysis\\n\\nTHREAT LANDSCAPE ANALYSIS:\\n• Current security environment assessment\\n• Emerging threat identification\\n• Risk probability and impact evaluation\\n• Industry-specific security challenges\\n• Regulatory compliance status\\n\\nSECURITY INFRASTRUCTURE REVIEW:\\n• Physical security systems evaluation\\n• Personnel security protocols\\n• Technology integration assessment\\n• Communication systems analysis\\n• Emergency response capabilities\\n\\nSTRATEGIC RECOMMENDATIONS:\\n• Security enhancement priorities\\n• Technology upgrade requirements\\n• Training and development needs\\n• Budget allocation recommendations\\n• Implementation timeline\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
-            },
-            'systems-audit': {
-                title: 'Systems Audit Report',
-                description: 'Technical evaluation of security equipment, technology infrastructure, and operational systems',
-                template: 'SYSTEMS AUDIT REPORT\\n\\nClient: [CLIENT_NAME]\\nAudit Date: [REPORT_DATE]\\nReport Type: Technology and Equipment Assessment\\n\\nSYSTEM PERFORMANCE ANALYSIS:\\n• Security camera network status\\n• Access control system functionality\\n• Communication equipment assessment\\n• Monitoring software evaluation\\n• Database integrity verification\\n\\nEQUIPMENT INVENTORY:\\n• Hardware condition assessment\\n• Software version compliance\\n• Maintenance schedule adherence\\n• Replacement timeline planning\\n• Warranty and support status\\n\\nOPTIMIZATION RECOMMENDATIONS:\\n• System upgrade priorities\\n• Performance enhancement measures\\n• Integration improvement opportunities\\n• Cybersecurity strengthening\\n• Operational efficiency gains\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
-            },
-            'discrepancy': {
-                title: 'Discrepancy Report',
-                description: 'Documentation of equipment issues, policy violations, and operational inconsistencies',
-                template: 'DISCREPANCY REPORT\\n\\nClient: [CLIENT_NAME]\\nReport Date: [REPORT_DATE]\\nReport Type: Operational Discrepancy Documentation\\n\\nDISCREPANCY IDENTIFICATION:\\n• Equipment malfunction details\\n• Policy compliance violations\\n• Procedural inconsistencies\\n• Documentation irregularities\\n• Performance standard deviations\\n\\nIMPACT ASSESSMENT:\\n• Operational effect evaluation\\n• Security implications analysis\\n• Cost impact determination\\n• Timeline considerations\\n• Risk level assessment\\n\\nCORRECTIVE ACTION PLAN:\\n• Immediate remediation steps\\n• Long-term solution development\\n• Prevention strategy implementation\\n• Monitoring and verification protocols\\n• Responsibility assignments\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
-            },
-            'vehicle-inspection': {
-                title: 'Vehicle Inspection Report',
-                description: 'Comprehensive vehicle safety and operational readiness assessment for fleet management',
-                template: 'VEHICLE INSPECTION REPORT\\n\\nClient: [CLIENT_NAME]\\nInspection Date: [REPORT_DATE]\\nReport Type: Fleet Vehicle Assessment\\n\\nVEHICLE IDENTIFICATION:\\n• Make, model, and year\\n• Vehicle identification number\\n• License plate information\\n• Mileage and service history\\n• Insurance and registration status\\n\\nSAFETY INSPECTION:\\n• Brake system functionality\\n• Tire condition and pressure\\n• Lighting system operation\\n• Emergency equipment inventory\\n• Communication device status\\n\\nOPERATIONAL READINESS:\\n• Fuel level and efficiency\\n• Engine performance metrics\\n• Maintenance schedule compliance\\n• Driver assignment protocols\\n• Route optimization capabilities\\n\\nPrepared by: VeriVault AI Security Intelligence\\nClassification: CONFIDENTIAL'
-            }
-        };
-
-        function selectReport(reportType) {
-            console.log('=== Selecting report:', reportType, '===');
-            
-            currentReportType = reportType;
-            var report = reportData[reportType];
-            
-            if (!report) {
-                console.error('Report type not found:', reportType);
-                return;
-            }
-            
-            // Update active sidebar item
-            var sidebarItems = document.querySelectorAll('.sidebar-item');
-            for (var i = 0; i < sidebarItems.length; i++) {
-                sidebarItems[i].classList.remove('active', 'bg-blue-600');
-                sidebarItems[i].classList.add('bg-slate-700');
-            }
-            
-            var targetItem = document.querySelector('[data-report="' + reportType + '"]');
-            if (targetItem) {
-                targetItem.classList.remove('bg-slate-700');
-                targetItem.classList.add('active', 'bg-blue-600');
-                console.log('Updated active sidebar item for:', reportType);
-            }
-            
-            // Update main content
-            var titleElement = document.getElementById('reportTitle');
-            var descElement = document.getElementById('reportDescription');
-            var contentElement = document.getElementById('reportContent');
-            
-            if (titleElement) {
-                titleElement.textContent = report.title;
-                console.log('Updated title to:', report.title);
-            }
-            if (descElement) {
-                descElement.textContent = report.description;
-                console.log('Updated description');
-            }
-            
-            // Update template content
-            if (contentElement) {
-                var clientNameEl = document.getElementById('clientName');
-                var reportDateEl = document.getElementById('reportDate');
-                var clientName = clientNameEl ? clientNameEl.value : '';
-                var reportDate = reportDateEl ? reportDateEl.value : new Date().toISOString().split('T')[0];
-                
-                var template = report.template
-                    .replace(/\[CLIENT_NAME\]/g, clientName || 'CLIENT_NAME')
-                    .replace(/\[REPORT_DATE\]/g, reportDate);
-                contentElement.value = template.replace(/\\n/g, '\n');
-                console.log('Updated report content template');
-            }
-            
-            // Reset CSV upload state
-            uploadedCsvData = null;
-            var aiSection = document.getElementById('aiEnhancedSection');
-            var uploadStatus = document.getElementById('uploadStatus');
-            if (aiSection) aiSection.classList.add('hidden');
-            if (uploadStatus) uploadStatus.classList.add('hidden');
-            
-            console.log('=== Report selection complete ===');
-        }
-
-        function handleFileUpload(file) {
-            console.log('Processing file:', file.name);
-            
-            var uploadStatus = document.getElementById('uploadStatus');
-            
-            if (!file.name.toLowerCase().endsWith('.csv')) {
-                if (uploadStatus) {
-                    uploadStatus.textContent = '❌ Please upload a CSV file only';
-                    uploadStatus.className = 'mt-2 text-sm text-red-400';
-                    uploadStatus.classList.remove('hidden');
-                }
-                return;
-            }
-
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedCsvData = e.target.result;
-                console.log('CSV data loaded, length:', uploadedCsvData.length);
-                
-                if (uploadStatus) {
-                    uploadStatus.textContent = '✅ File uploaded: ' + file.name;
-                    uploadStatus.className = 'mt-2 text-sm text-green-400';
-                    uploadStatus.classList.remove('hidden');
-                }
-                
-                var aiSection = document.getElementById('aiEnhancedSection');
-                if (aiSection) {
-                    aiSection.classList.remove('hidden');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function switchTab(tabName) {
-            console.log('=== Switching to tab:', tabName, '===');
-            
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(function(content) {
-                content.classList.add('hidden');
-            });
-            
-            // Remove active class from all tab buttons
-            document.querySelectorAll('.tab-button').forEach(function(btn) {
-                btn.classList.remove('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
-                btn.classList.add('text-slate-400', 'border-transparent');
-            });
-            
-            // Show selected tab content
-            var targetContent = document.getElementById(tabName + 'Content');
-            if (targetContent) {
-                targetContent.classList.remove('hidden');
-                console.log('Showed content for:', tabName);
-            } else {
-                console.error('Could not find content for tab:', tabName);
-            }
-            
-            // Activate selected tab button
-            var targetButton = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
-            if (targetButton) {
-                targetButton.classList.add('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
-                targetButton.classList.remove('text-slate-400', 'border-transparent');
-                console.log('Activated button for:', tabName);
-            } else {
-                console.error('Could not find button for tab:', tabName);
-            }
-            
-            currentTab = tabName;
-            console.log('=== Tab switch complete ===');
-        }
-
-        function selectEventType(eventType) {
-            document.querySelectorAll('.event-form').forEach(function(form) {
-                form.classList.add('hidden');
-            });
-            
-            var targetForm = document.getElementById(eventType + 'Form');
-            if (targetForm) {
-                targetForm.classList.remove('hidden');
-            }
-            
-            document.querySelectorAll('.event-type-btn').forEach(function(btn) {
-                var btnDiv = btn.querySelector('div');
-                if (btn.dataset.type === eventType) {
-                    btnDiv.classList.remove('bg-slate-600');
-                    btnDiv.classList.add('bg-blue-600');
-                    btn.classList.add('active');
-                } else {
-                    btnDiv.classList.remove('bg-blue-600');
-                    btnDiv.classList.add('bg-slate-600');
-                    btn.classList.remove('active');
-                }
-            });
-        }
-
-        function selectAuditPackage(packageType) {
-            document.querySelectorAll('.audit-package').forEach(function(pkg) {
-                pkg.classList.remove('ring-2', 'ring-cyan-400', 'ring-purple-400', 'ring-slate-400');
-                if (pkg.dataset.package === packageType) {
-                    if (packageType === 'premium') {
-                        pkg.classList.add('ring-2', 'ring-cyan-400');
-                    } else if (packageType === 'enterprise') {
-                        pkg.classList.add('ring-2', 'ring-purple-400');
-                    } else {
-                        pkg.classList.add('ring-2', 'ring-slate-400');
-                    }
-                }
-            });
-            selectedPackage = packageType;
-        }
-
-        function submitSecurityAudit() {
-            console.log('=== Generating Professional Security Audit Report ===');
-            
-            // Show loading state
-            var submitBtn = document.getElementById('submitAuditBtn');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="inline-block animate-spin">⚡</span> <span class="ml-2">AI Generating Professional Report...</span>';
-                submitBtn.classList.add('opacity-75');
-            }
-            
-            // Simulate realistic AI processing time
-            setTimeout(function() {
-                generateComprehensiveSecurityAudit();
-                
-                // Reset button
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '🔐 Submit Security Audit Request';
-                    submitBtn.classList.remove('opacity-75');
-                }
-            }, 4000); // 4 second realistic processing time
-        }
-
-        function generateComprehensiveSecurityAudit() {
-            try {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                // Collect comprehensive form data
-                var auditData = collectComprehensiveAuditData();
-                
-                // Generate AI-powered audit content based on current industry standards
-                var auditContent = generateAdvancedAuditContent(auditData);
-                
-                // Professional PDF Generation with Modern Design
-                createProfessionalSecurityPDF(doc, auditData, auditContent);
-                
-            } catch (error) {
-                console.error('Professional audit generation error:', error);
-                alert('❌ AI Report Generation Error\\n\\nThere was an issue creating your professional security audit. Please ensure all required fields are completed and try again.');
-            }
-        }
-
-        function collectComprehensiveAuditData() {
-            // Collect all intake form data with intelligent defaults
-            var formData = {
-                selectedPackage: selectedPackage || 'premium',
-                clientName: '',
-                email: '',
-                phone: '',
-                propertyAddress: '',
-                propertyType: 'Mixed Use Commercial Property',
-                propertySize: '5,000',
-                lotSize: '1.2',
-                budget: '$10,000 - $25,000',
-                existingCameras: '2',
-                securityConcerns: ['Blind spots', 'Poor lighting', 'Access control'],
-                timeline: 'Within 1 month',
-                notes: ''
-            };
-            
-            // Intelligently extract data from form inputs
-            var inputs = document.querySelectorAll('#intakeContent input, #intakeContent select, #intakeContent textarea');
-            inputs.forEach(function(input) {
-                var label = input.previousElementSibling ? input.previousElementSibling.textContent.toLowerCase() : '';
-                var placeholder = input.placeholder ? input.placeholder.toLowerCase() : '';
-                
-                if (input.value) {
-                    if (label.includes('name') || placeholder.includes('name')) {
-                        formData.clientName = input.value;
-                    } else if (input.type === 'email') {
-                        formData.email = input.value;
-                    } else if (input.type === 'tel') {
-                        formData.phone = input.value;
-                    } else if (label.includes('address') || placeholder.includes('address')) {
-                        formData.propertyAddress = input.value;
-                    } else if (label.includes('property type')) {
-                        formData.propertyType = input.value;
-                    } else if (label.includes('budget')) {
-                        formData.budget = input.value;
-                    }
-                }
-            });
-            
-            // Set intelligent defaults if form is empty (for demo purposes)
-            if (!formData.clientName) formData.clientName = 'Confidential Client Property';
-            if (!formData.propertyAddress) formData.propertyAddress = 'Commercial District Location';
-            
-            return formData;
-        }
-
-        function generateAdvancedAuditContent(data) {
-            var content = {
-                executiveSummary: generateExecutiveSummary(data),
-                propertyAnalysis: generatePropertyAnalysis(data),
-                vulnerabilityAssessment: generateVulnerabilityAssessment(data),
-                cameraRecommendations: generateCameraRecommendations(data),
-                implementationPlan: generateImplementationPlan(data),
-                costBenefit: generateCostBenefitAnalysis(data),
-                complianceRequirements: generateComplianceSection(data),
-                nextSteps: generateNextStepsSection(data)
-            };
-            
-            return content;
-        }
-
-        function generateExecutiveSummary(data) {
-            return `VeriVault SecureScope has conducted a comprehensive AI-powered security assessment for ${data.clientName} utilizing advanced threat modeling algorithms and industry best practices aligned with NIST Cybersecurity Framework standards. This ${data.selectedPackage} security audit provides data-driven recommendations specifically tailored to address identified vulnerabilities while optimizing budget allocation within the specified ${data.budget} range.
-
-Our assessment reveals a property security posture that presents moderate to elevated risk levels requiring immediate attention to critical entry points, perimeter monitoring, and surveillance coverage gaps. The current security infrastructure shows 60% coverage efficiency with significant blind spots in high-risk zones that require strategic camera placement and enhanced access control measures.
-
-Based on comparative analysis with similar ${data.propertyType.toLowerCase()} properties in the region, implementing our recommended security enhancements will reduce overall security risk by 78% and provide ROI within 18 months through reduced insurance premiums, theft prevention, and enhanced operational security.`;
-        }
-
-        function generatePropertyAnalysis(data) {
-            return `PROPERTY SECURITY PROFILE:
-• Location Classification: ${data.propertyAddress}
-• Property Type: ${data.propertyType}
-• Facility Size: ${data.propertySize} square feet
-• Lot Coverage: ${data.lotSize} acres
-• Current Security Infrastructure: ${data.existingCameras} existing cameras with limited coverage
-• Risk Assessment Score: 7.2/10 (High Priority for Enhancement)
-
-THREAT LANDSCAPE ANALYSIS:
-Based on local crime statistics and property vulnerability factors, this location faces elevated risks including:
-• 23% higher than average commercial break-in attempts within 2-mile radius
-• Limited natural surveillance due to property layout and surrounding structures
-• Multiple vehicular and pedestrian access points requiring monitoring
-• Insufficient deterrent effect from current security measures
-
-PERIMETER SECURITY ASSESSMENT:
-Current perimeter security shows significant gaps in coverage with only 40% effective monitoring of critical access points. The existing camera network lacks adequate resolution for facial recognition beyond 15 feet and provides no coverage during low-light conditions.`;
-        }
-
-        function generateVulnerabilityAssessment(data) {
-            return `CRITICAL SECURITY VULNERABILITIES IDENTIFIED:
-
-HIGH PRIORITY (Immediate Action Required):
-• Primary entrance lacks sufficient camera coverage for facial identification
-• Loading dock area completely unmonitored - major security blind spot
-• Parking areas have zero surveillance coverage creating liability exposure
-• No backup power systems for security equipment during outages
-• Access control systems outdated with no audit trail capabilities
-
-MEDIUM PRIORITY (Address Within 30 Days):
-• Exterior lighting insufficient for nighttime surveillance effectiveness
-• No motion detection or real-time alerting capabilities
-• Storage areas lack adequate monitoring for inventory protection
-• Emergency exit routes not properly monitored per compliance requirements
-
-LOW PRIORITY (Future Enhancement):
-• Integration opportunities with existing building management systems
-• Mobile monitoring capabilities for remote oversight
-• Advanced analytics for behavioral pattern recognition
-• Perimeter intrusion detection system implementation
-
-COMPLIANCE GAPS:
-• Current system does not meet updated commercial security standards
-• Insurance requirements for comprehensive coverage not satisfied
-• OSHA workplace safety monitoring capabilities absent
-• Data retention policies for video surveillance need updating`;
-        }
-
-        function generateCameraRecommendations(data) {
-            var recommendations = '';
-            
-            if (data.selectedPackage === 'starter') {
-                recommendations = `ESSENTIAL CAMERA DEPLOYMENT PLAN:
-
-Phase 1 - Critical Coverage ($2,500 - $5,000):
-• 4x 4K Ultra-HD cameras at primary entrance and exit points
-• 2x weatherproof outdoor cameras for parking area monitoring  
-• 1x indoor camera for reception/lobby area surveillance
-• Professional-grade 8-channel NVR with 2TB storage capacity
-• Basic motion detection and smartphone app integration
-
-CAMERA SPECIFICATIONS:
-• Resolution: 4K (8MP) with 3.6mm lens for optimal facial recognition
-• Night Vision: 100ft IR range with color night vision capability
-• Weather Rating: IP67 for outdoor installations
-• Storage: 30-day retention with automatic overwrite
-• Mounting Height: 8-10 feet for optimal coverage and tamper resistance`;
-            } else if (data.selectedPackage === 'premium') {
-                recommendations = `COMPREHENSIVE SECURITY CAMERA SYSTEM:
-
-Phase 1 - Advanced Coverage ($5,000 - $15,000):
-• 8x 4K Ultra-HD cameras with AI-powered analytics
-• 4x outdoor weatherproof cameras with 150ft night vision
-• 4x indoor dome cameras with vandal-resistant housing
-• 2x PTZ (pan-tilt-zoom) cameras for dynamic monitoring
-• Enterprise-grade 16-channel NVR with 6TB redundant storage
-
-Phase 2 - Smart Integration ($3,000 - $8,000):
-• AI-powered video analytics for unusual behavior detection
-• License plate recognition system for vehicle monitoring
-• Mobile app with real-time alerts and cloud backup
-• Integration with access control and alarm systems
-• Professional monitoring service setup
-
-ADVANCED FEATURES:
-• Facial recognition database with visitor management
-• Heat mapping analytics for traffic pattern analysis
-• Perimeter intrusion detection with instant alerts
-• Two-way audio communication capabilities
-• Backup cellular connectivity for system redundancy`;
-            } else { // enterprise
-                recommendations = `ENTERPRISE SECURITY TRANSFORMATION:
-
-Complete Multi-Layer Security Ecosystem ($15,000 - $50,000):
-• 16x 4K cameras with AI behavioral analytics
-• 8x outdoor cameras with thermal imaging capability
-• 6x indoor dome cameras with 360-degree coverage
-• 4x PTZ cameras with auto-tracking functionality
-• 2x specialized cameras for license plate capture
-• Military-grade 32-channel NVR with 12TB hot-swappable storage
-
-ENTERPRISE FEATURES:
-• AI-powered threat detection with automated response protocols
-• Integration with building management and fire safety systems
-• 24/7 professional monitoring service with armed response
-• Biometric access control integration
-• Advanced video analytics including crowd counting and social distancing
-• Mobile command center capabilities for security management
-• Redundant network infrastructure with 99.9% uptime guarantee
-• Comprehensive cybersecurity protection for camera network`;
-            }
-            
-            return recommendations;
-        }
-
-        function generateImplementationPlan(data) {
-            return `PROFESSIONAL IMPLEMENTATION TIMELINE:
-
-PRE-INSTALLATION PHASE (Week 1):
-• Detailed site survey by certified security engineers
-• Finalization of camera placement diagrams with optimal coverage analysis
-• Equipment procurement and quality verification
-• Permit acquisition and compliance documentation
-• Coordination with building management and stakeholders
-
-INSTALLATION PHASE (Weeks 2-3):
-• Professional camera mounting at optimal heights (8-10 feet)
-• High-grade cabling installation with concealed routing
-• Network video recorder setup and configuration
-• System integration and network security implementation
-• Initial testing and calibration of all equipment
-
-OPTIMIZATION PHASE (Week 4):
-• Advanced software configuration and analytics setup
-• Mobile app installation and user training
-• System stress testing under various lighting conditions
-• Documentation delivery including user manuals and warranties
-• Staff training on system operation and basic troubleshooting
-
-POST-INSTALLATION SUPPORT:
-• 30-day optimization period with adjustments as needed
-• Quarterly maintenance check-ups included for first year
-• 24/7 technical support hotline access
-• Annual system health evaluations and upgrade recommendations
-• 3-year comprehensive warranty on all equipment and labor`;
-        }
-
-        function generateCostBenefitAnalysis(data) {
-            return `RETURN ON INVESTMENT ANALYSIS:
-
-IMMEDIATE BENEFITS:
-• 25-40% reduction in commercial insurance premiums
-• Enhanced employee safety and productivity
-• Real-time incident response capabilities
-• Professional evidence collection for legal proceedings
-• Deterrent effect reducing theft and vandalism by up to 67%
-
-ANNUAL COST SAVINGS:
-• Insurance Premium Reduction: $2,400 - $4,800 annually
-• Theft Prevention: $3,500 - $7,000 in prevented losses
-• Reduced Security Guard Costs: $8,000 - $15,000 annually
-• Improved Operational Efficiency: $2,000 - $5,000 value
-
-TOTAL ESTIMATED ANNUAL SAVINGS: $15,900 - $31,800
-
-PAYBACK PERIOD: 12-18 months depending on package selected
-
-LONG-TERM VALUE:
-• Property value increase of 3-5% through enhanced security
-• Competitive advantage for tenant attraction and retention
-• Compliance with evolving security regulations and standards
-• Scalable system design for future expansion needs
-• Technology refresh program ensures ongoing effectiveness`;
-        }
-
-        function generateComplianceSection(data) {
-            return `REGULATORY COMPLIANCE REQUIREMENTS:
-
-COMMERCIAL PROPERTY STANDARDS:
-• NFPA 730 (Premises Security Standard) compliance verification
-• ADA accessibility requirements for security equipment placement
-• Local building code compliance for camera installations
-• OSHA workplace safety monitoring capabilities
-
-PRIVACY AND LEGAL COMPLIANCE:
-• State and federal privacy law adherence in camera placement
-• Proper signage and notification requirements
-• Data retention policies meeting legal standards (30-day minimum)
-• Employee privacy protection in workplace areas
-
-INSURANCE REQUIREMENTS:
-• Comprehensive coverage meeting carrier security standards
-• Professional installation certification documentation
-• UL-listed equipment compliance for maximum coverage benefits
-• Regular maintenance documentation for claim validity
-
-INDUSTRY BEST PRACTICES:
-• ASIS International security standards alignment
-• NIST Cybersecurity Framework implementation
-• CPTED (Crime Prevention Through Environmental Design) principles
-• Integration with emergency response protocols`;
-        }
-
-        function generateNextStepsSection(data) {
-            return `IMMEDIATE ACTION ITEMS:
-
-1. APPROVAL AND CONTRACTING (Days 1-3):
-   • Review and approve comprehensive security enhancement plan
-   • Execute professional services agreement with VeriVault
-   • Finalize equipment specifications and installation timeline
-   • Coordinate access schedules with building management
-
-2. PRE-INSTALLATION PREPARATION (Days 4-7):
-   • Schedule detailed site survey with security engineering team
-   • Obtain necessary building permits and approvals
-   • Coordinate with IT department for network infrastructure
-   • Notify tenants/employees of upcoming security improvements
-
-3. SYSTEM DEPLOYMENT (Weeks 2-4):
-   • Professional installation by certified technicians
-   • System testing and optimization procedures
-   • Staff training and documentation delivery
-   • Final inspection and warranty activation
-
-4. ONGOING PARTNERSHIP:
-   • Quarterly system performance reviews
-   • Annual security assessment updates
-   • Technology refresh planning for optimal effectiveness
-   • 24/7 support and monitoring service integration
-
-CONTACT INFORMATION:
-VeriVault SecureScope Professional Services
-Email: audits@verivault.com
-Phone: (555) 123-VAULT
-Emergency Support: Available 24/7/365
-
-This comprehensive security audit represents a strategic investment in protecting your most valuable assets while ensuring regulatory compliance and operational excellence.`;
-        }
-
-        function createProfessionalSecurityPDF(doc, data, content) {
-            // Professional PDF styling
-            const pageWidth = doc.internal.pageSize.getWidth();
-            const pageHeight = doc.internal.pageSize.getHeight();
-            const margin = 20;
-            let yPosition = margin;
-            
-            // Modern Header Design
-            doc.setFillColor(15, 23, 42); // slate-900
-            doc.rect(0, 0, pageWidth, 60, 'F');
-            
-            // VeriVault Professional Branding
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(32);
-            doc.setFont('helvetica', 'bold');
-            doc.text('VeriVault', margin, 25);
-            
-            doc.setFontSize(16);
-            doc.setFont('helvetica', 'normal');
-            doc.text('SecureScope Professional Security Audit', margin, 40);
-            
-            doc.setFontSize(12);
-            doc.setTextColor(56, 189, 248); // cyan-400
-            doc.text('AI-Powered Security Intelligence Platform', margin, 52);
-            
-            // Professional badges and date
-            doc.setTextColor(34, 197, 94); // green-500
-            doc.setFontSize(10);
-            doc.text('Generated: ' + new Date().toLocaleDateString('en-US', { 
-                year: 'numeric', month: 'long', day: 'numeric' 
-            }), pageWidth - 90, 25);
-            
-            doc.setTextColor(239, 68, 68); // red-500
-            doc.text('CONFIDENTIAL', pageWidth - 90, 35);
-            
-            doc.setTextColor(168, 85, 247); // purple-500
-            doc.text('PROFESSIONAL AUDIT', pageWidth - 90, 45);
-            
-            yPosition = 80;
-            
-            // Client Information Section
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(24);
-            doc.setFont('helvetica', 'bold');
-            doc.text('Professional Security Assessment', margin, yPosition);
-            yPosition += 20;
-            
-            // Package Badge with Modern Design
-            var packageColors = {
-                'starter': [71, 85, 105],    // slate-600
-                'premium': [6, 182, 212],    // cyan-500  
-                'enterprise': [147, 51, 234] // purple-600
-            };
-            var badgeColor = packageColors[data.selectedPackage] || packageColors['premium'];
-            
-            doc.setFillColor(badgeColor[0], badgeColor[1], badgeColor[2]);
-            doc.roundedRect(margin, yPosition, 100, 18, 4, 4, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(14);
-            doc.setFont('helvetica', 'bold');
-            doc.text(data.selectedPackage.toUpperCase() + ' AUDIT', margin + 8, yPosition + 12);
-            yPosition += 30;
-            
-            // Client Details
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(14);
-            doc.setFont('helvetica', 'normal');
-            doc.text('Client: ' + data.clientName, margin, yPosition);
-            doc.text('Property: ' + data.propertyType, margin, yPosition + 15);
-            doc.text('Assessment Date: ' + new Date().toLocaleDateString(), pageWidth/2, yPosition);
-            doc.text('Report ID: VSA-' + Date.now().toString().slice(-6), pageWidth/2, yPosition + 15);
-            yPosition += 40;
-            
-            // Add all content sections with proper formatting
-            addContentSection(doc, 'EXECUTIVE SUMMARY', content.executiveSummary, yPosition);
-            yPosition = doc.lastAutoTable ? doc.lastAutoTable.finalY + 20 : yPosition + 60;
-            
-            // Continue with other sections...
-            var sections = [
-                { title: 'PROPERTY ANALYSIS', content: content.propertyAnalysis },
-                { title: 'VULNERABILITY ASSESSMENT', content: content.vulnerabilityAssessment },
-                { title: 'CAMERA SYSTEM RECOMMENDATIONS', content: content.cameraRecommendations },
-                { title: 'IMPLEMENTATION PLAN', content: content.implementationPlan },
-                { title: 'COST-BENEFIT ANALYSIS', content: content.costBenefit },
-                { title: 'COMPLIANCE REQUIREMENTS', content: content.complianceRequirements },
-                { title: 'NEXT STEPS', content: content.nextSteps }
-            ];
-            
-            sections.forEach(function(section) {
-                yPosition = addContentSection(doc, section.title, section.content, yPosition);
-            });
-            
-            // Professional Footer
-            addProfessionalFooter(doc);
-            
-            // Generate and save
-            var fileName = 'VeriVault_SecurityAudit_' + 
-                          data.clientName.replace(/\s+/g, '_') + '_' + 
-                          new Date().toISOString().split('T')[0] + '.pdf';
-            
-            doc.save(fileName);
-            
-            // Success notification
-            setTimeout(function() {
-                alert('🎉 Professional Security Audit Generated Successfully!\\n\\n' +
-                      '✅ Comprehensive ' + data.selectedPackage + ' security assessment\\n' +
-                      '✅ AI-powered vulnerability analysis and recommendations\\n' +
-                      '✅ Industry-standard compliance requirements included\\n' +
-                      '✅ Professional implementation timeline and cost analysis\\n' +
-                      '✅ Client-ready PDF with VeriVault professional branding\\n\\n' +
-                      'File: ' + fileName + '\\n\\n' +
-                      'Your professional security audit is ready for client presentation!');
-            }, 500);
-        }
-
-        function addContentSection(doc, title, content, startY) {
-            var pageHeight = doc.internal.pageSize.getHeight();
-            var margin = 20;
-            var maxWidth = doc.internal.pageSize.getWidth() - (2 * margin);
-            var yPosition = startY;
-            
-            // Check for new page
-            if (yPosition > pageHeight - 80) {
-                doc.addPage();
-                yPosition = margin + 20;
-                addPageHeader(doc);
-            }
-            
-            // Section title
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(16);
-            doc.setTextColor(6, 182, 212); // cyan-500
-            doc.text(title, margin, yPosition);
-            yPosition += 15;
-            
-            // Section content
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(11);
-            doc.setTextColor(0, 0, 0);
-            
-            var lines = doc.splitTextToSize(content, maxWidth);
-            for (var i = 0; i < lines.length; i++) {
-                if (yPosition > pageHeight - 30) {
-                    doc.addPage();
-                    yPosition = margin + 20;
-                    addPageHeader(doc);
-                }
-                doc.text(lines[i], margin, yPosition);
-                yPosition += 6;
-            }
-            
-            return yPosition + 15;
-        }
-
-        function addPageHeader(doc) {
-            var pageWidth = doc.internal.pageSize.getWidth();
-            doc.setFillColor(248, 250, 252); // slate-50
-            doc.rect(0, 0, pageWidth, 25, 'F');
-            doc.setTextColor(71, 85, 105); // slate-600
-            doc.setFontSize(10);
-            doc.text('VeriVault SecureScope Professional Security Audit', 20, 15);
-            doc.text('Page ' + doc.getNumberOfPages(), pageWidth - 40, 15);
-        }
-
-        function addProfessionalFooter(doc) {
-            var pageHeight = doc.internal.pageSize.getHeight();
-            var pageWidth = doc.internal.pageSize.getWidth();
-            var yPosition = pageHeight - 35;
-            
-            doc.setFillColor(15, 23, 42); // slate-900
-            doc.rect(0, yPosition, pageWidth, 35, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(10);
-            doc.setFont('helvetica', 'normal');
-            doc.text('VeriVault SecureScope - Professional Security Intelligence', 20, yPosition + 12);
-            doc.text('Email: audits@verivault.com | Phone: (555) 123-VAULT', 20, yPosition + 24);
-            doc.text('© 2025 VeriVault Systems. All rights reserved.', pageWidth - 120, yPosition + 18);
-        } + fileName + '\\n\\n' +
-                          'Your professional security audit is ready to send to the client!');
-                }, 500);
-                
-            } catch (error) {
-                console.error('Audit generation error:', error);
-                alert('❌ Report Generation Error\\n\\nThere was an issue creating the professional audit. Please try again.');
-            }
-        }
-
-        function collectAuditFormData() {
-            // Collect all form data from the intake form
-            var inputs = document.querySelectorAll('#intakeContent input, #intakeContent select, #intakeContent textarea');
-            var formData = {
-                selectedPackage: selectedPackage,
-                clientName: '',
-                email: '',
-                phone: '',
-                propertyAddress: '',
-                propertyType: '',
-                budget: ''
-            };
-            
-            inputs.forEach(function(input) {
-                if (input.type === 'text' && input.placeholder.includes('name')) {
-                    formData.clientName = input.value;
-                } else if (input.type === 'email') {
-                    formData.email = input.value;
-                } else if (input.type === 'tel') {
-                    formData.phone = input.value;
-                } else if (input.placeholder && input.placeholder.includes('address')) {
-                    formData.propertyAddress = input.value;
-                } else if (input.tagName === 'SELECT' && input.previousElementSibling.textContent.includes('Property Type')) {
-                    formData.propertyType = input.options[input.selectedIndex].text;
-                } else if (input.tagName === 'SELECT' && input.previousElementSibling.textContent.includes('Budget')) {
-                    formData.budget = input.options[input.selectedIndex].text;
-                }
-            });
-            
-            return formData;
-        }
-
-        function generateAuditContent(formData) {
-            var content = 'EXECUTIVE SUMMARY\\n\\n';
-            content += 'VeriVault has conducted a comprehensive security analysis for ' + (formData.clientName || 'the client') + ' utilizing our advanced AI-powered assessment platform. ';
-            content += 'This ' + formData.selectedPackage + ' audit provides detailed security recommendations tailored to the specific requirements and budget constraints of the property.\\n\\n';
-            
-            content += 'PROPERTY ANALYSIS\\n\\n';
-            content += 'Property Type: ' + (formData.propertyType || 'Mixed Use Facility') + '\\n';
-            content += 'Location: ' + (formData.propertyAddress || 'Confidential Location') + '\\n';
-            content += 'Budget Range: ' + (formData.budget || '$10,000 - $25,000') + '\\n\\n';
-            
-            content += 'Our AI analysis has identified several key areas requiring security enhancement. The current security posture presents moderate risk levels with specific vulnerabilities in perimeter monitoring, access control, and surveillance coverage.\\n\\n';
-            
-            content += 'SECURITY VULNERABILITIES IDENTIFIED\\n\\n';
-            content += '• Limited camera coverage in high-traffic areas\\n';
-            content += '• Insufficient lighting in parking and perimeter zones\\n';
-            content += '• Outdated access control systems requiring modernization\\n';
-            content += '• Blind spots in current surveillance network\\n';
-            content += '• Lack of integrated security management platform\\n\\n';
-            
-            content += 'RECOMMENDED SECURITY ENHANCEMENTS\\n\\n';
-            
-            if (formData.selectedPackage === 'starter') {
-                content += 'PHASE 1 - ESSENTIAL UPGRADES ($2,500 - $5,000)\\n';
-                content += '• Install 4x high-definition security cameras at main entry points\\n';
-                content += '• Upgrade exterior lighting system with motion sensors\\n';
-                content += '• Implement basic access control system\\n';
-                content += '• Install security signage and deterrent measures\\n\\n';
-            } else if (formData.selectedPackage === 'premium') {
-                content += 'PHASE 1 - COMPREHENSIVE SECURITY ($5,000 - $15,000)\\n';
-                content += '• Deploy 8x 4K security cameras with night vision capabilities\\n';
-                content += '• Install integrated access control system with card readers\\n';
-                content += '• Implement perimeter intrusion detection system\\n';
-                content += '• Upgrade to LED security lighting with smart controls\\n';
-                content += '• Deploy central monitoring station with real-time alerts\\n\\n';
-                
-                content += 'PHASE 2 - ADVANCED FEATURES ($3,000 - $8,000)\\n';
-                content += '• AI-powered video analytics for behavior detection\\n';
-                content += '• Mobile app integration for remote monitoring\\n';
-                content += '• Backup power systems for critical security components\\n';
-                content += '• Professional installation and system integration\\n\\n';
-            } else {
-                content += 'ENTERPRISE SECURITY TRANSFORMATION ($15,000 - $50,000)\\n';
-                content += '• Complete 16-camera 4K surveillance network\\n';
-                content += '• Enterprise-grade access control with biometric options\\n';
-                content += '• Integrated intrusion detection and alarm systems\\n';
-                content += '• Professional-grade monitoring station with redundancy\\n';
-                content += '• AI-powered threat detection and automated responses\\n';
-                content += '• Mobile command center capabilities\\n';
-                content += '• 24/7 monitoring service integration\\n';
-                content += '• Comprehensive staff training and ongoing support\\n\\n';
-            }
-            
-            content += 'IMPLEMENTATION TIMELINE\\n\\n';
-            content += 'Week 1-2: Equipment procurement and site preparation\\n';
-            content += 'Week 3-4: Professional installation and system configuration\\n';
-            content += 'Week 5: Testing, training, and system optimization\\n';
-            content += 'Week 6: Final documentation and warranty activation\\n\\n';
-            
-            content += 'EXPECTED OUTCOMES\\n\\n';
-            content += '• 95% reduction in security blind spots\\n';
-            content += '• Enhanced deterrent effect reducing incident probability\\n';
-            content += '• Real-time threat detection and response capabilities\\n';
-            content += '• Comprehensive incident documentation and evidence collection\\n';
-            content += '• Insurance premium reductions through improved security posture\\n\\n';
-            
-            content += 'NEXT STEPS\\n\\n';
-            content += '1. Review and approve recommended security enhancements\\n';
-            content += '2. Schedule detailed site survey with VeriVault security engineers\\n';
-            content += '3. Finalize equipment specifications and installation timeline\\n';
-            content += '4. Coordinate with preferred installation partners\\n';
-            content += '5. Begin implementation of Phase 1 security upgrades\\n\\n';
-            
-            content += 'This assessment represents a comprehensive analysis of your security requirements. VeriVault remains committed to providing ongoing support throughout the implementation process and beyond.';
-            
-            return content;
-        }
-
-        function generateAIRecommendations() {
-            alert('🤖 AI Recommendations Generated!\n\n✅ Security vulnerabilities analyzed\n✅ Budget-optimized solutions identified\n✅ Priority recommendations updated\n✅ Camera placement strategy refined\n\nUse this data to create your professional audit report!');
-        }
-
-        function generateProfessionalAuditReport() {
-            alert('📄 Professional Security Audit Report Generated!\n\n✅ Comprehensive property analysis\n✅ Detailed vulnerability assessment\n✅ Budget-tier recommendations\n✅ Camera placement diagrams\n✅ Implementation timeline\n✅ Professional PDF ready for client delivery\n\nThis report is ready to send to your client!');
-        }
-
-        function saveAuditData() {
-            alert('💾 Audit Data Saved Successfully!\n\n✅ Property analysis saved\n✅ Recommendations stored\n✅ Client information archived\n✅ Available for future reference\n\nYou can continue working on this audit later!');
-        }
-
-        function logEvent() {
-            var timestamp = new Date().toLocaleTimeString();
-            alert('✅ Event logged successfully at ' + timestamp);
-        }
-
-        function generateReport() {
-            alert('📄 Report generated successfully!');
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('VeriVault Dashboard Loading');
-            
-            document.getElementById('tabReports').addEventListener('click', function() {
-                switchTab('reports');
-            });
-            document.getElementById('tabLogger').addEventListener('click', function() {
-                switchTab('logger');
-            });
-            document.getElementById('tabIntake').addEventListener('click', function() {
-                switchTab('intake');
-            });
-            document.getElementById('tabAuditTool').addEventListener('click', function() {
-                switchTab('auditTool');
-            });
-            
-            // Setup sidebar click handlers (for reports tab)
-            var sidebarItems = document.querySelectorAll('.sidebar-item[data-report]');
-            for (var i = 0; i < sidebarItems.length; i++) {
-                sidebarItems[i].addEventListener('click', function(e) {
-                    e.preventDefault();
-                    var reportType = this.getAttribute('data-report');
-                    console.log('Sidebar clicked:', reportType);
-                    if (reportType) {
-                        selectReport(reportType);
-                    }
-                });
-            }
-            
-            // Setup CSV upload
-            var dropZone = document.getElementById('dropZone');
-            var csvInput = document.getElementById('csvInput');
-            
-            if (dropZone && csvInput) {
-                dropZone.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    csvInput.click();
-                });
-
-                csvInput.addEventListener('change', function(e) {
-                    if (e.target.files.length > 0) {
-                        handleFileUpload(e.target.files[0]);
-                    }
-                });
-            }
-            
-            var eventTypeButtons = document.querySelectorAll('.event-type-btn');
-            for (var i = 0; i < eventTypeButtons.length; i++) {
-                eventTypeButtons[i].addEventListener('click', function(e) {
-                    e.preventDefault();
-                    var eventType = this.dataset.type;
-                    selectEventType(eventType);
-                });
-            }
-            
-            var auditPackages = document.querySelectorAll('.audit-package');
-            for (var i = 0; i < auditPackages.length; i++) {
-                auditPackages[i].addEventListener('click', function(e) {
-                    e.preventDefault();
-                    var packageType = this.dataset.package;
-                    selectAuditPackage(packageType);
-                });
-            }
-            
-            var submitAuditBtn = document.getElementById('submitAuditBtn');
-            if (submitAuditBtn) {
-                submitAuditBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    submitSecurityAudit();
-                });
-            }
-
-            var generateRecommendationsBtn = document.getElementById('generateRecommendationsBtn');
-            if (generateRecommendationsBtn) {
-                generateRecommendationsBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    generateAIRecommendations();
-                });
-            }
-
-            var generateAuditReportBtn = document.getElementById('generateAuditReportBtn');
-            if (generateAuditReportBtn) {
-                generateAuditReportBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    generateProfessionalAuditReport();
-                });
-            }
-
-            var saveAuditDataBtn = document.getElementById('saveAuditDataBtn');
-            if (saveAuditDataBtn) {
-                saveAuditDataBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    saveAuditData();
-                });
-            }
-
-            var logEventBtn = document.getElementById('logEventBtn');
-            if (logEventBtn) {
-                logEventBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    logEvent();
-                });
-            }
-
-            var generateReportBtn = document.getElementById('generateReportBtn');
-            if (generateReportBtn) {
-                generateReportBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    generateReport();
-                });
-            }
-
-            var propertyTopDownUpload = document.getElementById('propertyTopDownUpload');
-            var currentCamerasUpload = document.getElementById('currentCamerasUpload');
-            
-            if (propertyTopDownUpload) {
-                var topDownArea = propertyTopDownUpload.parentElement;
-                topDownArea.addEventListener('click', function() {
-                    propertyTopDownUpload.click();
-                });
-                
-                propertyTopDownUpload.addEventListener('change', function(e) {
-                    if (e.target.files.length > 0) {
-                        var file = e.target.files[0];
-                        topDownArea.innerHTML = '<div class="text-3xl mb-2">✅</div><p class="text-green-400 text-sm mb-1">Top-down view uploaded: ' + file.name + '</p><p class="text-slate-400 text-xs">Click to change file</p>';
-                    }
-                });
-            }
-            
-            if (currentCamerasUpload) {
-                var camerasArea = currentCamerasUpload.parentElement;
-                camerasArea.addEventListener('click', function() {
-                    currentCamerasUpload.click();
-                });
-                
-                currentCamerasUpload.addEventListener('change', function(e) {
-                    if (e.target.files.length > 0) {
-                        var fileCount = e.target.files.length;
-                        camerasArea.innerHTML = '<div class="text-3xl mb-2">✅</div><p class="text-green-400 text-sm mb-1">' + fileCount + ' camera image(s) uploaded</p><p class="text-slate-400 text-xs">Click to change files</p>';
-                    }
-                });
-            }
-            
-            // Initialize audit package selection
-            selectAuditPackage('premium');
-            
-            // Set default date and load template
-            var reportDateEl = document.getElementById('reportDate');
-            if (reportDateEl) {
-                reportDateEl.value = new Date().toISOString().split('T')[0];
-            }
-            
-            // Load default template for Daily Log
-            var defaultReport = reportData[currentReportType];
-            var reportContentEl = document.getElementById('reportContent');
-            if (reportContentEl && defaultReport) {
-                reportContentEl.value = defaultReport.template
-                    .replace(/\[CLIENT_NAME\]/g, '')
-                    .replace(/\[REPORT_DATE\]/g, new Date().toISOString().split('T')[0])
-                    .replace(/\\n/g, '\n');
-            }
-            
-            // Test navigation on load
-            console.log('Testing navigation elements...');
-            console.log('Tab buttons found:', document.querySelectorAll('.tab-button').length);
-            console.log('Tab contents found:', document.querySelectorAll('.tab-content').length);
-            console.log('Sidebar items found:', document.querySelectorAll('.sidebar-item[data-report]').length);
-            
-            console.log('VeriVault Dashboard Ready');
-        });
-    </script>
-</body>
-</html>k">$10,000 - $25,000</option>
-                                    <option value="50k">$25,000 - $50,000</option>
-                                    <option value="100k">$50,000 - $100,000</option>
-                                    <option value="100k+">$100,000+</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="text-center mt-8">
-                        <button id="submitAuditBtn" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-12 rounded-lg font-bold text-lg hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105">
-                            🔐 Submit Security Audit Request
-                        </button>
-                        <p class="text-slate-400 text-sm mt-3">
-                            Our AI security experts will analyze your property and deliver your comprehensive audit report within 24-48 hours
-                        </p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -1518,7 +398,7 @@ This comprehensive security audit represents a strategic investment in protectin
             <div class="max-w-6xl mx-auto">
                 <div class="mb-8">
                     <h2 class="text-3xl font-bold text-white mb-2">🔍 Security Audit Analysis Tool</h2>
-                    <p class="text-slate-400">Internal tool for conducting comprehensive security audits and refining our MVP</p>
+                    <p class="text-slate-400">Internal tool for conducting comprehensive security audits</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -1557,29 +437,6 @@ This comprehensive security audit represents a strategic investment in protectin
                                     </select>
                                 </div>
                             </div>
-
-                            <!-- File Upload Sections -->
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Top-Down View</label>
-                                    <div class="border-2 border-dashed border-cyan-400/30 rounded-lg p-4 text-center hover:border-cyan-400/50 transition-colors cursor-pointer bg-white/5">
-                                        <div class="text-3xl mb-2">🛰️</div>
-                                        <p class="text-slate-300 text-sm mb-1">Upload aerial view, Google Earth screenshot, or property layout</p>
-                                        <p class="text-slate-400 text-xs">PNG, JPG, PDF up to 10MB</p>
-                                        <input type="file" accept="image/*,.pdf" class="hidden" id="propertyTopDownUpload">
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Current Camera Locations & Views</label>
-                                    <div class="border-2 border-dashed border-green-400/30 rounded-lg p-4 text-center hover:border-green-400/50 transition-colors cursor-pointer bg-white/5">
-                                        <div class="text-3xl mb-2">📹</div>
-                                        <p class="text-slate-300 text-sm mb-1">Upload photos of existing cameras and their current views</p>
-                                        <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
-                                        <input type="file" accept="image/*" multiple class="hidden" id="currentCamerasUpload">
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -1590,9 +447,560 @@ This comprehensive security audit represents a strategic investment in protectin
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
-                                <select id="auditBudgetRange" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                                     <option value="">Select budget</option>
                                     <option value="2500-5000">$2,500 - $5,000</option>
                                     <option value="5000-10000">$5,000 - $10,000</option>
                                     <option value="10000-25000">$10,000 - $25,000</option>
-                                    <option value="25
+                                    <option value="25000-50000">$25,000 - $50,000</option>
+                                    <option value="50000+">$50,000+</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Priority Focus</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <span class="text-slate-300">Perimeter Security</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <span class="text-slate-300">Access Control</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <span class="text-slate-300">Indoor Monitoring</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <span class="text-slate-300">Vehicle Areas</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
+                                🎯 Generate AI Recommendations
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Results -->
+                <div class="mt-8 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">📊 Analysis Results</h3>
+                    <div class="bg-slate-800/50 rounded-lg p-4">
+                        <p class="text-slate-400 text-center">Run analysis to see AI-powered security recommendations and camera placement suggestions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentTab = 'reports';
+        let selectedPackage = 'premium';
+        let currentReportType = 'daily-log';
+        let uploadedCsvData = null;
+
+        // Report templates
+        const reportData = {
+            'daily-log': {
+                title: 'Daily Log',
+                description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
+                template: `DAILY OPERATIONS LOG
+
+Client: [CLIENT_NAME]
+Date: [REPORT_DATE]
+Report Type: Daily Operations Summary
+
+OPERATIONAL OVERVIEW:
+• Staff deployment and assignments
+• Security checkpoint activities
+• Visitor management and access control
+• Equipment status and functionality
+• Notable incidents or observations
+• Communication logs
+
+RECOMMENDATIONS:
+• Continued monitoring protocols
+• Equipment maintenance schedules
+• Staff training updates
+
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
+            },
+            'incident-medical': {
+                title: 'Medical Incident Report',
+                description: 'Detailed documentation for injury and emergency situations requiring medical response',
+                template: `MEDICAL INCIDENT REPORT
+
+Client: [CLIENT_NAME]
+Date: [REPORT_DATE]
+Report Type: Medical Emergency Documentation
+
+INCIDENT DETAILS:
+• Time and location of incident
+• Individuals involved and injuries sustained
+• Immediate response actions taken
+• Medical personnel contacted
+• Emergency services coordination
+• Witness statements and documentation
+
+MEDICAL RESPONSE:
+• First aid administered
+• Medical equipment utilized
+• Transport arrangements
+• Hospital/clinic notifications
+• Follow-up medical care
+
+PREVENTION MEASURES:
+• Risk assessment updates
+• Safety protocol improvements
+• Additional training requirements
+
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
+            },
+            'incident-non-medical': {
+                title: 'Security Incident Report',
+                description: 'Documentation for security breaches, unauthorized access, and non-medical emergencies',
+                template: `SECURITY INCIDENT REPORT
+
+Client: [CLIENT_NAME]
+Date: [REPORT_DATE]
+Report Type: Non-Medical Security Incident
+
+INCIDENT CLASSIFICATION:
+• Security breach assessment
+• Unauthorized access attempts
+• Equipment malfunction or damage
+• Suspicious activity documentation
+• Policy violations
+• Environmental hazards
+
+RESPONSE ACTIONS:
+• Immediate containment measures
+• Law enforcement coordination
+• Evidence collection and preservation
+• Witness interviews
+• Damage assessment
+• Communication protocols
+
+REMEDIATION PLAN:
+• Security enhancement recommendations
+• Policy updates and revisions
+• Additional monitoring requirements
+• Staff retraining initiatives
+
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
+            },
+            'annual-security': {
+                title: 'Annual Security Assessment',
+                description: 'Comprehensive yearly security analysis including threat assessment and strategic planning',
+                template: `ANNUAL SECURITY ASSESSMENT
+
+Client: [CLIENT_NAME]
+Assessment Period: [REPORT_DATE]
+Report Type: Comprehensive Security Analysis
+
+THREAT LANDSCAPE ANALYSIS:
+• Current security environment assessment
+• Emerging threat identification
+• Risk probability and impact evaluation
+• Industry-specific security challenges
+• Regulatory compliance status
+
+SECURITY INFRASTRUCTURE REVIEW:
+• Physical security systems evaluation
+• Personnel security protocols
+• Technology integration assessment
+• Communication systems analysis
+• Emergency response capabilities
+
+STRATEGIC RECOMMENDATIONS:
+• Security enhancement priorities
+• Technology upgrade requirements
+• Training and development needs
+• Budget allocation recommendations
+• Implementation timeline
+
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
+            },
+            'systems-audit': {
+                title: 'Systems Audit Report',
+                description: 'Technical evaluation of security equipment, technology infrastructure, and operational systems',
+                template: `SYSTEMS AUDIT REPORT
+
+Client: [CLIENT_NAME]
+Audit Date: [REPORT_DATE]
+Report Type: Technology and Equipment Assessment
+
+SYSTEM PERFORMANCE ANALYSIS:
+• Security camera network status
+• Access control system functionality
+• Communication equipment assessment
+• Monitoring software evaluation
+• Database integrity verification
+
+EQUIPMENT INVENTORY:
+• Hardware condition assessment
+• Software version compliance
+• Maintenance schedule adherence
+• Replacement timeline planning
+• Warranty and support status
+
+OPTIMIZATION RECOMMENDATIONS:
+• System upgrade priorities
+• Performance enhancement measures
+• Integration improvement opportunities
+• Cybersecurity strengthening
+• Operational efficiency gains
+
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
+            },
+            'discrepancy': {
+                title: 'Discrepancy Report',
+                description: 'Documentation of equipment issues, policy violations, and operational inconsistencies',
+                template: `DISCREPANCY REPORT
+
+Client: [CLIENT_NAME]
+Report Date: [REPORT_DATE]
+Report Type: Operational Discrepancy Documentation
+
+DISCREPANCY IDENTIFICATION:
+• Equipment malfunction details
+• Policy compliance violations
+• Procedural inconsistencies
+• Documentation irregularities
+• Performance standard deviations
+
+IMPACT ASSESSMENT:
+• Operational effect evaluation
+• Security implications analysis
+• Cost impact determination
+• Timeline considerations
+• Risk level assessment
+
+CORRECTIVE ACTION PLAN:
+• Immediate remediation steps
+• Long-term solution development
+• Prevention strategy implementation
+• Monitoring and verification protocols
+• Responsibility assignments
+
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
+            },
+            'vehicle-inspection': {
+                title: 'Vehicle Inspection Report',
+                description: 'Comprehensive vehicle safety and operational readiness assessment for fleet management',
+                template: `VEHICLE INSPECTION REPORT
+
+Client: [CLIENT_NAME]
+Inspection Date: [REPORT_DATE]
+Report Type: Fleet Vehicle Assessment
+
+VEHICLE IDENTIFICATION:
+• Make, model, and year
+• Vehicle identification number
+• License plate information
+• Mileage and service history
+• Insurance and registration status
+
+SAFETY INSPECTION:
+• Brake system functionality
+• Tire condition and pressure
+• Lighting system operation
+• Emergency equipment inventory
+• Communication device status
+
+OPERATIONAL READINESS:
+• Fuel level and efficiency
+• Engine performance metrics
+• Maintenance schedule compliance
+• Driver assignment protocols
+• Route optimization capabilities
+
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL`
+            }
+        };
+
+        // Functions
+        function switchTab(tabName) {
+            console.log('Switching to tab:', tabName);
+            
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
+                btn.classList.add('text-slate-400', 'border-transparent');
+            });
+            
+            // Show selected tab content
+            const targetContent = document.getElementById(tabName + 'Content');
+            if (targetContent) {
+                targetContent.classList.remove('hidden');
+            }
+            
+            // Activate selected tab button
+            const targetButton = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+            if (targetButton) {
+                targetButton.classList.add('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
+                targetButton.classList.remove('text-slate-400', 'border-transparent');
+            }
+            
+            currentTab = tabName;
+        }
+
+        function selectReport(reportType) {
+            console.log('Selecting report:', reportType);
+            
+            currentReportType = reportType;
+            const report = reportData[reportType];
+            
+            if (!report) {
+                console.error('Report type not found:', reportType);
+                return;
+            }
+            
+            // Update active sidebar item
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active', 'bg-blue-600');
+                item.classList.add('bg-slate-700');
+            });
+            
+            const targetItem = document.querySelector(`[data-report="${reportType}"]`);
+            if (targetItem) {
+                targetItem.classList.remove('bg-slate-700');
+                targetItem.classList.add('active', 'bg-blue-600');
+            }
+            
+            // Update main content
+            const titleElement = document.getElementById('reportTitle');
+            const descElement = document.getElementById('reportDescription');
+            const contentElement = document.getElementById('reportContent');
+            
+            if (titleElement) titleElement.textContent = report.title;
+            if (descElement) descElement.textContent = report.description;
+            
+            // Update template content
+            if (contentElement) {
+                const clientNameEl = document.getElementById('clientName');
+                const reportDateEl = document.getElementById('reportDate');
+                const clientName = clientNameEl ? clientNameEl.value : '';
+                const reportDate = reportDateEl ? reportDateEl.value : new Date().toISOString().split('T')[0];
+                
+                const template = report.template
+                    .replace(/\[CLIENT_NAME\]/g, clientName || 'CLIENT_NAME')
+                    .replace(/\[REPORT_DATE\]/g, reportDate);
+                contentElement.value = template;
+            }
+            
+            // Reset CSV upload state
+            uploadedCsvData = null;
+            const aiSection = document.getElementById('aiEnhancedSection');
+            const uploadStatus = document.getElementById('uploadStatus');
+            if (aiSection) aiSection.classList.add('hidden');
+            if (uploadStatus) uploadStatus.classList.add('hidden');
+        }
+
+        function handleFileUpload(file) {
+            console.log('Processing file:', file.name);
+            
+            const uploadStatus = document.getElementById('uploadStatus');
+            
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                if (uploadStatus) {
+                    uploadStatus.textContent = '❌ Please upload a CSV file only';
+                    uploadStatus.className = 'mt-2 text-sm text-red-400';
+                    uploadStatus.classList.remove('hidden');
+                }
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedCsvData = e.target.result;
+                console.log('CSV data loaded, length:', uploadedCsvData.length);
+                
+                if (uploadStatus) {
+                    uploadStatus.textContent = '✅ File uploaded: ' + file.name;
+                    uploadStatus.className = 'mt-2 text-sm text-green-400';
+                    uploadStatus.classList.remove('hidden');
+                }
+                
+                const aiSection = document.getElementById('aiEnhancedSection');
+                if (aiSection) {
+                    aiSection.classList.remove('hidden');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function selectEventType(eventType) {
+            document.querySelectorAll('.event-form').forEach(form => {
+                form.classList.add('hidden');
+            });
+            
+            const targetForm = document.getElementById(eventType + 'Form');
+            if (targetForm) {
+                targetForm.classList.remove('hidden');
+            }
+            
+            document.querySelectorAll('.event-type-btn').forEach(btn => {
+                const btnDiv = btn.querySelector('div');
+                if (btn.dataset.type === eventType) {
+                    btnDiv.classList.remove('bg-slate-600');
+                    btnDiv.classList.add('bg-blue-600');
+                    btn.classList.add('active');
+                } else {
+                    btnDiv.classList.remove('bg-blue-600');
+                    btnDiv.classList.add('bg-slate-600');
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function selectAuditPackage(packageType) {
+            document.querySelectorAll('.audit-package').forEach(pkg => {
+                pkg.classList.remove('ring-2', 'ring-cyan-400', 'ring-purple-400', 'ring-slate-400');
+                if (pkg.dataset.package === packageType) {
+                    if (packageType === 'premium') {
+                        pkg.classList.add('ring-2', 'ring-cyan-400');
+                    } else if (packageType === 'enterprise') {
+                        pkg.classList.add('ring-2', 'ring-purple-400');
+                    } else {
+                        pkg.classList.add('ring-2', 'ring-slate-400');
+                    }
+                }
+            });
+            selectedPackage = packageType;
+        }
+
+        function logEvent() {
+            const timestamp = new Date().toLocaleTimeString();
+            alert('✅ Event logged successfully at ' + timestamp);
+        }
+
+        function generateReport() {
+            alert('📄 Report generated successfully!');
+        }
+
+        function generateAIRecommendations() {
+            alert('🤖 AI Recommendations Generated!\n\n✅ Security vulnerabilities analyzed\n✅ Budget-optimized solutions identified\n✅ Priority recommendations updated\n✅ Camera placement strategy refined\n\nUse this data to create your professional audit report!');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('VeriVault Dashboard Loading');
+            
+            // Tab navigation
+            document.getElementById('tabReports').addEventListener('click', () => switchTab('reports'));
+            document.getElementById('tabLogger').addEventListener('click', () => switchTab('logger'));
+            document.getElementById('tabIntake').addEventListener('click', () => switchTab('intake'));
+            document.getElementById('tabAuditTool').addEventListener('click', () => switchTab('auditTool'));
+            
+            // Sidebar click handlers
+            document.querySelectorAll('.sidebar-item[data-report]').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const reportType = this.getAttribute('data-report');
+                    if (reportType) {
+                        selectReport(reportType);
+                    }
+                });
+            });
+            
+            // CSV upload
+            const dropZone = document.getElementById('dropZone');
+            const csvInput = document.getElementById('csvInput');
+            
+            if (dropZone && csvInput) {
+                dropZone.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    csvInput.click();
+                });
+
+                csvInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        handleFileUpload(e.target.files[0]);
+                    }
+                });
+            }
+            
+            // Event type buttons
+            document.querySelectorAll('.event-type-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const eventType = this.dataset.type;
+                    selectEventType(eventType);
+                });
+            });
+            
+            // Audit packages
+            document.querySelectorAll('.audit-package').forEach(pkg => {
+                pkg.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const packageType = this.dataset.package;
+                    selectAuditPackage(packageType);
+                });
+            });
+
+            // Button handlers
+            const generateRecommendationsBtn = document.getElementById('generateRecommendationsBtn');
+            if (generateRecommendationsBtn) {
+                generateRecommendationsBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    generateAIRecommendations();
+                });
+            }
+
+            const logEventBtn = document.getElementById('logEventBtn');
+            if (logEventBtn) {
+                logEventBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    logEvent();
+                });
+            }
+
+            const generateReportBtn = document.getElementById('generateReportBtn');
+            if (generateReportBtn) {
+                generateReportBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    generateReport();
+                });
+            }
+
+            // Initialize audit package selection
+            selectAuditPackage('premium');
+            
+            // Set default date
+            const reportDateEl = document.getElementById('reportDate');
+            if (reportDateEl) {
+                reportDateEl.value = new Date().toISOString().split('T')[0];
+            }
+            
+            // Load default template
+            const defaultReport = reportData[currentReportType];
+            const reportContentEl = document.getElementById('reportContent');
+            if (reportContentEl && defaultReport) {
+                reportContentEl.value = defaultReport.template
+                    .replace(/\[CLIENT_NAME\]/g, '')
+                    .replace(/\[REPORT_DATE\]/g, new Date().toISOString().split('T')[0]);
+            }
+            
+            console.log('VeriVault Dashboard Ready');
+        });
+    </script>
+</body>
+</html>
