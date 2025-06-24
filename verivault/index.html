@@ -1,4 +1,324 @@
-<div id="cameraStatus" class="mt-2 text-sm hidden"></div>
+<!-- EVENT LOGGER TAB CONTENT -->
+    <div id="content-logger" class="tab-content hidden">
+        <div class="w-full p-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">Event Logger</h2>
+                    <p class="text-slate-400">Real-time event logging for staff, vendors, deliveries, and guests</p>
+                </div>
+
+                <div class="bg-white bg-opacity-5 backdrop-blur-sm rounded-xl border border-white border-opacity-10 p-6">
+                    <!-- Event Type Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-300 mb-3">Event Type</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <button onclick="selectEventType('staff')" class="event-btn active">
+                                <div class="bg-blue-600 p-4 rounded-lg text-center hover:bg-blue-700 transition-colors">
+                                    <div class="text-2xl mb-2">👥</div>
+                                    <div class="text-white font-medium">Staff</div>
+                                </div>
+                            </button>
+                            <button onclick="selectEventType('vendor')" class="event-btn">
+                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
+                                    <div class="text-2xl mb-2">🔧</div>
+                                    <div class="text-white font-medium">Vendor</div>
+                                </div>
+                            </button>
+                            <button onclick="selectEventType('delivery')" class="event-btn">
+                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
+                                    <div class="text-2xl mb-2">📦</div>
+                                    <div class="text-white font-medium">Delivery</div>
+                                </div>
+                            </button>
+                            <button onclick="selectEventType('guest')" class="event-btn">
+                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
+                                    <div class="text-2xl mb-2">🏃</div>
+                                    <div class="text-white font-medium">Guest</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Name</label>
+                            <input type="text" placeholder="Enter name" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
+                            <select class="w-full bg-white border border-white border-opacity-20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <option value="">Select action</option>
+                                <option value="arrived">Arrived</option>
+                                <option value="departed">Departed</option>
+                                <option value="break">Break Started</option>
+                                <option value="return">Returned from Break</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Notes Field -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Notes</label>
+                        <textarea rows="3" placeholder="Additional observations or details..." class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"></textarea>
+                    </div>
+
+                    <!-- Log Entry Button -->
+                    <button onclick="logEvent()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                        ✅ Log Event
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECURITY AUDIT INTAKE TAB -->
+    <div id="content-intake" class="tab-content hidden">
+        <div class="w-full p-8">
+            <div class="max-w-5xl mx-auto">
+                <div class="mb-8 text-center">
+                    <h2 class="text-4xl font-bold text-white mb-4">🔐 VeriVault SecureScope</h2>
+                    <p class="text-xl text-cyan-400 mb-2">AI-Powered Security Audit & Camera Placement Analysis</p>
+                    <p class="text-slate-400">Get professional security recommendations tailored to your property and budget</p>
+                </div>
+
+                <div class="bg-white bg-opacity-5 backdrop-blur-sm rounded-xl border border-white border-opacity-10 p-8">
+                    <!-- Pricing Tiers -->
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold text-white mb-6 text-center">Choose Your Security Audit Package</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div onclick="selectPackage('starter')" class="package-item cursor-pointer relative bg-gradient-to-br from-slate-700 to-slate-800 p-6 rounded-xl border border-white border-opacity-10 hover:border-cyan-400 hover:border-opacity-50 transition-all">
+                                <div class="text-center">
+                                    <div class="text-3xl mb-3">🏠</div>
+                                    <h4 class="text-xl font-bold text-white mb-2">Starter Audit</h4>
+                                    <div class="text-3xl font-bold text-cyan-400 mb-4">$799</div>
+                                    <ul class="text-slate-300 text-sm space-y-2">
+                                        <li>✅ Property layout analysis</li>
+                                        <li>✅ Basic camera placement plan</li>
+                                        <li>✅ Equipment recommendations</li>
+                                        <li>✅ PDF security report</li>
+                                        <li>✅ 48-hour delivery</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div onclick="selectPackage('premium')" class="package-item cursor-pointer active relative bg-gradient-to-br from-cyan-600 to-blue-700 p-6 rounded-xl border-2 border-cyan-400 hover:border-cyan-300 transition-all">
+                                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                    <span class="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold">MOST POPULAR</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl mb-3">🏢</div>
+                                    <h4 class="text-xl font-bold text-white mb-2">Premium Audit</h4>
+                                    <div class="text-3xl font-bold text-white mb-4">$2,499</div>
+                                    <ul class="text-blue-100 text-sm space-y-2">
+                                        <li>✅ Everything in Starter</li>
+                                        <li>✅ Detailed threat analysis</li>
+                                        <li>✅ 3D visualization mockups</li>
+                                        <li>✅ Budget-tier recommendations</li>
+                                        <li>✅ Installation partner referrals</li>
+                                        <li>✅ 24-hour delivery</li>
+                                        <li>✅ 30-min consultation call</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div onclick="selectPackage('enterprise')" class="package-item cursor-pointer relative bg-gradient-to-br from-purple-600 to-pink-700 p-6 rounded-xl border border-white border-opacity-10 hover:border-purple-400 hover:border-opacity-50 transition-all">
+                                <div class="text-center">
+                                    <div class="text-3xl mb-3">🏰</div>
+                                    <h4 class="text-xl font-bold text-white mb-2">Enterprise Audit</h4>
+                                    <div class="text-3xl font-bold text-white mb-4">$5,999</div>
+                                    <ul class="text-purple-100 text-sm space-y-2">
+                                        <li>✅ Everything in Premium</li>
+                                        <li>✅ On-site visit option</li>
+                                        <li>✅ Multi-building analysis</li>
+                                        <li>✅ Advanced threat modeling</li>
+                                        <li>✅ Custom security protocols</li>
+                                        <li>✅ Implementation timeline</li>
+                                        <li>✅ 1-hour strategy session</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="bg-white bg-opacity-5 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-white mb-4">📞 Contact Information</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+                                <input type="text" placeholder="Your name" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+                                <input type="email" placeholder="your.email@domain.com" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
+                                <input type="tel" placeholder="(555) 123-4567" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
+                                <select class="w-full bg-white border border-white border-opacity-20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                    <option value="">Select budget range</option>
+                                    <option value="5k">$2,500 - $5,000</option>
+                                    <option value="10k">$5,000 - $10,000</option>
+                                    <option value="25000-50000">$25,000 - $50,000</option>
+                                    <option value="50000-100000">$50,000 - $100,000</option>
+                                    <option value="100000+">$100,000+</option>
+                                </select>
+                            </div>
+
+                            <button onclick="generateRecommendations()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                                🔄 Generate AI Recommendations
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUDIT ANALYSIS TOOL TAB -->
+    <div id="content-auditTool" class="tab-content hidden">
+        <div class="w-full p-8">
+            <div class="max-w-6xl mx-auto">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">🔍 Security Audit Analysis Tool</h2>
+                    <p class="text-slate-400">Internal tool for conducting comprehensive security audits with photo analysis</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Property Analysis Section -->
+                    <div class="bg-white bg-opacity-5 backdrop-blur-sm rounded-xl border border-white border-opacity-10 p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">🏠 Property Analysis</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Property Address/Name</label>
+                                <input type="text" placeholder="Enter property for analysis" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Type</label>
+                                    <select class="w-full bg-white border border-white border-opacity-20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="">Select type</option>
+                                        <option value="residential_estate">Residential Estate</option>
+                                        <option value="commercial">Commercial Building</option>
+                                        <option value="industrial">Industrial Facility</option>
+                                        <option value="retail">Retail Location</option>
+                                        <option value="mixed_use">Mixed Use</option>
+                                        <option value="government">Government Building</option>
+                                        <option value="educational">Educational Facility</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Risk Level</label>
+                                    <select class="w-full bg-white border border-white border-opacity-20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                        <option value="">Assess risk</option>
+                                        <option value="low">Low Risk</option>
+                                        <option value="medium">Medium Risk</option>
+                                        <option value="high">High Risk</option>
+                                        <option value="critical">Critical Risk</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Photo Upload Sections - ONLY IN AUDIT TOOL -->
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Layout/Aerial View</label>
+                                    <div onclick="document.getElementById('propertyLayout').click()" class="border-2 border-dashed border-cyan-400 border-opacity-30 rounded-lg p-4 text-center hover:border-cyan-400 hover:border-opacity-50 transition-colors cursor-pointer bg-white bg-opacity-5">
+                                        <div class="text-3xl mb-2">🛰️</div>
+                                        <p class="text-slate-300 text-sm mb-1">Upload aerial view, Google Earth screenshot, or property layout</p>
+                                        <p class="text-slate-400 text-xs">PNG, JPG, PDF up to 10MB</p>
+                                    </div>
+                                    <input type="file" id="propertyLayout" accept="image/*,.pdf" class="hidden" onchange="handleFileUpload(this, 'property')">
+                                    <div id="propertyStatus" class="mt-2 text-sm hidden"></div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Current Camera Locations & Views</label>
+                                    <div onclick="document.getElementById('cameraPhotos').click()" class="border-2 border-dashed border-green-400 border-opacity-30 rounded-lg p-4 text-center hover:border-green-400 hover:border-opacity-50 transition-colors cursor-pointer bg-white bg-opacity-5">
+                                        <div class="text-3xl mb-2">📹</div>
+                                        <p class="text-slate-300 text-sm mb-1">Upload photos of existing cameras and their current views</p>
+                                        <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
+                                    </div>
+                                    <input type="file" id="cameraPhotos" accept="image/*" multiple class="hidden" onchange="handleFileUpload(this, 'camera')">
+                                    <div id="cameraStatus" class="mt-2 text-sm hidden"></div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Site Photos (Optional)</label>
+                                    <div onclick="document.getElementById('sitePhotos').click()" class="border-2 border-dashed border-purple-400 border-opacity-30 rounded-lg p-4 text-center hover:border-purple-400 hover:border-opacity-50 transition-colors cursor-pointer bg-white bg-opacity-5">
+                                        <div class="text-3xl mb-2">📸</div>
+                                        <p class="text-slate-300 text-sm mb-1">Upload additional site photos for context</p>
+                                        <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
+                                    </div>
+                                    <input type="file" id="sitePhotos" accept="image/*" multiple class="hidden" onchange="handleFileUpload(this, 'site')">
+                                    <div id="siteStatus" class="mt-2 text-sm hidden"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations Engine -->
+                    <div class="bg-white bg-opacity-5 backdrop-blur-sm rounded-xl border border-white border-opacity-10 p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">💡 Recommendations Engine</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
+                                <select class="w-full bg-white border border-white border-opacity-20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                    <option value="">Select budget</option>
+                                    <option value="2500-5000">$2,500 - $5,000</option>
+                                    <option value="5000-10000">$5,000 - $10,000</option>
+                                    <option value="10000-25000">$10,000 - $25,000</option>
+                                    <option value="25000-50000">$25,000 - $50,000</option>
+                                    <option value="50000+">$50,000+</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Priority Focus</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <span class="text-slate-300">Perimeter Security</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <span class="text-slate-300">Access Control</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <span class="text-slate-300">Indoor Monitoring</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <span class="text-slate-300">Vehicle Areas</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button onclick="runAuditAnalysis()" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
+                                🎯 Generate AI Recommendations
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Results -->
+                <div class="mt-8 bg-white bg-opacity-5 backdrop-blur-sm rounded-xl border border-white border-opacity-10 p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">📊 Analysis Results</h3>
+                    <div id="analysisResults" class="bg-slate-800 bg-opacity-50 rounded-lg p-4">
+                        <p class="text-slate-400 text-center">Run analysis to see AI-powered security recommendations and camera placement suggestions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>                                    <div id="cameraStatus" class="mt-2 text-sm hidden"></div>
                                 </div>
 
                                 <div>
@@ -749,13 +1069,19 @@ Classification: CONFIDENTIAL`
     <title>VeriVault - AI Security Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Ensure Tailwind loads properly */
+        body { margin: 0; padding: 0; }
+        .tab-content.hidden { display: none !important; }
+        .tab-content { display: block; }
+    </style>
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
     <!-- Top Navigation Tabs -->
-    <div class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
+    <div class="bg-slate-800 bg-opacity-90 backdrop-blur-sm border-b border-white border-opacity-10 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex space-x-8">
-                <button onclick="switchToTab('reports')" id="btn-reports" class="tab-btn active py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400/10">
+                <button onclick="switchToTab('reports')" id="btn-reports" class="tab-btn active py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400 bg-opacity-10">
                     📊 Report Generation
                 </button>
                 <button onclick="switchToTab('logger')" id="btn-logger" class="tab-btn py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
@@ -775,7 +1101,7 @@ Classification: CONFIDENTIAL`
     <div id="content-reports" class="tab-content">
         <div class="flex h-screen">
             <!-- Sidebar -->
-            <div class="w-80 bg-slate-800/50 backdrop-blur-sm border-r border-white/10 p-6">
+            <div class="w-80 bg-slate-800 bg-opacity-50 backdrop-blur-sm border-r border-white border-opacity-10 p-6">
                 <!-- Logo -->
                 <div class="flex items-center gap-3 mb-8">
                     <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
@@ -887,20 +1213,20 @@ Classification: CONFIDENTIAL`
                     </div>
 
                     <!-- Form -->
-                    <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                    <div class="bg-white bg-opacity-5 backdrop-blur-sm rounded-xl border border-white border-opacity-10 p-6">
                         <!-- Basic Info -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">
                                     👤 Client Name
                                 </label>
-                                <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">
                                     📅 Report Date
                                 </label>
-                                <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <input type="date" id="reportDate" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
                             </div>
                         </div>
 
@@ -909,7 +1235,7 @@ Classification: CONFIDENTIAL`
                             <label class="block text-sm font-medium text-slate-300 mb-2">
                                 📊 Upload CSV Data for AI Analysis (Optional)
                             </label>
-                            <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed">
+                            <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white bg-opacity-5 border border-white border-opacity-20 rounded-lg text-center cursor-pointer hover:bg-white hover:bg-opacity-10 transition-colors border-dashed">
                                 <div class="text-4xl mb-4">📁</div>
                                 <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
                                 <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
@@ -923,7 +1249,7 @@ Classification: CONFIDENTIAL`
                             <label class="block text-sm font-medium text-slate-300 mb-2">
                                 📝 Report Content
                             </label>
-                            <textarea id="reportContent" rows="15" placeholder="Enter report details..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm"></textarea>
+                            <textarea id="reportContent" rows="15" placeholder="Enter report details..." class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm"></textarea>
                         </div>
 
                         <!-- Generate Button -->
