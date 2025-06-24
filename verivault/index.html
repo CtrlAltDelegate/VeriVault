@@ -469,6 +469,20 @@
     </div>
 
     <script>
+        // Make functions globally accessible
+        window.showTab = showTab;
+        window.selectReport = selectReport;
+        window.selectEventType = selectEventType;
+        window.selectPackage = selectPackage;
+        window.handleFileUpload = handleFileUpload;
+        window.handleCSVUpload = handleCSVUpload;
+        window.runAuditAnalysis = runAuditAnalysis;
+        window.generateReport = generateReport;
+        window.logEvent = logEvent;
+        window.generateRecommendations = generateRecommendations;
+        window.generateCustomAuditPDF = generateCustomAuditPDF;
+        window.generateAuditPDF = generateAuditPDF;
+
         // Global variables
         var currentTab = 'reports';
         var selectedPackage = 'premium';
@@ -727,19 +741,21 @@ Classification: CONFIDENTIAL`
             var targetTab = document.getElementById('tab-' + tabName);
             if (targetTab) {
                 targetTab.classList.remove('hidden');
+                console.log('Showed tab:', tabName);
+            } else {
+                console.error('Tab not found:', 'tab-' + tabName);
             }
             
-            // Activate selected button
-            var activeBtn = event.target;
-            if (activeBtn) {
-                activeBtn.classList.add('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
-                activeBtn.classList.remove('text-slate-400', 'border-transparent');
+            // Activate clicked button
+            if (event && event.target) {
+                event.target.classList.add('active', 'bg-cyan-400/10', 'border-cyan-400', 'text-white');
+                event.target.classList.remove('text-slate-400', 'border-transparent');
             }
             
             currentTab = tabName;
         }
 
-        // Report selection function
+        // Report selection function - FIXED
         function selectReport(reportType) {
             console.log('Selecting report:', reportType);
             
@@ -1332,7 +1348,7 @@ Classification: CONFIDENTIAL`
         }
 
         // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', function() {
             console.log('VeriVault Dashboard Loaded');
             
             // Set default date
@@ -1343,6 +1359,12 @@ Classification: CONFIDENTIAL`
             
             // Load default report template
             selectReport('daily-log');
+            
+            // Test elements
+            console.log('Testing elements:');
+            console.log('Tab buttons:', document.querySelectorAll('.tab-btn').length);
+            console.log('Tab contents:', document.querySelectorAll('.tab-content').length);
+            console.log('Report items:', document.querySelectorAll('.report-item').length);
             
             console.log('Dashboard ready!');
         });
