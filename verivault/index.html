@@ -7,38 +7,30 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        /* Ensure proper tab hiding */
-        .tab-content.hidden {
-            display: none !important;
-        }
-        .tab-content {
-            display: block;
-        }
+        .tab-content.hidden { display: none !important; }
+        .tab-content { display: block; }
+        .audit-only { display: none !important; }
+        #content-auditTool .audit-only { display: block !important; }
+        body { overflow-x: hidden; }
+        .tab-content { position: relative; z-index: 1; }
         
-        /* Completely hide audit-only elements from other tabs */
-        .audit-only {
-            display: none !important;
+        /* Custom animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
+        .animate-pulse-custom { animation: pulse 2s infinite; }
         
-        /* Only show audit elements in audit tool tab */
-        #content-auditTool .audit-only {
-            display: block !important;
-        }
-        
-        /* Prevent any overflow issues */
-        body {
-            overflow-x: hidden;
-        }
-        
-        /* Ensure content doesn't bleed between tabs */
-        .tab-content {
-            position: relative;
-            z-index: 1;
+        /* Glassmorphism effects */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
-    <!-- Top Navigation Tabs - Fixed at top -->
+    <!-- Top Navigation Tabs -->
     <div class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex space-x-8">
@@ -62,7 +54,7 @@
     <div id="content-reports" class="tab-content">
         <div class="flex h-screen">
             <!-- Left Sidebar for Reports -->
-            <div class="w-80 bg-slate-800/50 backdrop-blur-sm border-r border-white/10 p-6">
+            <div class="w-80 glass border-r border-white/10 p-6">
                 <!-- Logo -->
                 <div class="flex items-center gap-3 mb-8">
                     <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
@@ -74,11 +66,11 @@
                     </div>
                 </div>
 
-                <!-- Report Types - Left Sidebar -->
+                <!-- Report Types -->
                 <div class="space-y-2">
                     <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
                     
-                    <div onclick="selectReport('daily-log')" class="report-item active bg-blue-600 p-3 rounded-lg cursor-pointer transition-all hover:bg-blue-700">
+                    <div onclick="selectReport('daily-log')" class="report-item active bg-blue-600 p-3 rounded-lg cursor-pointer transition-all hover:bg-blue-700 transform hover:scale-105">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">📅</span>
@@ -90,7 +82,7 @@
                         </div>
                     </div>
 
-                    <div onclick="selectReport('incident-medical')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
+                    <div onclick="selectReport('incident-medical')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">🏥</span>
@@ -102,7 +94,7 @@
                         </div>
                     </div>
 
-                    <div onclick="selectReport('incident-non-medical')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
+                    <div onclick="selectReport('incident-non-medical')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">⚠️</span>
@@ -114,7 +106,7 @@
                         </div>
                     </div>
 
-                    <div onclick="selectReport('annual-security')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
+                    <div onclick="selectReport('annual-security')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">🛡️</span>
@@ -126,7 +118,7 @@
                         </div>
                     </div>
 
-                    <div onclick="selectReport('systems-audit')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
+                    <div onclick="selectReport('systems-audit')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">⚙️</span>
@@ -138,7 +130,7 @@
                         </div>
                     </div>
 
-                    <div onclick="selectReport('discrepancy')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
+                    <div onclick="selectReport('discrepancy')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">🔍</span>
@@ -150,7 +142,7 @@
                         </div>
                     </div>
 
-                    <div onclick="selectReport('vehicle-inspection')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600">
+                    <div onclick="selectReport('vehicle-inspection')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
                                 <span class="text-white text-sm">🚗</span>
@@ -174,24 +166,24 @@
                     </div>
 
                     <!-- Form -->
-                    <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                    <div class="glass rounded-xl p-6">
                         <!-- Basic Info -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">👤 Client Name</label>
-                                <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">📅 Report Date</label>
-                                <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                             </div>
                         </div>
 
                         <!-- CSV Upload Section -->
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data for AI Analysis (Optional)</label>
-                            <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed">
-                                <div class="text-4xl mb-4">📁</div>
+                            <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed group">
+                                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">📁</div>
                                 <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
                                 <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
                             </div>
@@ -202,13 +194,13 @@
                         <!-- Report Content -->
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-slate-300 mb-2">📝 Report Content</label>
-                            <textarea id="reportContent" rows="15" placeholder="Enter report details..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm"></textarea>
+                            <textarea id="reportContent" rows="15" placeholder="Enter report details or upload CSV for AI-generated content..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm transition-all"></textarea>
                         </div>
 
                         <!-- Generate Button -->
                         <div>
-                            <button onclick="generateReport()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg">
-                                📄 Generate Report
+                            <button onclick="generateReport()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105">
+                                📄 Generate Professional PDF Report
                             </button>
                         </div>
                     </div>
@@ -226,31 +218,31 @@
                     <p class="text-slate-400">Real-time event logging for staff, vendors, deliveries, and guests</p>
                 </div>
 
-                <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                <div class="glass rounded-xl p-6">
                     <!-- Event Type Selection -->
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-slate-300 mb-3">Event Type</label>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             <button onclick="selectEventType('staff')" class="event-btn active">
-                                <div class="bg-blue-600 p-4 rounded-lg text-center hover:bg-blue-700 transition-colors">
+                                <div class="bg-blue-600 p-4 rounded-lg text-center hover:bg-blue-700 transition-all transform hover:scale-105">
                                     <div class="text-2xl mb-2">👥</div>
                                     <div class="text-white font-medium">Staff</div>
                                 </div>
                             </button>
                             <button onclick="selectEventType('vendor')" class="event-btn">
-                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
+                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
                                     <div class="text-2xl mb-2">🔧</div>
                                     <div class="text-white font-medium">Vendor</div>
                                 </div>
                             </button>
                             <button onclick="selectEventType('delivery')" class="event-btn">
-                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
+                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
                                     <div class="text-2xl mb-2">📦</div>
                                     <div class="text-white font-medium">Delivery</div>
                                 </div>
                             </button>
                             <button onclick="selectEventType('guest')" class="event-btn">
-                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-colors">
+                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
                                     <div class="text-2xl mb-2">🏃</div>
                                     <div class="text-white font-medium">Guest</div>
                                 </div>
@@ -262,11 +254,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">Name</label>
-                            <input type="text" placeholder="Enter name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                            <input type="text" id="eventName" placeholder="Enter name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
-                            <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                            <select id="eventAction" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                                 <option value="">Select action</option>
                                 <option value="arrived">Arrived</option>
                                 <option value="departed">Departed</option>
@@ -279,11 +271,11 @@
                     <!-- Notes Field -->
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-slate-300 mb-2">Notes</label>
-                        <textarea rows="3" placeholder="Additional observations or details..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"></textarea>
+                        <textarea id="eventNotes" rows="3" placeholder="Additional observations or details..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"></textarea>
                     </div>
 
                     <!-- Log Entry Button -->
-                    <button onclick="logEvent()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                    <button onclick="logEvent()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
                         ✅ Log Event
                     </button>
                 </div>
@@ -301,12 +293,12 @@
                     <p class="text-slate-400">Get professional security recommendations tailored to your property and budget</p>
                 </div>
 
-                <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-8">
+                <div class="glass rounded-xl p-8">
                     <!-- Pricing Tiers -->
                     <div class="mb-8">
                         <h3 class="text-2xl font-bold text-white mb-6 text-center">Choose Your Security Audit Package</h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div onclick="selectPackage('starter')" class="package-item cursor-pointer relative bg-gradient-to-br from-slate-700 to-slate-800 p-6 rounded-xl border border-white/10 hover:border-cyan-400/50 transition-all">
+                            <div onclick="selectPackage('starter')" class="package-item cursor-pointer relative bg-gradient-to-br from-slate-700 to-slate-800 p-6 rounded-xl border border-white/10 hover:border-cyan-400/50 transition-all transform hover:scale-105">
                                 <div class="text-center">
                                     <div class="text-3xl mb-3">🏠</div>
                                     <h4 class="text-xl font-bold text-white mb-2">Starter Audit</h4>
@@ -321,9 +313,9 @@
                                 </div>
                             </div>
                             
-                            <div onclick="selectPackage('premium')" class="package-item cursor-pointer active relative bg-gradient-to-br from-cyan-600 to-blue-700 p-6 rounded-xl border-2 border-cyan-400 hover:border-cyan-300 transition-all">
+                            <div onclick="selectPackage('premium')" class="package-item cursor-pointer active relative bg-gradient-to-br from-cyan-600 to-blue-700 p-6 rounded-xl border-2 border-cyan-400 hover:border-cyan-300 transition-all transform hover:scale-105">
                                 <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                                    <span class="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold">MOST POPULAR</span>
+                                    <span class="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold animate-pulse-custom">MOST POPULAR</span>
                                 </div>
                                 <div class="text-center">
                                     <div class="text-3xl mb-3">🏢</div>
@@ -341,7 +333,7 @@
                                 </div>
                             </div>
                             
-                            <div onclick="selectPackage('enterprise')" class="package-item cursor-pointer relative bg-gradient-to-br from-purple-600 to-pink-700 p-6 rounded-xl border border-white/10 hover:border-purple-400/50 transition-all">
+                            <div onclick="selectPackage('enterprise')" class="package-item cursor-pointer relative bg-gradient-to-br from-purple-600 to-pink-700 p-6 rounded-xl border border-white/10 hover:border-purple-400/50 transition-all transform hover:scale-105">
                                 <div class="text-center">
                                     <div class="text-3xl mb-3">🏰</div>
                                     <h4 class="text-xl font-bold text-white mb-2">Enterprise Audit</h4>
@@ -366,19 +358,19 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
-                                <input type="text" placeholder="Your name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <input type="text" placeholder="Your name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
-                                <input type="email" placeholder="your.email@domain.com" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <input type="email" placeholder="your.email@domain.com" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
-                                <input type="tel" placeholder="(555) 123-4567" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <input type="tel" placeholder="(555) 123-4567" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
-                                <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                                     <option value="">Select budget range</option>
                                     <option value="5k">$2,500 - $5,000</option>
                                     <option value="10k">$5,000 - $10,000</option>
@@ -387,9 +379,11 @@
                                     <option value="100000+">$100,000+</option>
                                 </select>
                             </div>
-
-                            <button onclick="generateRecommendations()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
-                                🔄 Generate AI Recommendations
+                        </div>
+                        
+                        <div class="mt-6">
+                            <button onclick="generateRecommendations()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
+                                🔄 Generate AI Security Recommendations
                             </button>
                         </div>
                     </div>
@@ -409,38 +403,72 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <!-- Property Analysis Section -->
-                    <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                    <div class="glass rounded-xl p-6">
                         <h3 class="text-xl font-bold text-white mb-4">🏠 Property Analysis</h3>
                         
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Property Address/Name</label>
-                                <input type="text" placeholder="Enter property for analysis" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <input type="text" placeholder="Enter property for analysis" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                             </div>
                             
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Site Photos (Optional)</label>
-                                    <div onclick="document.getElementById('sitePhotos').click()" class="border-2 border-dashed border-purple-400/30 rounded-lg p-4 text-center hover:border-purple-400/50 transition-colors cursor-pointer bg-white/5">
-                                        <div class="text-3xl mb-2">📸</div>
-                                        <p class="text-slate-300 text-sm mb-1">Upload additional site photos for context</p>
-                                        <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
-                                    </div>
-                                    <input type="file" id="sitePhotos" accept="image/*" multiple class="hidden" onchange="handleFileUpload(this, 'site')">
-                                    <div id="siteStatus" class="mt-2 text-sm hidden"></div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Property Type</label>
+                                <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                    <option value="">Select type</option>
+                                    <option value="residential_estate">Residential Estate</option>
+                                    <option value="commercial">Commercial Building</option>
+                                    <option value="industrial">Industrial Facility</option>
+                                    <option value="retail">Retail Location</option>
+                                    <option value="mixed_use">Mixed Use</option>
+                                    <option value="government">Government Building</option>
+                                    <option value="educational">Educational Facility</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Property Layout/Aerial View</label>
+                                <div onclick="document.getElementById('propertyLayout').click()" class="border-2 border-dashed border-cyan-400/30 rounded-lg p-4 text-center hover:border-cyan-400/50 transition-colors cursor-pointer bg-white/5 group">
+                                    <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">🛰️</div>
+                                    <p class="text-slate-300 text-sm mb-1">Upload aerial view, Google Earth screenshot, or property layout</p>
+                                    <p class="text-slate-400 text-xs">PNG, JPG, PDF up to 10MB</p>
                                 </div>
+                                <input type="file" id="propertyLayout" accept="image/*,.pdf" style="display: none;" onchange="handleFileUpload(this, 'property')">
+                                <div id="propertyStatus" class="mt-2 text-sm hidden"></div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Current Camera Locations & Views</label>
+                                <div onclick="document.getElementById('cameraPhotos').click()" class="border-2 border-dashed border-green-400/30 rounded-lg p-4 text-center hover:border-green-400/50 transition-colors cursor-pointer bg-white/5 group">
+                                    <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">📹</div>
+                                    <p class="text-slate-300 text-sm mb-1">Upload photos of existing cameras and their current views</p>
+                                    <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
+                                </div>
+                                <input type="file" id="cameraPhotos" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'camera')">
+                                <div id="cameraStatus" class="mt-2 text-sm hidden"></div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Site Photos (Optional)</label>
+                                <div onclick="document.getElementById('sitePhotos').click()" class="border-2 border-dashed border-purple-400/30 rounded-lg p-4 text-center hover:border-purple-400/50 transition-colors cursor-pointer bg-white/5 group">
+                                    <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">📸</div>
+                                    <p class="text-slate-300 text-sm mb-1">Upload additional site photos for context</p>
+                                    <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
+                                </div>
+                                <input type="file" id="sitePhotos" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'site')">
+                                <div id="siteStatus" class="mt-2 text-sm hidden"></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Recommendations Engine -->
-                    <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                    <div class="glass rounded-xl p-6">
                         <h3 class="text-xl font-bold text-white mb-4">💡 Recommendations Engine</h3>
                         
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
-                                <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                                <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                                     <option value="">Select budget</option>
                                     <option value="2500-5000">$2,500 - $5,000</option>
                                     <option value="5000-10000">$5,000 - $10,000</option>
@@ -454,25 +482,25 @@
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Priority Focus</label>
                                 <div class="space-y-2">
                                     <label class="flex items-center">
-                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <input type="checkbox" class="mr-2 text-cyan-400 rounded">
                                         <span class="text-slate-300">Perimeter Security</span>
                                     </label>
                                     <label class="flex items-center">
-                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <input type="checkbox" class="mr-2 text-cyan-400 rounded">
                                         <span class="text-slate-300">Access Control</span>
                                     </label>
                                     <label class="flex items-center">
-                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <input type="checkbox" class="mr-2 text-cyan-400 rounded">
                                         <span class="text-slate-300">Indoor Monitoring</span>
                                     </label>
                                     <label class="flex items-center">
-                                        <input type="checkbox" class="mr-2 text-cyan-400">
+                                        <input type="checkbox" class="mr-2 text-cyan-400 rounded">
                                         <span class="text-slate-300">Vehicle Areas</span>
                                     </label>
                                 </div>
                             </div>
 
-                            <button onclick="runAuditAnalysis()" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
+                            <button onclick="runAuditAnalysis()" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg transform hover:scale-105">
                                 🎯 Generate AI Recommendations
                             </button>
                         </div>
@@ -480,7 +508,7 @@
                 </div>
 
                 <!-- Analysis Results -->
-                <div class="mt-8 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
+                <div class="mt-8 glass rounded-xl p-6">
                     <h3 class="text-xl font-bold text-white mb-4">📊 Analysis Results</h3>
                     <div id="analysisResults" class="bg-slate-800/50 rounded-lg p-4">
                         <p class="text-slate-400 text-center">Run analysis to see AI-powered security recommendations and camera placement suggestions.</p>
@@ -492,19 +520,20 @@
 
     <script>
         // Global variables
-        var currentTab = 'reports';
-        var selectedPackage = 'premium';
-        var currentReport = 'daily-log';
-        var uploadedPhotos = {
+        let currentTab = 'reports';
+        let selectedPackage = 'premium';
+        let currentReport = 'daily-log';
+        let uploadedPhotos = {
             property: null,
             camera: [],
             site: []
         };
-        var uploadedCSVData = null;
-        var csvFileName = null;
+        let uploadedCSVData = null;
+        let csvFileName = null;
+        let eventLog = [];
 
         // Report templates
-        var reportTemplates = {
+        const reportTemplates = {
             'daily-log': {
                 title: 'Daily Log',
                 description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
@@ -522,10 +551,23 @@ OPERATIONAL OVERVIEW:
 • Notable incidents or observations
 • Communication logs
 
+STAFF ACTIVITIES:
+• Personnel accountability and positioning
+• Patrol schedules and completion status
+• Break times and coverage arrangements
+• Special assignments and duties
+
+SECURITY STATUS:
+• All access points monitored and secure
+• Surveillance systems operational
+• Emergency procedures verified
+• Incident response protocols active
+
 RECOMMENDATIONS:
 • Continued monitoring protocols
 • Equipment maintenance schedules
 • Staff training updates
+• Process improvement opportunities
 
 Prepared by: VeriVault AI Security Intelligence
 Classification: CONFIDENTIAL`
@@ -552,12 +594,19 @@ MEDICAL RESPONSE:
 • Medical equipment utilized
 • Transport arrangements
 • Hospital/clinic notifications
-• Follow-up medical care
+• Follow-up medical care requirements
+
+INVESTIGATION FINDINGS:
+• Root cause analysis
+• Contributing factors identified
+• Policy compliance review
+• Equipment functionality check
 
 PREVENTION MEASURES:
 • Risk assessment updates
 • Safety protocol improvements
 • Additional training requirements
+• Environmental modifications
 
 Prepared by: VeriVault AI Security Intelligence
 Classification: CONFIDENTIAL`
@@ -586,6 +635,13 @@ RESPONSE ACTIONS:
 • Witness interviews
 • Damage assessment
 • Communication protocols
+
+INVESTIGATION SUMMARY:
+• Timeline of events
+• Personnel involved
+• Equipment status
+• Policy compliance review
+• External factors
 
 REMEDIATION PLAN:
 • Security enhancement recommendations
@@ -618,6 +674,13 @@ SECURITY INFRASTRUCTURE REVIEW:
 • Technology integration assessment
 • Communication systems analysis
 • Emergency response capabilities
+
+PERFORMANCE METRICS:
+• Incident response times
+• Equipment uptime statistics
+• Staff performance indicators
+• Cost-effectiveness analysis
+• Compliance audit results
 
 STRATEGIC RECOMMENDATIONS:
 • Security enhancement priorities
@@ -652,6 +715,13 @@ EQUIPMENT INVENTORY:
 • Replacement timeline planning
 • Warranty and support status
 
+CYBERSECURITY ASSESSMENT:
+• Network security protocols
+• Data protection measures
+• User access controls
+• Backup and recovery systems
+• Vulnerability assessments
+
 OPTIMIZATION RECOMMENDATIONS:
 • System upgrade priorities
 • Performance enhancement measures
@@ -684,6 +754,13 @@ IMPACT ASSESSMENT:
 • Cost impact determination
 • Timeline considerations
 • Risk level assessment
+
+ROOT CAUSE ANALYSIS:
+• Primary causation factors
+• Contributing circumstances
+• System failures identified
+• Human error components
+• Environmental influences
 
 CORRECTIVE ACTION PLAN:
 • Immediate remediation steps
@@ -725,62 +802,56 @@ OPERATIONAL READINESS:
 • Driver assignment protocols
 • Route optimization capabilities
 
+COMPLIANCE VERIFICATION:
+• Regulatory requirement adherence
+• Safety standard compliance
+• Environmental regulations
+• Documentation completeness
+• Certification status
+
 Prepared by: VeriVault AI Security Intelligence
 Classification: CONFIDENTIAL`
             }
         };
 
-        // Tab switching function - FIXED
+        // Tab switching function
         function switchTab(tabName) {
-            console.log('Switching to tab:', tabName);
-            
             // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(function(content) {
+            document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.add('hidden');
             });
             
             // Remove active styling from all tabs
-            document.querySelectorAll('[id^="tab-"]').forEach(function(btn) {
+            document.querySelectorAll('[id^="tab-"]').forEach(btn => {
                 btn.classList.remove('text-white', 'border-cyan-400', 'bg-cyan-400/10');
                 btn.classList.add('text-slate-400', 'border-transparent');
             });
             
             // Show selected tab content
-            var targetTab = document.getElementById('content-' + tabName);
+            const targetTab = document.getElementById('content-' + tabName);
             if (targetTab) {
                 targetTab.classList.remove('hidden');
-                console.log('Showed tab:', tabName);
-            } else {
-                console.error('Tab not found:', 'content-' + tabName);
             }
             
             // Activate selected tab button
-            var targetBtn = document.getElementById('tab-' + tabName);
+            const targetBtn = document.getElementById('tab-' + tabName);
             if (targetBtn) {
                 targetBtn.classList.remove('text-slate-400', 'border-transparent');
                 targetBtn.classList.add('text-white', 'border-cyan-400', 'bg-cyan-400/10');
-                console.log('Activated button for:', tabName);
-            } else {
-                console.error('Button not found:', 'tab-' + tabName);
             }
             
             currentTab = tabName;
         }
 
-        // Report selection function - FIXED
+        // Report selection function
         function selectReport(reportType) {
-            console.log('Selecting report:', reportType);
-            
             currentReport = reportType;
-            var report = reportTemplates[reportType];
+            const report = reportTemplates[reportType];
             
-            if (!report) {
-                console.error('Report not found:', reportType);
-                return;
-            }
+            if (!report) return;
             
             // Update sidebar active state
-            document.querySelectorAll('.report-item').forEach(function(item) {
+            document.querySelectorAll('.report-item').forEach(item => {
                 item.classList.remove('active', 'bg-blue-600');
                 item.classList.add('bg-slate-700');
             });
@@ -792,18 +863,18 @@ Classification: CONFIDENTIAL`
             }
             
             // Update content
-            var titleEl = document.getElementById('reportTitle');
-            var descEl = document.getElementById('reportDescription');
-            var contentEl = document.getElementById('reportContent');
+            const titleEl = document.getElementById('reportTitle');
+            const descEl = document.getElementById('reportDescription');
+            const contentEl = document.getElementById('reportContent');
             
             if (titleEl) titleEl.textContent = report.title;
             if (descEl) descEl.textContent = report.description;
             
-            if (contentEl) {
-                var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : '';
-                var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
+            if (contentEl && !uploadedCSVData) {
+                const clientName = document.getElementById('clientName')?.value || '';
+                const reportDate = document.getElementById('reportDate')?.value || new Date().toISOString().split('T')[0];
                 
-                var template = report.template
+                const template = report.template
                     .replace(/\[CLIENT_NAME\]/g, clientName || 'CLIENT_NAME')
                     .replace(/\[REPORT_DATE\]/g, reportDate);
                 contentEl.value = template;
@@ -812,8 +883,8 @@ Classification: CONFIDENTIAL`
 
         // Event type selection
         function selectEventType(eventType) {
-            document.querySelectorAll('.event-btn').forEach(function(btn) {
-                var div = btn.querySelector('div');
+            document.querySelectorAll('.event-btn').forEach(btn => {
+                const div = btn.querySelector('div');
                 if (btn === event.currentTarget) {
                     div.classList.remove('bg-slate-600');
                     div.classList.add('bg-blue-600');
@@ -829,7 +900,7 @@ Classification: CONFIDENTIAL`
         // Package selection
         function selectPackage(packageType) {
             selectedPackage = packageType;
-            document.querySelectorAll('.package-item').forEach(function(pkg) {
+            document.querySelectorAll('.package-item').forEach(pkg => {
                 pkg.classList.remove('active');
             });
             if (event && event.currentTarget) {
@@ -837,14 +908,14 @@ Classification: CONFIDENTIAL`
             }
         }
 
-        // File upload handler with photo analysis
+        // File upload handler
         function handleFileUpload(input, type) {
-            var files = input.files;
-            var statusId = type + 'Status';
-            var statusEl = document.getElementById(statusId);
+            const files = input.files;
+            const statusId = type + 'Status';
+            const statusEl = document.getElementById(statusId);
             
             if (files.length > 0) {
-                var fileNames = [];
+                const fileNames = [];
                 
                 // Store photos for analysis
                 if (type === 'property') {
@@ -855,11 +926,11 @@ Classification: CONFIDENTIAL`
                     uploadedPhotos.site = Array.from(files);
                 }
                 
-                for (var i = 0; i < Math.min(files.length, 3); i++) {
+                for (let i = 0; i < Math.min(files.length, 3); i++) {
                     fileNames.push(files[i].name);
                 }
                 if (files.length > 3) {
-                    fileNames.push('... and ' + (files.length - 3) + ' more');
+                    fileNames.push(`... and ${files.length - 3} more`);
                 }
                 
                 if (statusEl) {
@@ -878,19 +949,18 @@ Classification: CONFIDENTIAL`
             }
         }
 
-        // CSV upload handler with AI analysis
+        // CSV upload handler
         function handleCSVUpload(input) {
-            var file = input.files[0];
-            var statusEl = document.getElementById('uploadStatus');
+            const file = input.files[0];
+            const statusEl = document.getElementById('uploadStatus');
             
             if (file) {
                 if (file.name.toLowerCase().endsWith('.csv')) {
                     csvFileName = file.name;
                     
-                    // Read the CSV file
-                    var reader = new FileReader();
+                    const reader = new FileReader();
                     reader.onload = function(e) {
-                        var csvText = e.target.result;
+                        const csvText = e.target.result;
                         uploadedCSVData = parseCSVData(csvText);
                         
                         if (statusEl) {
@@ -907,7 +977,6 @@ Classification: CONFIDENTIAL`
                             statusEl.classList.remove('hidden');
                         }
                         
-                        // Auto-generate AI summary in the report content
                         generateAISummary();
                     };
                     reader.readAsText(file);
@@ -921,24 +990,23 @@ Classification: CONFIDENTIAL`
             }
         }
 
+        // CSV parsing function
         function parseCSVData(csvText) {
-            var lines = csvText.split('\n');
-            var data = [];
-            var headers = null;
+            const lines = csvText.split('\n');
+            const data = [];
+            let headers = null;
             
-            for (var i = 0; i < lines.length; i++) {
-                var line = lines[i].trim();
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
                 if (!line) continue;
                 
-                var row = line.split(',').map(function(cell) {
-                    return cell.replace(/"/g, '').trim();
-                });
+                const row = line.split(',').map(cell => cell.replace(/"/g, '').trim());
                 
                 if (i === 0) {
                     headers = row;
                 } else {
-                    var entry = {};
-                    for (var j = 0; j < headers.length && j < row.length; j++) {
+                    const entry = {};
+                    for (let j = 0; j < headers.length && j < row.length; j++) {
                         entry[headers[j]] = row[j];
                     }
                     data.push(entry);
@@ -948,19 +1016,17 @@ Classification: CONFIDENTIAL`
             return data;
         }
 
+        // AI summary generation
         function generateAISummary() {
-            if (!uploadedCSVData || uploadedCSVData.length === 0) {
-                return;
-            }
+            if (!uploadedCSVData || uploadedCSVData.length === 0) return;
             
-            var contentEl = document.getElementById('reportContent');
-            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : 'CLIENT_NAME';
-            var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
+            const contentEl = document.getElementById('reportContent');
+            const clientName = document.getElementById('clientName')?.value || 'CLIENT_NAME';
+            const reportDate = document.getElementById('reportDate')?.value || new Date().toISOString().split('T')[0];
             
-            // Analyze the CSV data
-            var analysis = analyzeSecurityLog(uploadedCSVData);
+            const analysis = analyzeSecurityLog(uploadedCSVData);
             
-            var aiGeneratedContent = `DAILY OPERATIONS LOG - AI GENERATED SUMMARY
+            const aiGeneratedContent = `DAILY OPERATIONS LOG - AI GENERATED SUMMARY
 
 Client: ${clientName}
 Date: ${reportDate}
@@ -1014,8 +1080,9 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
             }
         }
 
+        // Security log analysis function
         function analyzeSecurityLog(data) {
-            var analysis = {
+            const analysis = {
                 summary: '',
                 timeRange: '',
                 personnel: [],
@@ -1033,19 +1100,17 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                 overallStatus: 'Secure'
             };
             
-            // Extract unique personnel
-            var personnelSet = new Set();
-            var times = [];
-            var eventTypes = new Set();
-            var locations = new Set();
+            const personnelSet = new Set();
+            const times = [];
+            const eventTypes = new Set();
+            const locations = new Set();
             
-            data.forEach(function(entry) {
-                // Look for common CSV column names (more flexible)
-                var person = entry['Name'] || entry['Personnel'] || entry['Officer'] || entry['Staff'] || entry['Guard'] || entry['Employee'] || '';
-                var time = entry['Time'] || entry['Timestamp'] || entry['Date'] || entry['Start Time'] || entry['End Time'] || '';
-                var event = entry['Event'] || entry['Activity'] || entry['Type'] || entry['Description'] || entry['Action'] || '';
-                var location = entry['Location'] || entry['Area'] || entry['Zone'] || entry['Post'] || entry['Building'] || '';
-                var notes = entry['Notes'] || entry['Comments'] || entry['Observations'] || entry['Details'] || entry['Remarks'] || '';
+            data.forEach(entry => {
+                const person = entry['Name'] || entry['Personnel'] || entry['Officer'] || entry['Staff'] || entry['Guard'] || entry['Employee'] || '';
+                const time = entry['Time'] || entry['Timestamp'] || entry['Date'] || entry['Start Time'] || entry['End Time'] || '';
+                const event = entry['Event'] || entry['Activity'] || entry['Type'] || entry['Description'] || entry['Action'] || '';
+                const location = entry['Location'] || entry['Area'] || entry['Zone'] || entry['Post'] || entry['Building'] || '';
+                const notes = entry['Notes'] || entry['Comments'] || entry['Observations'] || entry['Details'] || entry['Remarks'] || '';
                 
                 if (person) personnelSet.add(person);
                 if (time) times.push(time);
@@ -1054,16 +1119,13 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                 if (event) {
                     eventTypes.add(event);
                     analysis.activities.push({
-                        time: time,
-                        person: person,
-                        event: event,
-                        location: location,
-                        notes: notes
+                        time, person, event, location, notes
                     });
                 }
                 
-                // Enhanced incident detection
-                var combinedText = (event + ' ' + notes).toLowerCase();
+                const combinedText = (event + ' ' + notes).toLowerCase();
+                
+                // Incident detection
                 if (combinedText.includes('incident') || 
                     combinedText.includes('alert') || 
                     combinedText.includes('emergency') ||
@@ -1071,15 +1133,11 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                     combinedText.includes('breach') ||
                     combinedText.includes('alarm')) {
                     analysis.incidents.push({
-                        time: time,
-                        person: person,
-                        type: event,
-                        description: notes,
-                        location: location
+                        time, person, type: event, description: notes, location
                     });
                 }
                 
-                // Enhanced security concerns detection
+                // Security concerns detection
                 if (combinedText.includes('concern') || 
                     combinedText.includes('suspicious') || 
                     combinedText.includes('unusual') ||
@@ -1091,15 +1149,12 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                     combinedText.includes('issue') ||
                     combinedText.includes('warning')) {
                     analysis.securityConcerns.push({
-                        time: time,
-                        person: person,
-                        concern: notes || event,
-                        location: location,
+                        time, person, concern: notes || event, location,
                         severity: determineSeverity(combinedText)
                     });
                 }
                 
-                // Count access events
+                // Access events
                 if (combinedText.includes('access') || 
                     combinedText.includes('entry') || 
                     combinedText.includes('exit') ||
@@ -1112,51 +1167,47 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
             
             analysis.personnel = Array.from(personnelSet);
             
-            // Generate time range
             if (times.length > 0) {
-                var sortedTimes = times.sort();
-                analysis.timeRange = sortedTimes[0] + ' to ' + sortedTimes[sortedTimes.length - 1];
+                const sortedTimes = times.sort();
+                analysis.timeRange = `${sortedTimes[0]} to ${sortedTimes[sortedTimes.length - 1]}`;
             }
             
-            // Enhanced summary with more detail
-            var riskLevel = analysis.securityConcerns.length > 0 ? 'elevated' : 'normal';
-            var incidentDescription = analysis.incidents.length > 0 ? 
+            const riskLevel = analysis.securityConcerns.length > 0 ? 'elevated' : 'normal';
+            const incidentDescription = analysis.incidents.length > 0 ? 
                 `${analysis.incidents.length} security incidents requiring attention` : 
                 'no critical security incidents';
             
-            analysis.summary = `Comprehensive analysis of ${data.length} security log entries reveals operational activities spanning ${analysis.timeRange} with ${analysis.personnel.length} security personnel deployed across ${locations.size} monitored locations. Security posture maintained at ${riskLevel} risk level with ${incidentDescription} and ${analysis.securityConcerns.length} security concerns documented. Access control systems processed ${analysis.accessEvents} entry/exit events throughout the reporting period. Overall facility security maintained within acceptable operational parameters.`;
+            analysis.summary = `Comprehensive analysis of ${data.length} security log entries reveals operational activities spanning ${analysis.timeRange} with ${analysis.personnel.length} security personnel deployed across ${locations.size} monitored locations. Security posture maintained at ${riskLevel} risk level with ${incidentDescription} and ${analysis.securityConcerns.length} security concerns documented. Access control systems processed ${analysis.accessEvents} entry/exit events throughout the reporting period.`;
             
-            // Enhanced detailed findings with narrative style
-            var keyEvents = analysis.activities.slice(0, 15);
+            // Generate detailed findings
+            const keyEvents = analysis.activities.slice(0, 15);
             analysis.detailedFindings = `CHRONOLOGICAL ACTIVITY LOG:\n\n` + 
-                keyEvents.map(function(event, index) {
-                    var timeStr = event.time || 'Time not specified';
-                    var locationStr = event.location ? ` at ${event.location}` : '';
-                    var notesStr = event.notes ? ` - ${event.notes}` : '';
+                keyEvents.map((event, index) => {
+                    const timeStr = event.time || 'Time not specified';
+                    const locationStr = event.location ? ` at ${event.location}` : '';
+                    const notesStr = event.notes ? ` - ${event.notes}` : '';
                     return `${index + 1}. ${timeStr}: ${event.person} conducted ${event.event}${locationStr}${notesStr}`;
                 }).join('\n') + 
                 (analysis.activities.length > 15 ? `\n\n[${analysis.activities.length - 15} additional activities logged...]` : '');
             
-            // Enhanced personnel summary
+            // Personnel summary
             analysis.personnelSummary = `SECURITY PERSONNEL DEPLOYMENT:\n\n` +
-                analysis.personnel.map(function(person) {
-                    var personEvents = analysis.activities.filter(function(activity) {
-                        return activity.person === person;
-                    });
-                    var personLocations = new Set();
-                    personEvents.forEach(function(event) {
+                analysis.personnel.map(person => {
+                    const personEvents = analysis.activities.filter(activity => activity.person === person);
+                    const personLocations = new Set();
+                    personEvents.forEach(event => {
                         if (event.location) personLocations.add(event.location);
                     });
                     
                     return `• ${person}: ${personEvents.length} documented activities across ${personLocations.size} locations\n  Primary duties included patrol operations, access control, and security monitoring`;
                 }).join('\n\n');
             
-            // Enhanced incident summary
+            // Incident summary
             if (analysis.incidents.length > 0) {
                 analysis.incidentSummary = `SECURITY INCIDENTS REQUIRING ATTENTION:\n\n` +
-                    analysis.incidents.map(function(incident, index) {
-                        return `• Incident ${index + 1} (${incident.time}): ${incident.type}\n  Location: ${incident.location || 'Not specified'}\n  Details: ${incident.description}\n  Reporting Officer: ${incident.person}`;
-                    }).join('\n\n');
+                    analysis.incidents.map((incident, index) => 
+                        `• Incident ${index + 1} (${incident.time}): ${incident.type}\n  Location: ${incident.location || 'Not specified'}\n  Details: ${incident.description}\n  Reporting Officer: ${incident.person}`
+                    ).join('\n\n');
                 analysis.overallStatus = 'Heightened Alert - Incidents Reported';
             } else {
                 analysis.incidentSummary = `SECURITY INCIDENT STATUS:\n• No formal security incidents reported during this operational period\n• All security activities conducted within normal operational parameters\n• Facility maintained secure status throughout reporting timeframe`;
@@ -1165,9 +1216,9 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
             // Security concerns summary
             if (analysis.securityConcerns.length > 0) {
                 analysis.securityConcernsSummary = `SECURITY CONCERNS IDENTIFIED:\n\n` +
-                    analysis.securityConcerns.map(function(concern, index) {
-                        return `• Concern ${index + 1} (${concern.time}) - Severity: ${concern.severity}\n  Reported by: ${concern.person}\n  Location: ${concern.location || 'Not specified'}\n  Details: ${concern.concern}`;
-                    }).join('\n\n');
+                    analysis.securityConcerns.map((concern, index) => 
+                        `• Concern ${index + 1} (${concern.time}) - Severity: ${concern.severity}\n  Reported by: ${concern.person}\n  Location: ${concern.location || 'Not specified'}\n  Details: ${concern.concern}`
+                    ).join('\n\n');
                 
                 if (analysis.overallStatus === 'Secure') {
                     analysis.overallStatus = 'Under Review - Security Concerns Noted';
@@ -1176,7 +1227,7 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                 analysis.securityConcernsSummary = `SECURITY CONCERNS STATUS:\n• No security concerns documented during this reporting period\n• All observations within expected operational parameters\n• Security posture maintained at optimal levels`;
             }
             
-            // Enhanced recommendations based on findings
+            // Recommendations
             analysis.recommendations = [
                 '• Maintain current security protocols and personnel deployment schedules',
                 '• Continue regular patrol rotations across all monitored areas',
@@ -1195,15 +1246,6 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                 analysis.recommendations.push('• Consider additional security measures for high-concern areas');
             }
             
-            if (analysis.accessEvents > 100) {
-                analysis.recommendations.push('• High access volume detected - implement access pattern monitoring');
-                analysis.recommendations.push('• Consider peak-hour staffing adjustments for access control points');
-            }
-            
-            if (locations.size > 5) {
-                analysis.recommendations.push('• Multi-location deployment requires enhanced coordination protocols');
-            }
-            
             return analysis;
         }
 
@@ -1217,13 +1259,12 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
             }
         }
 
-        // Enhanced audit analysis with photo processing
+        // Audit analysis function
         function runAuditAnalysis() {
-            var resultsDiv = document.getElementById('analysisResults');
-            var btn = event.target;
+            const resultsDiv = document.getElementById('analysisResults');
+            const btn = event.target;
             
-            // Check if photos are uploaded
-            var hasPhotos = uploadedPhotos.property || uploadedPhotos.camera.length > 0 || uploadedPhotos.site.length > 0;
+            const hasPhotos = uploadedPhotos.property || uploadedPhotos.camera.length > 0 || uploadedPhotos.site.length > 0;
             
             // Show loading
             btn.disabled = true;
@@ -1234,9 +1275,8 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
             }
             btn.classList.add('opacity-75');
             
-            setTimeout(function() {
-                // Generate analysis based on uploaded photos
-                var analysisHTML = hasPhotos ? generatePhotoBasedAnalysis() : generateStandardAnalysis();
+            setTimeout(() => {
+                const analysisHTML = hasPhotos ? generatePhotoBasedAnalysis() : generateStandardAnalysis();
                 
                 if (resultsDiv) {
                     resultsDiv.innerHTML = analysisHTML;
@@ -1247,7 +1287,7 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                 btn.innerHTML = '🎯 Generate AI Recommendations';
                 btn.classList.remove('opacity-75');
                 
-                var alertMessage = hasPhotos ? 
+                const alertMessage = hasPhotos ? 
                     '🎉 AI Photo Analysis Complete!\n\n✅ Photos analyzed for existing security measures\n✅ Current infrastructure assessed\n✅ Tailored recommendations generated\n✅ Gap analysis completed\n\nScroll down to view your personalized analysis results!' :
                     '🎉 AI Security Analysis Complete!\n\n✅ Property vulnerabilities identified\n✅ Camera placement optimized\n✅ Budget recommendations generated\n✅ Implementation timeline created\n\nScroll down to view your detailed analysis results!';
                 
@@ -1257,10 +1297,10 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
         }
 
         function generatePhotoBasedAnalysis() {
-            var photoCount = getTotalPhotoCount();
-            var hasCameras = uploadedPhotos.camera.length > 0;
-            var currentCoverage = hasCameras ? Math.round(Math.random() * 30 + 40) : Math.round(Math.random() * 20 + 25);
-            var savings = hasCameras ? '$8,500' : '$3,200';
+            const photoCount = getTotalPhotoCount();
+            const hasCameras = uploadedPhotos.camera.length > 0;
+            const currentCoverage = hasCameras ? Math.round(Math.random() * 30 + 40) : Math.round(Math.random() * 20 + 25);
+            const savings = hasCameras ? '$8,500' : '$3,200';
             
             return `
                 <div class="space-y-6">
@@ -1330,14 +1370,14 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                             <div class="text-center">
                                 <div class="text-sm text-cyan-200 mb-1">Current Coverage</div>
                                 <div class="w-full bg-slate-700 rounded-full h-3">
-                                    <div class="bg-yellow-500 h-3 rounded-full" style="width: ${currentCoverage}%"></div>
+                                    <div class="bg-yellow-500 h-3 rounded-full transition-all duration-1000" style="width: ${currentCoverage}%"></div>
                                 </div>
                                 <div class="text-xs text-slate-400 mt-1">${currentCoverage}% - Partial Protection</div>
                             </div>
                             <div class="text-center">
                                 <div class="text-sm text-cyan-200 mb-1">With Upgrades</div>
                                 <div class="w-full bg-slate-700 rounded-full h-3">
-                                    <div class="bg-green-500 h-3 rounded-full" style="width: 92%"></div>
+                                    <div class="bg-green-500 h-3 rounded-full transition-all duration-1000" style="width: 92%"></div>
                                 </div>
                                 <div class="text-xs text-slate-400 mt-1">92% - Comprehensive Security</div>
                             </div>
@@ -1350,7 +1390,7 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                     </div>
                     
                     <div class="text-center">
-                        <button onclick="generateCustomAuditPDF()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                        <button onclick="generateCustomAuditPDF()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
                             📄 Generate Personalized Audit Report
                         </button>
                     </div>
@@ -1398,7 +1438,7 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                     </div>
                     
                     <div class="text-center">
-                        <button onclick="generateAuditPDF()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                        <button onclick="generateAuditPDF()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
                             📄 Generate Professional Audit Report
                         </button>
                     </div>
@@ -1407,21 +1447,20 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
         }
 
         function getTotalPhotoCount() {
-            var count = 0;
+            let count = 0;
             if (uploadedPhotos.property) count += 1;
             count += uploadedPhotos.camera.length;
             count += uploadedPhotos.site.length;
             return count;
         }
 
-        // Button functions
+        // Generate report function
         function generateReport() {
-            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : 'CLIENT_NAME';
-            var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
-            var reportContent = document.getElementById('reportContent') ? document.getElementById('reportContent').value : '';
-            var reportTitle = document.getElementById('reportTitle') ? document.getElementById('reportTitle').textContent : 'Report';
+            const clientName = document.getElementById('clientName')?.value || 'CLIENT_NAME';
+            const reportDate = document.getElementById('reportDate')?.value || new Date().toISOString().split('T')[0];
+            const reportContent = document.getElementById('reportContent')?.value || '';
+            const reportTitle = document.getElementById('reportTitle')?.textContent || 'Report';
             
-            // If no content but CSV is uploaded, generate AI summary first
             if (!reportContent.trim() && uploadedCSVData && uploadedCSVData.length > 0) {
                 generateAISummary();
                 reportContent = document.getElementById('reportContent').value;
@@ -1433,7 +1472,6 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
             }
             
             try {
-                // Create new PDF document
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 
@@ -1452,7 +1490,6 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                 doc.text(`Date: ${reportDate}`, 20, 60);
                 doc.text(`Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 20, 70);
                 
-                // Add data source info if CSV was used
                 if (uploadedCSVData && csvFileName) {
                     doc.text(`Data Source: ${csvFileName} (${uploadedCSVData.length} entries analyzed)`, 20, 80);
                     doc.text('Analysis Type: AI-Powered Security Log Analysis', 20, 90);
@@ -1460,8 +1497,8 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                 
                 // Add content
                 doc.setFontSize(10);
-                var startY = uploadedCSVData ? 105 : 85;
-                var splitContent = doc.splitTextToSize(reportContent, 170);
+                const startY = uploadedCSVData ? 105 : 85;
+                const splitContent = doc.splitTextToSize(reportContent, 170);
                 doc.text(splitContent, 20, startY);
                 
                 // Add footer
@@ -1469,18 +1506,18 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                 for (let i = 1; i <= pageCount; i++) {
                     doc.setPage(i);
                     doc.setFontSize(8);
-                    var footerText = uploadedCSVData ? 
+                    const footerText = uploadedCSVData ? 
                         `Page ${i} of ${pageCount} - VeriVault AI Analysis - Confidential` :
                         `Page ${i} of ${pageCount} - VeriVault Confidential`;
                     doc.text(footerText, 20, 285);
                 }
                 
                 // Save the PDF
-                var filePrefix = uploadedCSVData ? 'AI_Analysis_' : '';
-                var fileName = `${filePrefix}${reportTitle.replace(/\s+/g, '_')}_${clientName.replace(/\s+/g, '_')}_${reportDate}.pdf`;
+                const filePrefix = uploadedCSVData ? 'AI_Analysis_' : '';
+                const fileName = `${filePrefix}${reportTitle.replace(/\s+/g, '_')}_${clientName.replace(/\s+/g, '_')}_${reportDate}.pdf`;
                 doc.save(fileName);
                 
-                var successMessage = uploadedCSVData ? 
+                const successMessage = uploadedCSVData ? 
                     '📄 AI-Analyzed PDF Report Generated Successfully!\n\n✅ CSV data analyzed by AI\n✅ Professional PDF created\n✅ Downloaded to your device\n✅ Ready for client delivery' :
                     '📄 PDF Report Generated Successfully!\n\n✅ Professional PDF created\n✅ Downloaded to your device\n✅ Ready for client delivery';
                 
@@ -1492,25 +1529,61 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
             }
         }
 
+        // Log event function
         function logEvent() {
-            var timestamp = new Date().toLocaleTimeString();
-            alert('✅ Event logged successfully at ' + timestamp);
+            const eventName = document.getElementById('eventName')?.value || '';
+            const eventAction = document.getElementById('eventAction')?.value || '';
+            const eventNotes = document.getElementById('eventNotes')?.value || '';
+            
+            if (!eventName || !eventAction) {
+                alert('❌ Please enter both name and action before logging the event.');
+                return;
+            }
+            
+            const timestamp = new Date().toLocaleString();
+            const newEvent = {
+                timestamp,
+                name: eventName,
+                action: eventAction,
+                notes: eventNotes
+            };
+            
+            eventLog.push(newEvent);
+            
+            // Clear form
+            document.getElementById('eventName').value = '';
+            document.getElementById('eventAction').value = '';
+            document.getElementById('eventNotes').value = '';
+            
+            alert(`✅ Event logged successfully!\n\nTime: ${timestamp}\nName: ${eventName}\nAction: ${eventAction}\n${eventNotes ? `Notes: ${eventNotes}` : ''}\n\nTotal events logged: ${eventLog.length}`);
         }
 
+        // Generate recommendations function
         function generateRecommendations() {
-            alert('🤖 AI Recommendations Generated!\n\n✅ Security vulnerabilities analyzed\n✅ Budget-optimized solutions identified\n✅ Priority recommendations updated\n✅ Camera placement strategy refined\n\nUse this data to create your professional audit report!');
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="inline-block animate-spin">🤖</span> <span class="ml-2">AI Generating Recommendations...</span>';
+            btn.classList.add('opacity-75');
+            
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '🔄 Generate AI Security Recommendations';
+                btn.classList.remove('opacity-75');
+                
+                alert('🤖 AI Security Recommendations Generated!\n\n✅ Property vulnerabilities analyzed\n✅ Budget-optimized solutions identified\n✅ Priority recommendations created\n✅ Camera placement strategy developed\n✅ Risk assessment completed\n\nYour customized security plan is ready for review!');
+            }, 3000);
         }
 
+        // Generate custom audit PDF
         function generateCustomAuditPDF() {
             try {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 
-                // Get property info
-                var propertyName = 'Property Analysis Report';
-                var analysisDate = new Date().toLocaleDateString();
-                var hasPhotos = uploadedPhotos.property || uploadedPhotos.camera.length > 0 || uploadedPhotos.site.length > 0;
-                var photoCount = getTotalPhotoCount();
+                const propertyName = 'Security Analysis Report';
+                const analysisDate = new Date().toLocaleDateString();
+                const hasPhotos = uploadedPhotos.property || uploadedPhotos.camera.length > 0 || uploadedPhotos.site.length > 0;
+                const photoCount = getTotalPhotoCount();
                 
                 // Header
                 doc.setFontSize(20);
@@ -1537,9 +1610,9 @@ Report ID: VV-${Date.now().toString().slice(-6)}`;
                 
                 doc.setFontSize(10);
                 doc.setFont(undefined, 'normal');
-                var startY = hasPhotos ? 125 : 105;
+                const startY = hasPhotos ? 125 : 105;
                 
-                var content = `EXECUTIVE SUMMARY:
+                const content = `EXECUTIVE SUMMARY:
 This comprehensive security audit identifies critical vulnerabilities and provides strategic recommendations for enhanced property protection. Our AI-powered analysis evaluates current security infrastructure, identifies gaps, and proposes cost-effective solutions.
 
 VULNERABILITY ASSESSMENT:
@@ -1580,7 +1653,7 @@ COMPLIANCE CONSIDERATIONS:
 • Installation proposals consider local building codes
 • Privacy protection measures integrated into design`;
 
-                var splitContent = doc.splitTextToSize(content, 170);
+                const splitContent = doc.splitTextToSize(content, 170);
                 doc.text(splitContent, 20, startY);
                 
                 // Footer
@@ -1592,7 +1665,7 @@ COMPLIANCE CONSIDERATIONS:
                 }
                 
                 // Save PDF
-                var fileName = `VeriVault_Security_Audit_${analysisDate.replace(/\//g, '-')}.pdf`;
+                const fileName = `VeriVault_Security_Audit_${analysisDate.replace(/\//g, '-')}.pdf`;
                 doc.save(fileName);
                 
                 alert('📄 Professional Security Audit PDF Generated!\n\n✅ Comprehensive security analysis included\n✅ Professional formatting for client presentation\n✅ Recommendations and budget analysis\n✅ Ready for client delivery\n\nPDF saved as: ' + fileName);
@@ -1604,15 +1677,15 @@ COMPLIANCE CONSIDERATIONS:
         }
 
         function generateAuditPDF() {
-            generateCustomAuditPDF(); // Use the same enhanced function
+            generateCustomAuditPDF();
         }
 
         // Initialize on page load
-        window.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', () => {
             console.log('VeriVault Dashboard Loaded');
             
             // Set default date
-            var dateInput = document.getElementById('reportDate');
+            const dateInput = document.getElementById('reportDate');
             if (dateInput) {
                 dateInput.value = new Date().toISOString().split('T')[0];
             }
@@ -1620,60 +1693,8 @@ COMPLIANCE CONSIDERATIONS:
             // Load default report template
             selectReport('daily-log');
             
-            console.log('Dashboard ready - testing tab navigation...');
-            console.log('Tab buttons found:', document.querySelectorAll('[id^="tab-"]').length);
-            console.log('Tab contents found:', document.querySelectorAll('.tab-content').length);
-            console.log('Report items found:', document.querySelectorAll('.report-item').length);
+            console.log('Dashboard ready');
         });
     </script>
 </body>
-</html> text-slate-300 mb-2">Property Type</label>
-                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                                        <option value="">Select type</option>
-                                        <option value="residential_estate">Residential Estate</option>
-                                        <option value="commercial">Commercial Building</option>
-                                        <option value="industrial">Industrial Facility</option>
-                                        <option value="retail">Retail Location</option>
-                                        <option value="mixed_use">Mixed Use</option>
-                                        <option value="government">Government Building</option>
-                                        <option value="educational">Educational Facility</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Risk Level</label>
-                                    <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                                        <option value="">Assess risk</option>
-                                        <option value="low">Low Risk</option>
-                                        <option value="medium">Medium Risk</option>
-                                        <option value="high">High Risk</option>
-                                        <option value="critical">Critical Risk</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Photo Upload Sections - ONLY IN AUDIT TOOL -->
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Property Layout/Aerial View</label>
-                                    <div onclick="document.getElementById('propertyLayout').click()" class="border-2 border-dashed border-cyan-400/30 rounded-lg p-4 text-center hover:border-cyan-400/50 transition-colors cursor-pointer bg-white/5">
-                                        <div class="text-3xl mb-2">🛰️</div>
-                                        <p class="text-slate-300 text-sm mb-1">Upload aerial view, Google Earth screenshot, or property layout</p>
-                                        <p class="text-slate-400 text-xs">PNG, JPG, PDF up to 10MB</p>
-                                    </div>
-                                    <input type="file" id="propertyLayout" accept="image/*,.pdf" class="hidden" onchange="handleFileUpload(this, 'property')">
-                                    <div id="propertyStatus" class="mt-2 text-sm hidden"></div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Current Camera Locations & Views</label>
-                                    <div onclick="document.getElementById('cameraPhotos').click()" class="border-2 border-dashed border-green-400/30 rounded-lg p-4 text-center hover:border-green-400/50 transition-colors cursor-pointer bg-white/5">
-                                        <div class="text-3xl mb-2">📹</div>
-                                        <p class="text-slate-300 text-sm mb-1">Upload photos of existing cameras and their current views</p>
-                                        <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
-                                    </div>
-                                    <input type="file" id="cameraPhotos" accept="image/*" multiple class="hidden" onchange="handleFileUpload(this, 'camera')">
-                                    <div id="cameraStatus" class="mt-2 text-sm hidden"></div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium
+</html>
