@@ -6,6 +6,27 @@
     <title>VeriVault - AI Security Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Ensure proper tab hiding */
+        .tab-content.hidden {
+            display: none !important;
+        }
+        .tab-content {
+            display: block;
+        }
+        
+        /* Prevent content bleeding between tabs */
+        #content-reports .audit-only,
+        #content-logger .audit-only,
+        #content-intake .audit-only {
+            display: none !important;
+        }
+        
+        /* Only show audit elements in audit tool */
+        #content-auditTool .audit-only {
+            display: block !important;
+        }
+    </style>
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
     <!-- Top Navigation Tabs - Fixed at top -->
@@ -1067,7 +1088,59 @@ Classification: CONFIDENTIAL`
 
         // Button functions
         function generateReport() {
-            alert('📄 Report generated successfully!');
+            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : 'CLIENT_NAME';
+            var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
+            var reportContent = document.getElementById('reportContent') ? document.getElementById('reportContent').value : '';
+            var reportTitle = document.getElementById('reportTitle') ? document.getElementById('reportTitle').textContent : 'Report';
+            
+            if (!reportContent.trim()) {
+                alert('❌ Please enter report content before generating PDF.');
+                return;
+            }
+            
+            try {
+                // Create new PDF document
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Add header
+                doc.setFontSize(20);
+                doc.setFont(undefined, 'bold');
+                doc.text('VeriVault AI Security Intelligence', 20, 20);
+                
+                doc.setFontSize(16);
+                doc.text(reportTitle, 20, 35);
+                
+                // Add client info
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'normal');
+                doc.text(`Client: ${clientName}`, 20, 50);
+                doc.text(`Date: ${reportDate}`, 20, 60);
+                doc.text(`Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 20, 70);
+                
+                // Add content
+                doc.setFontSize(10);
+                const splitContent = doc.splitTextToSize(reportContent, 170);
+                doc.text(splitContent, 20, 85);
+                
+                // Add footer
+                const pageCount = doc.internal.getNumberOfPages();
+                for (let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    doc.setFontSize(8);
+                    doc.text(`Page ${i} of ${pageCount} - VeriVault Confidential`, 20, 285);
+                }
+                
+                // Save the PDF
+                const fileName = `${reportTitle.replace(/\s+/g, '_')}_${clientName.replace(/\s+/g, '_')}_${reportDate}.pdf`;
+                doc.save(fileName);
+                
+                alert('📄 PDF Report Generated Successfully!\n\n✅ Professional PDF created\n✅ Downloaded to your device\n✅ Ready for client delivery');
+                
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                alert('❌ Error generating PDF. Please check your browser supports PDF generation.');
+            }
         }
 
         function logEvent() {
