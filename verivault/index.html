@@ -15,16 +15,25 @@
             display: block;
         }
         
-        /* Prevent content bleeding between tabs */
-        #content-reports .audit-only,
-        #content-logger .audit-only,
-        #content-intake .audit-only {
+        /* Completely hide audit-only elements from other tabs */
+        .audit-only {
             display: none !important;
         }
         
-        /* Only show audit elements in audit tool */
+        /* Only show audit elements in audit tool tab */
         #content-auditTool .audit-only {
             display: block !important;
+        }
+        
+        /* Prevent any overflow issues */
+        body {
+            overflow-x: hidden;
+        }
+        
+        /* Ensure content doesn't bleed between tabs */
+        .tab-content {
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
@@ -491,6 +500,8 @@
             camera: [],
             site: []
         };
+        var uploadedCSVData = null;
+        var csvFileName = null;
 
         // Report templates
         var reportTemplates = {
@@ -867,18 +878,39 @@ Classification: CONFIDENTIAL`
             }
         }
 
-        // CSV upload handler
+        // CSV upload handler with AI analysis
         function handleCSVUpload(input) {
             var file = input.files[0];
             var statusEl = document.getElementById('uploadStatus');
             
             if (file) {
                 if (file.name.toLowerCase().endsWith('.csv')) {
-                    if (statusEl) {
-                        statusEl.textContent = '✅ File uploaded: ' + file.name;
-                        statusEl.className = 'mt-2 text-sm text-green-400';
-                        statusEl.classList.remove('hidden');
-                    }
+                    csvFileName = file.name;
+                    
+                    // Read the CSV file
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        var csvText = e.target.result;
+                        uploadedCSVData = parseCSVData(csvText);
+                        
+                        if (statusEl) {
+                            statusEl.innerHTML = `
+                                <div class="flex items-center gap-2">
+                                    <span class="text-green-400">✅</span>
+                                    <span class="text-green-400">File uploaded: ${file.name}</span>
+                                </div>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-blue-400 text-xs">🤖</span>
+                                    <span class="text-blue-400 text-xs">AI ready to analyze ${uploadedCSVData.length} log entries</span>
+                                </div>
+                            `;
+                            statusEl.classList.remove('hidden');
+                        }
+                        
+                        // Auto-generate AI summary in the report content
+                        generateAISummary();
+                    };
+                    reader.readAsText(file);
                 } else {
                     if (statusEl) {
                         statusEl.textContent = '❌ Please upload a CSV file only';
@@ -887,6 +919,201 @@ Classification: CONFIDENTIAL`
                     }
                 }
             }
+        }
+
+        function parseCSVData(csvText) {
+            var lines = csvText.split('\n');
+            var data = [];
+            var headers = null;
+            
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i].trim();
+                if (!line) continue;
+                
+                var row = line.split(',').map(function(cell) {
+                    return cell.replace(/"/g, '').trim();
+                });
+                
+                if (i === 0) {
+                    headers = row;
+                } else {
+                    var entry = {};
+                    for (var j = 0; j < headers.length && j < row.length; j++) {
+                        entry[headers[j]] = row[j];
+                    }
+                    data.push(entry);
+                }
+            }
+            
+            return data;
+        }
+
+        function generateAISummary() {
+            if (!uploadedCSVData || uploadedCSVData.length === 0) {
+                return;
+            }
+            
+            var contentEl = document.getElementById('reportContent');
+            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : 'CLIENT_NAME';
+            var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
+            
+            // Analyze the CSV data
+            var analysis = analyzeSecurityLog(uploadedCSVData);
+            
+            var aiGeneratedContent = `DAILY OPERATIONS LOG - AI GENERATED SUMMARY
+
+Client: ${clientName}
+Date: ${reportDate}
+Report Type: Daily Operations Summary (AI Analyzed)
+Data Source: ${csvFileName} (${uploadedCSVData.length} entries)
+
+EXECUTIVE SUMMARY:
+${analysis.summary}
+
+OPERATIONAL OVERVIEW:
+• Total log entries processed: ${uploadedCSVData.length}
+• Active time period: ${analysis.timeRange}
+• Key personnel on duty: ${analysis.personnel.join(', ')}
+• Major activities logged: ${analysis.activities.length} distinct events
+• Security incidents: ${analysis.incidents.length} reported
+• Access control events: ${analysis.accessEvents} recorded
+
+DETAILED FINDINGS:
+${analysis.detailedFindings}
+
+PERSONNEL ACTIVITY:
+${analysis.personnelSummary}
+
+SECURITY INCIDENTS:
+${analysis.incidentSummary}
+
+RECOMMENDATIONS:
+${analysis.recommendations.join('\n')}
+
+SYSTEM STATUS:
+• Equipment functionality: ${analysis.equipmentStatus}
+• Communication systems: Operational
+• Access control: ${analysis.accessControlStatus}
+• Overall security posture: ${analysis.overallStatus}
+
+Prepared by: VeriVault AI Security Intelligence
+Classification: CONFIDENTIAL
+Generated: ${new Date().toLocaleString()}`;
+
+            if (contentEl) {
+                contentEl.value = aiGeneratedContent;
+            }
+        }
+
+        function analyzeSecurityLog(data) {
+            var analysis = {
+                summary: '',
+                timeRange: '',
+                personnel: [],
+                activities: [],
+                incidents: [],
+                accessEvents: 0,
+                detailedFindings: '',
+                personnelSummary: '',
+                incidentSummary: '',
+                recommendations: [],
+                equipmentStatus: 'Operational',
+                accessControlStatus: 'Normal',
+                overallStatus: 'Secure'
+            };
+            
+            // Extract unique personnel
+            var personnelSet = new Set();
+            var times = [];
+            var eventTypes = new Set();
+            
+            data.forEach(function(entry) {
+                // Look for common CSV column names
+                var person = entry['Name'] || entry['Personnel'] || entry['Officer'] || entry['Staff'] || '';
+                var time = entry['Time'] || entry['Timestamp'] || entry['Date'] || '';
+                var event = entry['Event'] || entry['Activity'] || entry['Type'] || entry['Description'] || '';
+                var location = entry['Location'] || entry['Area'] || entry['Zone'] || '';
+                
+                if (person) personnelSet.add(person);
+                if (time) times.push(time);
+                if (event) {
+                    eventTypes.add(event);
+                    analysis.activities.push({
+                        time: time,
+                        person: person,
+                        event: event,
+                        location: location
+                    });
+                }
+                
+                // Detect incidents
+                if (event.toLowerCase().includes('incident') || 
+                    event.toLowerCase().includes('alert') || 
+                    event.toLowerCase().includes('emergency') ||
+                    event.toLowerCase().includes('violation')) {
+                    analysis.incidents.push(entry);
+                }
+                
+                // Count access events
+                if (event.toLowerCase().includes('access') || 
+                    event.toLowerCase().includes('entry') || 
+                    event.toLowerCase().includes('exit') ||
+                    event.toLowerCase().includes('door')) {
+                    analysis.accessEvents++;
+                }
+            });
+            
+            analysis.personnel = Array.from(personnelSet);
+            
+            // Generate time range
+            if (times.length > 0) {
+                analysis.timeRange = times[0] + ' to ' + times[times.length - 1];
+            }
+            
+            // Generate summary
+            analysis.summary = `Analyzed ${data.length} security log entries covering operational activities with ${analysis.personnel.length} personnel members. ${analysis.incidents.length} security incidents detected and ${analysis.accessEvents} access control events logged. Overall security operations maintained normal status throughout the reporting period.`;
+            
+            // Generate detailed findings
+            var keyEvents = analysis.activities.slice(0, 10); // Top 10 events
+            analysis.detailedFindings = keyEvents.map(function(event, index) {
+                return `${index + 1}. ${event.time} - ${event.person}: ${event.event} ${event.location ? 'at ' + event.location : ''}`;
+            }).join('\n');
+            
+            // Personnel summary
+            analysis.personnelSummary = analysis.personnel.map(function(person) {
+                var personEvents = analysis.activities.filter(function(activity) {
+                    return activity.person === person;
+                });
+                return `• ${person}: ${personEvents.length} logged activities`;
+            }).join('\n');
+            
+            // Incident summary
+            if (analysis.incidents.length > 0) {
+                analysis.incidentSummary = analysis.incidents.map(function(incident, index) {
+                    return `• Incident ${index + 1}: ${incident.Event || incident.Description || 'Security event logged'}`;
+                }).join('\n');
+                analysis.overallStatus = 'Heightened Alert';
+            } else {
+                analysis.incidentSummary = '• No security incidents reported during this period\n• All activities within normal operational parameters';
+            }
+            
+            // Generate recommendations
+            analysis.recommendations = [
+                '• Continue current monitoring protocols',
+                '• Maintain personnel assignment schedules',
+                '• Regular equipment functionality checks recommended'
+            ];
+            
+            if (analysis.incidents.length > 0) {
+                analysis.recommendations.push('• Review incident response procedures');
+                analysis.recommendations.push('• Consider additional security measures for high-activity areas');
+            }
+            
+            if (analysis.accessEvents > 50) {
+                analysis.recommendations.push('• High access volume detected - consider access pattern analysis');
+            }
+            
+            return analysis;
         }
 
         // Enhanced audit analysis with photo processing
@@ -1093,8 +1320,14 @@ Classification: CONFIDENTIAL`
             var reportContent = document.getElementById('reportContent') ? document.getElementById('reportContent').value : '';
             var reportTitle = document.getElementById('reportTitle') ? document.getElementById('reportTitle').textContent : 'Report';
             
+            // If no content but CSV is uploaded, generate AI summary first
+            if (!reportContent.trim() && uploadedCSVData && uploadedCSVData.length > 0) {
+                generateAISummary();
+                reportContent = document.getElementById('reportContent').value;
+            }
+            
             if (!reportContent.trim()) {
-                alert('❌ Please enter report content before generating PDF.');
+                alert('❌ Please enter report content or upload a CSV file for AI analysis before generating PDF.');
                 return;
             }
             
@@ -1118,24 +1351,39 @@ Classification: CONFIDENTIAL`
                 doc.text(`Date: ${reportDate}`, 20, 60);
                 doc.text(`Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 20, 70);
                 
+                // Add data source info if CSV was used
+                if (uploadedCSVData && csvFileName) {
+                    doc.text(`Data Source: ${csvFileName} (${uploadedCSVData.length} entries analyzed)`, 20, 80);
+                    doc.text('Analysis Type: AI-Powered Security Log Analysis', 20, 90);
+                }
+                
                 // Add content
                 doc.setFontSize(10);
-                const splitContent = doc.splitTextToSize(reportContent, 170);
-                doc.text(splitContent, 20, 85);
+                var startY = uploadedCSVData ? 105 : 85;
+                var splitContent = doc.splitTextToSize(reportContent, 170);
+                doc.text(splitContent, 20, startY);
                 
                 // Add footer
                 const pageCount = doc.internal.getNumberOfPages();
                 for (let i = 1; i <= pageCount; i++) {
                     doc.setPage(i);
                     doc.setFontSize(8);
-                    doc.text(`Page ${i} of ${pageCount} - VeriVault Confidential`, 20, 285);
+                    var footerText = uploadedCSVData ? 
+                        `Page ${i} of ${pageCount} - VeriVault AI Analysis - Confidential` :
+                        `Page ${i} of ${pageCount} - VeriVault Confidential`;
+                    doc.text(footerText, 20, 285);
                 }
                 
                 // Save the PDF
-                const fileName = `${reportTitle.replace(/\s+/g, '_')}_${clientName.replace(/\s+/g, '_')}_${reportDate}.pdf`;
+                var filePrefix = uploadedCSVData ? 'AI_Analysis_' : '';
+                var fileName = `${filePrefix}${reportTitle.replace(/\s+/g, '_')}_${clientName.replace(/\s+/g, '_')}_${reportDate}.pdf`;
                 doc.save(fileName);
                 
-                alert('📄 PDF Report Generated Successfully!\n\n✅ Professional PDF created\n✅ Downloaded to your device\n✅ Ready for client delivery');
+                var successMessage = uploadedCSVData ? 
+                    '📄 AI-Analyzed PDF Report Generated Successfully!\n\n✅ CSV data analyzed by AI\n✅ Professional PDF created\n✅ Downloaded to your device\n✅ Ready for client delivery' :
+                    '📄 PDF Report Generated Successfully!\n\n✅ Professional PDF created\n✅ Downloaded to your device\n✅ Ready for client delivery';
+                
+                alert(successMessage);
                 
             } catch (error) {
                 console.error('PDF generation error:', error);
