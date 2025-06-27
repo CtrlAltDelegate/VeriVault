@@ -15,23 +15,42 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        .notification {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .pulse { animation: pulse 2s infinite; }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
+    <!-- Notification System -->
+    <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2 max-w-sm"></div>
+
     <!-- Top Navigation Tabs -->
-    <div class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
+    <div class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex space-x-8">
-                <button onclick="switchTab('reports')" id="tab-reports" class="py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400/10">
+                <button onclick="switchTab('logger')" id="tab-logger" class="py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400/10">
+                    📝 Daily Log System
+                </button>
+                <button onclick="switchTab('reports')" id="tab-reports" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
                     📊 Report Generation
                 </button>
-                <button onclick="switchTab('logger')" id="tab-logger" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
-                    📝 Event Logger
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                    📈 Analytics Dashboard
                 </button>
-                <button onclick="switchTab('intake')" id="tab-intake" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                <!-- Hidden BTC tabs for future use -->
+                <button onclick="switchTab('intake')" id="tab-intake" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400 hidden">
                     🔐 Security Audit Intake
                 </button>
-                <button onclick="switchTab('auditTool')" id="tab-auditTool" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                <button onclick="switchTab('auditTool')" id="tab-auditTool" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400 hidden">
                     🔍 Audit Analysis Tool
                 </button>
             </div>
@@ -142,6 +161,21 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Recent Reports -->
+                <div class="mt-8">
+                    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Recent Reports</h3>
+                    <div class="space-y-2">
+                        <div class="bg-slate-700/50 p-2 rounded text-xs">
+                            <div class="text-white font-medium">Daily Log - Johnson Estate</div>
+                            <div class="text-slate-400">Generated 2 hours ago</div>
+                        </div>
+                        <div class="bg-slate-700/50 p-2 rounded text-xs">
+                            <div class="text-white font-medium">Security Audit - Metro Plaza</div>
+                            <div class="text-slate-400">Generated yesterday</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Main Content Area -->
@@ -186,9 +220,12 @@
                         </div>
 
                         <!-- Generate Button -->
-                        <div>
-                            <button onclick="generateReport()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105">
+                        <div class="flex gap-4">
+                            <button onclick="generateReport()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105">
                                 📄 Generate Professional PDF Report
+                            </button>
+                            <button onclick="saveAsDraft()" class="px-6 bg-slate-600 text-white py-4 rounded-lg font-semibold hover:bg-slate-500 transition-all">
+                                💾 Save Draft
                             </button>
                         </div>
                     </div>
@@ -197,75 +234,324 @@
         </div>
     </div>
 
-    <!-- EVENT LOGGER TAB CONTENT -->
-    <div id="content-logger" class="tab-content hidden">
+    <!-- ENHANCED DAILY LOG SYSTEM TAB CONTENT -->
+    <div id="content-logger" class="tab-content">
         <div class="w-full p-8">
-            <div class="max-w-4xl mx-auto">
+            <div class="max-w-7xl mx-auto">
+                <!-- Enhanced Header -->
                 <div class="mb-8">
-                    <h2 class="text-3xl font-bold text-white mb-2">Event Logger</h2>
-                    <p class="text-slate-400">Real-time event logging for staff, vendors, deliveries, and guests</p>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-3xl font-bold text-white mb-2">📝 Daily Log System</h2>
+                            <p class="text-slate-400">Professional security activity logging with real-time search and categorization</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-right">
+                                <div class="text-sm text-slate-400">Current Shift</div>
+                                <div id="currentShift" class="text-lg font-semibold text-cyan-400">Day Shift</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm text-slate-400">Today's Entries</div>
+                                <div id="totalEntries" class="text-lg font-semibold text-white">0</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="glass rounded-xl p-6">
-                    <!-- Event Type Selection -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-300 mb-3">Event Type</label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <button onclick="selectEventType('staff')" class="event-btn active">
-                                <div class="bg-blue-600 p-4 rounded-lg text-center hover:bg-blue-700 transition-all transform hover:scale-105">
-                                    <div class="text-2xl mb-2">👥</div>
-                                    <div class="text-white font-medium">Staff</div>
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    <!-- Enhanced Log Entry Form -->
+                    <div class="xl:col-span-2">
+                        <div class="glass rounded-xl p-6 mb-6">
+                            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                                <span class="text-green-400">➕</span>New Log Entry
+                            </h3>
+
+                            <!-- Quick Entry Type Selection -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-slate-300 mb-3">Entry Category</label>
+                                <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+                                    <button onclick="selectLogCategory('staff')" class="log-category-btn active" data-category="staff">
+                                        <div class="bg-blue-600 p-3 rounded-lg text-center hover:bg-blue-700 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">👥</div>
+                                            <div class="text-white text-xs font-medium">Staff</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="selectLogCategory('visitor')" class="log-category-btn" data-category="visitor">
+                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">🏃</div>
+                                            <div class="text-white text-xs font-medium">Visitor</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="selectLogCategory('vendor')" class="log-category-btn" data-category="vendor">
+                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">🔧</div>
+                                            <div class="text-white text-xs font-medium">Vendor</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="selectLogCategory('delivery')" class="log-category-btn" data-category="delivery">
+                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">📦</div>
+                                            <div class="text-white text-xs font-medium">Delivery</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="selectLogCategory('incident')" class="log-category-btn" data-category="incident">
+                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">⚠️</div>
+                                            <div class="text-white text-xs font-medium">Incident</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="selectLogCategory('patrol')" class="log-category-btn" data-category="patrol">
+                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">🚶</div>
+                                            <div class="text-white text-xs font-medium">Patrol</div>
+                                        </div>
+                                    </button>
                                 </div>
-                            </button>
-                            <button onclick="selectEventType('vendor')" class="event-btn">
-                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
-                                    <div class="text-2xl mb-2">🔧</div>
-                                    <div class="text-white font-medium">Vendor</div>
+                            </div>
+
+                            <!-- Enhanced Form Fields -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Timestamp</label>
+                                    <input type="datetime-local" id="logTimestamp" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                                 </div>
-                            </button>
-                            <button onclick="selectEventType('delivery')" class="event-btn">
-                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
-                                    <div class="text-2xl mb-2">📦</div>
-                                    <div class="text-white font-medium">Delivery</div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Location</label>
+                                    <select id="logLocation" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                        <option value="">Select location</option>
+                                        <option value="main_entrance">Main Entrance</option>
+                                        <option value="lobby">Lobby</option>
+                                        <option value="parking_garage">Parking Garage</option>
+                                        <option value="loading_dock">Loading Dock</option>
+                                        <option value="perimeter">Perimeter</option>
+                                        <option value="office_area">Office Area</option>
+                                        <option value="emergency_exit">Emergency Exit</option>
+                                        <option value="rooftop">Rooftop</option>
+                                        <option value="other">Other</option>
+                                    </select>
                                 </div>
-                            </button>
-                            <button onclick="selectEventType('guest')" class="event-btn">
-                                <div class="bg-slate-600 p-4 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
-                                    <div class="text-2xl mb-2">🏃</div>
-                                    <div class="text-white font-medium">Guest</div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Name/Subject</label>
+                                    <input type="text" id="logSubject" placeholder="Enter name or subject" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
                                 </div>
-                            </button>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Action/Status</label>
+                                    <select id="logAction" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                        <option value="">Select action</option>
+                                        <option value="arrived">Arrived</option>
+                                        <option value="departed">Departed</option>
+                                        <option value="break_start">Break Started</option>
+                                        <option value="break_end">Break Ended</option>
+                                        <option value="patrol_complete">Patrol Completed</option>
+                                        <option value="incident_reported">Incident Reported</option>
+                                        <option value="system_check">System Check</option>
+                                        <option value="maintenance">Maintenance</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Priority Level -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-slate-300 mb-3">Priority Level</label>
+                                <div class="flex gap-4">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="priority" value="low" checked class="mr-2 text-green-400">
+                                        <span class="flex items-center gap-2">
+                                            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                                            <span class="text-slate-300">Low</span>
+                                        </span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="priority" value="medium" class="mr-2 text-yellow-400">
+                                        <span class="flex items-center gap-2">
+                                            <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                                            <span class="text-slate-300">Medium</span>
+                                        </span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="priority" value="high" class="mr-2 text-red-400">
+                                        <span class="flex items-center gap-2">
+                                            <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+                                            <span class="text-slate-300">High</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Enhanced Notes Field -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Detailed Notes</label>
+                                <textarea id="logNotes" rows="4" placeholder="Enter detailed observations, actions taken, or additional context..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"></textarea>
+                                <div class="text-xs text-slate-400 mt-1">Tip: Include badge numbers, license plates, or specific details</div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex gap-4">
+                                <button onclick="addLogEntry()" class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
+                                    ✅ Add to Log
+                                </button>
+                                <button onclick="clearLogForm()" class="px-6 bg-slate-600 text-white py-4 rounded-lg font-semibold hover:bg-slate-500 transition-all">
+                                    🗑️ Clear
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Search and Filter Section -->
+                        <div class="glass rounded-xl p-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-blue-400">🔍</span>Search & Filter
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <input type="text" id="searchLogs" placeholder="Search entries..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                </div>
+                                <div>
+                                    <select id="filterCategory" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                        <option value="">All Categories</option>
+                                        <option value="staff">Staff</option>
+                                        <option value="visitor">Visitor</option>
+                                        <option value="vendor">Vendor</option>
+                                        <option value="delivery">Delivery</option>
+                                        <option value="incident">Incident</option>
+                                        <option value="patrol">Patrol</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select id="filterPriority" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                        <option value="">All Priorities</option>
+                                        <option value="low">Low Priority</option>
+                                        <option value="medium">Medium Priority</option>
+                                        <option value="high">High Priority</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Form Fields -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-2">Name</label>
-                            <input type="text" id="eventName" placeholder="Enter name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                    <!-- Enhanced Sidebar -->
+                    <div class="space-y-6">
+                        <!-- Today's Summary -->
+                        <div class="glass rounded-xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-cyan-400">📊</span>Today's Summary
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>Staff Events
+                                    </span>
+                                    <span id="staffLogCount" class="text-blue-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-purple-500 rounded-full"></span>Visitor Events
+                                    </span>
+                                    <span id="visitorLogCount" class="text-purple-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-orange-500 rounded-full"></span>Vendor Events
+                                    </span>
+                                    <span id="vendorLogCount" class="text-orange-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-green-500 rounded-full"></span>Deliveries
+                                    </span>
+                                    <span id="deliveryLogCount" class="text-green-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-red-500 rounded-full"></span>Incidents
+                                    </span>
+                                    <span id="incidentLogCount" class="text-red-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-gray-500 rounded-full"></span>Patrols
+                                    </span>
+                                    <span id="patrolLogCount" class="text-gray-400 font-semibold">0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-2">Action</label>
-                            <select id="eventAction" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                <option value="">Select action</option>
-                                <option value="arrived">Arrived</option>
-                                <option value="departed">Departed</option>
-                                <option value="break">Break Started</option>
-                                <option value="return">Returned from Break</option>
-                            </select>
+
+                        <!-- Priority Alerts -->
+                        <div class="glass rounded-xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-red-400">🚨</span>Priority Alerts
+                            </h3>
+                            <div id="priorityAlerts" class="space-y-2">
+                                <p class="text-slate-400 text-center text-sm">No high-priority items</p>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="glass rounded-xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-yellow-400">⚡</span>Quick Actions
+                            </h3>
+                            <div class="space-y-3">
+                                <button onclick="exportTodaysLog()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-all text-sm">
+                                    📄 Export Today's Log
+                                </button>
+                                <button onclick="startPatrolLog()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-purple-700 transition-all text-sm">
+                                    🚶 Start Patrol Log
+                                </button>
+                                <button onclick="reportIncident()" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-all text-sm">
+                                    ⚠️ Report Incident
+                                </button>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Notes Field -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-300 mb-2">Notes</label>
-                        <textarea id="eventNotes" rows="3" placeholder="Additional observations or details..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"></textarea>
+                <!-- Enhanced Log Entries Display -->
+                <div class="mt-8">
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                                <span class="text-slate-400">📋</span>Log Entries
+                            </h3>
+                            <div class="flex items-center gap-4">
+                                <select id="sortOrder" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm">
+                                    <option value="newest">Newest First</option>
+                                    <option value="oldest">Oldest First</option>
+                                    <option value="priority">By Priority</option>
+                                </select>
+                                <button onclick="refreshLogView()" class="bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition-all text-sm">
+                                    🔄 Refresh
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="logEntriesContainer" class="space-y-3 max-h-96 overflow-y-auto">
+                            <div class="text-center text-slate-400 py-8">
+                                <div class="text-4xl mb-4">📝</div>
+                                <p>No log entries yet today</p>
+                                <p class="text-sm mt-2">Start by adding your first entry above</p>
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- Log Entry Button -->
-                    <button onclick="logEvent()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
-                        ✅ Log Event
-                    </button>
+                </div>
+            </div>
+        </div>
+    </div>Vendor Visits:</span>
+                                    <span id="vendorCount" class="text-orange-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-300">Deliveries:</span>
+                                    <span id="deliveryCount" class="text-green-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-300">Guest Visits:</span>
+                                    <span id="guestCount" class="text-purple-400 font-semibold">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -506,9 +792,102 @@
         </div>
     </div>
 
+    <!-- ANALYTICS DASHBOARD TAB -->
+    <div id="content-dashboard" class="tab-content hidden">
+        <div class="w-full p-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">📈 Analytics Dashboard</h2>
+                    <p class="text-slate-400">Real-time security metrics and performance insights</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Metric Cards -->
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400">Active Events</span>
+                            <span class="text-2xl">📊</span>
+                        </div>
+                        <div class="text-2xl font-bold text-white">24</div>
+                        <div class="text-sm text-green-400">+12% from yesterday</div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400">Reports Generated</span>
+                            <span class="text-2xl">📄</span>
+                        </div>
+                        <div class="text-2xl font-bold text-white">156</div>
+                        <div class="text-sm text-blue-400">+8% this week</div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400">Security Audits</span>
+                            <span class="text-2xl">🔍</span>
+                        </div>
+                        <div class="text-2xl font-bold text-white">12</div>
+                        <div class="text-sm text-purple-400">3 pending review</div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400">System Health</span>
+                            <span class="text-2xl">⚡</span>
+                        </div>
+                        <div class="text-2xl font-bold text-green-400">98.7%</div>
+                        <div class="text-sm text-green-400">All systems operational</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Activity Chart -->
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">📊 Weekly Activity</h3>
+                        <div class="h-64 bg-slate-800/50 rounded-lg flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">📈</div>
+                                <p class="text-slate-400">Activity chart visualization</p>
+                                <p class="text-slate-500 text-sm">Chart component would be integrated here</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">🕐 Recent Activity</h3>
+                        <div class="space-y-4 max-h-64 overflow-y-auto">
+                            <div class="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-sm">📄</div>
+                                <div class="flex-1">
+                                    <div class="text-white font-medium">Daily report generated</div>
+                                    <div class="text-slate-400 text-sm">Johnson Estate - 2 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg">
+                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-sm">✅</div>
+                                <div class="flex-1">
+                                    <div class="text-white font-medium">Security audit completed</div>
+                                    <div class="text-slate-400 text-sm">Metro Plaza - 15 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg">
+                                <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-sm">👥</div>
+                                <div class="flex-1">
+                                    <div class="text-white font-medium">Staff event logged</div>
+                                    <div class="text-slate-400 text-sm">John Smith departure - 1 hour ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Global variables
-        var currentTab = 'reports';
+        // Global variables for enhanced daily log system
+        var currentTab = 'logger'; // Start with daily log system
         var uploadedCSVData = null;
         var csvFileName = null;
         var selectedPackage = 'premium';
@@ -517,6 +896,423 @@
             camera: [],
             site: []
         };
+        var dailyLogEntries = [];
+        var logStats = {
+            staff: 0,
+            visitor: 0,
+            vendor: 0,
+            delivery: 0,
+            incident: 0,
+            patrol: 0
+        };
+        var selectedLogCategory = 'staff';
+        var currentShift = 'Day Shift';
+
+        // Enhanced daily log functions
+        function selectLogCategory(category) {
+            selectedLogCategory = category;
+            
+            // Update visual selection
+            document.querySelectorAll('.log-category-btn').forEach(function(btn) {
+                var div = btn.querySelector('div');
+                div.classList.remove('bg-blue-600', 'bg-slate-600');
+                div.classList.add('bg-slate-600');
+            });
+            
+            var selectedBtn = document.querySelector(`.log-category-btn[data-category="${category}"]`);
+            if (selectedBtn) {
+                var div = selectedBtn.querySelector('div');
+                div.classList.remove('bg-slate-600');
+                div.classList.add('bg-blue-600');
+            }
+            
+            // Update action dropdown based on category
+            updateActionOptions(category);
+        }
+
+        function updateActionOptions(category) {
+            var actionSelect = document.getElementById('logAction');
+            if (!actionSelect) return;
+            
+            var options = {
+                staff: [
+                    { value: 'arrived', text: 'Arrived' },
+                    { value: 'departed', text: 'Departed' },
+                    { value: 'break_start', text: 'Break Started' },
+                    { value: 'break_end', text: 'Break Ended' },
+                    { value: 'shift_change', text: 'Shift Change' }
+                ],
+                visitor: [
+                    { value: 'arrived', text: 'Arrived' },
+                    { value: 'departed', text: 'Departed' },
+                    { value: 'escorted', text: 'Escorted' },
+                    { value: 'waiting', text: 'Waiting' }
+                ],
+                vendor: [
+                    { value: 'arrived', text: 'Arrived' },
+                    { value: 'departed', text: 'Departed' },
+                    { value: 'work_started', text: 'Work Started' },
+                    { value: 'work_completed', text: 'Work Completed' }
+                ],
+                delivery: [
+                    { value: 'arrived', text: 'Arrived' },
+                    { value: 'departed', text: 'Departed' },
+                    { value: 'delivered', text: 'Package Delivered' },
+                    { value: 'refused', text: 'Delivery Refused' }
+                ],
+                incident: [
+                    { value: 'reported', text: 'Incident Reported' },
+                    { value: 'investigating', text: 'Under Investigation' },
+                    { value: 'resolved', text: 'Resolved' },
+                    { value: 'escalated', text: 'Escalated' }
+                ],
+                patrol: [
+                    { value: 'started', text: 'Patrol Started' },
+                    { value: 'completed', text: 'Patrol Completed' },
+                    { value: 'checkpoint', text: 'Checkpoint Reached' },
+                    { value: 'anomaly', text: 'Anomaly Detected' }
+                ]
+            };
+            
+            actionSelect.innerHTML = '<option value="">Select action</option>';
+            if (options[category]) {
+                options[category].forEach(function(option) {
+                    var optionEl = document.createElement('option');
+                    optionEl.value = option.value;
+                    optionEl.textContent = option.text;
+                    actionSelect.appendChild(optionEl);
+                });
+            }
+        }
+
+        function addLogEntry() {
+            var timestamp = document.getElementById('logTimestamp') ? document.getElementById('logTimestamp').value : '';
+            var location = document.getElementById('logLocation') ? document.getElementById('logLocation').value : '';
+            var subject = document.getElementById('logSubject') ? document.getElementById('logSubject').value : '';
+            var action = document.getElementById('logAction') ? document.getElementById('logAction').value : '';
+            var notes = document.getElementById('logNotes') ? document.getElementById('logNotes').value : '';
+            var priority = document.querySelector('input[name="priority"]:checked') ? document.querySelector('input[name="priority"]:checked').value : 'low';
+            
+            // Validation
+            if (!timestamp || !subject || !action) {
+                showNotification('Please fill in timestamp, subject/name, and action fields', 'error');
+                return;
+            }
+            
+            // Create log entry
+            var entry = {
+                id: Date.now(),
+                timestamp: timestamp,
+                category: selectedLogCategory,
+                location: location,
+                subject: subject,
+                action: action,
+                notes: notes,
+                priority: priority,
+                shift: currentShift,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add to log
+            dailyLogEntries.unshift(entry);
+            logStats[selectedLogCategory]++;
+            
+            // Update displays
+            updateLogEntriesDisplay();
+            updateLogStats();
+            updatePriorityAlerts();
+            
+            // Clear form
+            clearLogForm();
+            
+            showNotification(`Log entry added: ${subject} - ${action}`, 'success');
+        }
+
+        function clearLogForm() {
+            if (document.getElementById('logTimestamp')) {
+                var now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                document.getElementById('logTimestamp').value = now.toISOString().slice(0, 16);
+            }
+            if (document.getElementById('logLocation')) document.getElementById('logLocation').value = '';
+            if (document.getElementById('logSubject')) document.getElementById('logSubject').value = '';
+            if (document.getElementById('logAction')) document.getElementById('logAction').value = '';
+            if (document.getElementById('logNotes')) document.getElementById('logNotes').value = '';
+            
+            // Reset priority to low
+            var lowPriority = document.querySelector('input[name="priority"][value="low"]');
+            if (lowPriority) lowPriority.checked = true;
+        }
+
+        function updateLogEntriesDisplay() {
+            var container = document.getElementById('logEntriesContainer');
+            if (!container) return;
+            
+            var searchTerm = document.getElementById('searchLogs') ? document.getElementById('searchLogs').value.toLowerCase() : '';
+            var categoryFilter = document.getElementById('filterCategory') ? document.getElementById('filterCategory').value : '';
+            var priorityFilter = document.getElementById('filterPriority') ? document.getElementById('filterPriority').value : '';
+            var sortOrder = document.getElementById('sortOrder') ? document.getElementById('sortOrder').value : 'newest';
+            
+            // Filter entries
+            var filteredEntries = dailyLogEntries.filter(function(entry) {
+                var matchesSearch = !searchTerm || 
+                    entry.subject.toLowerCase().includes(searchTerm) ||
+                    entry.notes.toLowerCase().includes(searchTerm) ||
+                    entry.location.toLowerCase().includes(searchTerm);
+                var matchesCategory = !categoryFilter || entry.category === categoryFilter;
+                var matchesPriority = !priorityFilter || entry.priority === priorityFilter;
+                
+                return matchesSearch && matchesCategory && matchesPriority;
+            });
+            
+            // Sort entries
+            filteredEntries.sort(function(a, b) {
+                if (sortOrder === 'oldest') {
+                    return new Date(a.timestamp) - new Date(b.timestamp);
+                } else if (sortOrder === 'priority') {
+                    var priorityOrder = { high: 3, medium: 2, low: 1 };
+                    return priorityOrder[b.priority] - priorityOrder[a.priority];
+                } else {
+                    return new Date(b.timestamp) - new Date(a.timestamp);
+                }
+            });
+            
+            if (filteredEntries.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-slate-400 py-8">
+                        <div class="text-4xl mb-4">📝</div>
+                        <p>${dailyLogEntries.length === 0 ? 'No log entries yet today' : 'No entries match your filters'}</p>
+                        <p class="text-sm mt-2">${dailyLogEntries.length === 0 ? 'Start by adding your first entry above' : 'Try adjusting your search or filters'}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            var html = '';
+            filteredEntries.forEach(function(entry) {
+                var priorityColor = entry.priority === 'high' ? 'border-red-500/50 bg-red-500/10' : 
+                                  entry.priority === 'medium' ? 'border-yellow-500/50 bg-yellow-500/10' : 
+                                  'border-green-500/50 bg-green-500/10';
+                
+                var categoryIcon = getCategoryIcon(entry.category);
+                var categoryColor = getCategoryColor(entry.category);
+                
+                var formattedTime = new Date(entry.timestamp).toLocaleString();
+                
+                html += `
+                    <div class="bg-slate-700/30 border ${priorityColor} rounded-lg p-4">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 ${categoryColor} rounded-full flex items-center justify-center text-sm">
+                                    ${categoryIcon}
+                                </div>
+                                <div>
+                                    <div class="text-white font-medium">${entry.subject} - ${formatActionText(entry.action)}</div>
+                                    <div class="text-slate-400 text-sm">${formattedTime} • ${entry.location || 'No location'}</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-1 rounded-full text-xs font-medium ${getPriorityBadgeClass(entry.priority)}">
+                                    ${entry.priority.toUpperCase()}
+                                </span>
+                                <button onclick="deleteLogEntry(${entry.id})" class="text-red-400 hover:text-red-300 text-sm">🗑️</button>
+                            </div>
+                        </div>
+                        ${entry.notes ? `<div class="text-slate-300 text-sm mt-2 pl-11">${entry.notes}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // Update total count
+            var totalEl = document.getElementById('totalEntries');
+            if (totalEl) totalEl.textContent = dailyLogEntries.length;
+        }
+
+        function updateLogStats() {
+            var elements = {
+                staffLogCount: document.getElementById('staffLogCount'),
+                visitorLogCount: document.getElementById('visitorLogCount'),
+                vendorLogCount: document.getElementById('vendorLogCount'),
+                deliveryLogCount: document.getElementById('deliveryLogCount'),
+                incidentLogCount: document.getElementById('incidentLogCount'),
+                patrolLogCount: document.getElementById('patrolLogCount')
+            };
+            
+            if (elements.staffLogCount) elements.staffLogCount.textContent = logStats.staff;
+            if (elements.visitorLogCount) elements.visitorLogCount.textContent = logStats.visitor;
+            if (elements.vendorLogCount) elements.vendorLogCount.textContent = logStats.vendor;
+            if (elements.deliveryLogCount) elements.deliveryLogCount.textContent = logStats.delivery;
+            if (elements.incidentLogCount) elements.incidentLogCount.textContent = logStats.incident;
+            if (elements.patrolLogCount) elements.patrolLogCount.textContent = logStats.patrol;
+        }
+
+        function updatePriorityAlerts() {
+            var container = document.getElementById('priorityAlerts');
+            if (!container) return;
+            
+            var highPriorityEntries = dailyLogEntries.filter(function(entry) {
+                return entry.priority === 'high';
+            });
+            
+            if (highPriorityEntries.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-center text-sm">No high-priority items</p>';
+                return;
+            }
+            
+            var html = '';
+            highPriorityEntries.slice(0, 5).forEach(function(entry) {
+                html += `
+                    <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
+                        <div class="text-red-300 font-medium text-sm">${entry.subject}</div>
+                        <div class="text-red-400 text-xs">${new Date(entry.timestamp).toLocaleString()}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function deleteLogEntry(entryId) {
+            if (!confirm('Are you sure you want to delete this log entry?')) return;
+            
+            var entryIndex = dailyLogEntries.findIndex(function(entry) {
+                return entry.id === entryId;
+            });
+            
+            if (entryIndex !== -1) {
+                var entry = dailyLogEntries[entryIndex];
+                logStats[entry.category]--;
+                dailyLogEntries.splice(entryIndex, 1);
+                
+                updateLogEntriesDisplay();
+                updateLogStats();
+                updatePriorityAlerts();
+                
+                showNotification('Log entry deleted', 'success');
+            }
+        }
+
+        // Helper functions
+        function getCategoryIcon(category) {
+            var icons = {
+                staff: '👥',
+                visitor: '🏃',
+                vendor: '🔧',
+                delivery: '📦',
+                incident: '⚠️',
+                patrol: '🚶'
+            };
+            return icons[category] || '📝';
+        }
+
+        function getCategoryColor(category) {
+            var colors = {
+                staff: 'bg-blue-500',
+                visitor: 'bg-purple-500',
+                vendor: 'bg-orange-500',
+                delivery: 'bg-green-500',
+                incident: 'bg-red-500',
+                patrol: 'bg-gray-500'
+            };
+            return colors[category] || 'bg-gray-500';
+        }
+
+        function getPriorityBadgeClass(priority) {
+            var classes = {
+                high: 'bg-red-500/20 text-red-300 border border-red-500/30',
+                medium: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30',
+                low: 'bg-green-500/20 text-green-300 border border-green-500/30'
+            };
+            return classes[priority] || classes.low;
+        }
+
+        function formatActionText(action) {
+            return action.split('_').map(function(word) {
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            }).join(' ');
+        }
+
+        // Quick action functions
+        function exportTodaysLog() {
+            if (dailyLogEntries.length === 0) {
+                showNotification('No log entries to export', 'error');
+                return;
+            }
+            
+            var csvContent = 'Timestamp,Category,Location,Subject,Action,Priority,Notes,Shift\n';
+            dailyLogEntries.forEach(function(entry) {
+                var row = [
+                    entry.timestamp,
+                    entry.category,
+                    entry.location || '',
+                    entry.subject,
+                    entry.action,
+                    entry.priority,
+                    (entry.notes || '').replace(/"/g, '""'),
+                    entry.shift
+                ].map(function(field) {
+                    return '"' + field + '"';
+                }).join(',');
+                csvContent += row + '\n';
+            });
+            
+            var blob = new Blob([csvContent], { type: 'text/csv' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'daily_log_' + new Date().toISOString().split('T')[0] + '.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('Daily log exported successfully', 'success');
+        }
+
+        function startPatrolLog() {
+            selectLogCategory('patrol');
+            document.getElementById('logSubject').value = 'Security Patrol';
+            document.getElementById('logAction').value = 'started';
+            showNotification('Patrol log initiated - complete the entry details', 'info');
+        }
+
+        function reportIncident() {
+            selectLogCategory('incident');
+            document.querySelector('input[name="priority"][value="high"]').checked = true;
+            document.getElementById('logSubject').focus();
+            showNotification('Incident report mode activated - enter details immediately', 'info');
+        }
+
+        function refreshLogView() {
+            updateLogEntriesDisplay();
+            showNotification('Log view refreshed', 'success');
+        }
+
+        // Search and filter event listeners
+        function initializeSearchAndFilters() {
+            var searchInput = document.getElementById('searchLogs');
+            var categoryFilter = document.getElementById('filterCategory');
+            var priorityFilter = document.getElementById('filterPriority');
+            var sortOrder = document.getElementById('sortOrder');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    setTimeout(updateLogEntriesDisplay, 300);
+                });
+            }
+            
+            if (categoryFilter) {
+                categoryFilter.addEventListener('change', updateLogEntriesDisplay);
+            }
+            
+            if (priorityFilter) {
+                priorityFilter.addEventListener('change', updateLogEntriesDisplay);
+            }
+            
+            if (sortOrder) {
+                sortOrder.addEventListener('change', updateLogEntriesDisplay);
+            }
+        }
 
         // Report templates
         var reportTemplates = {
@@ -556,6 +1352,32 @@
                 template: 'VEHICLE INSPECTION REPORT\n\nClient: [CLIENT_NAME]\nInspection Date: [REPORT_DATE]\nReport Type: Fleet Vehicle Assessment\n\nVEHICLE IDENTIFICATION:\n• Make, model, and year\n• Vehicle identification number\n• License plate information\n\nSAFETY INSPECTION:\n• Brake system functionality\n• Tire condition and pressure\n• Lighting system operation\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
             }
         };
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            var container = document.getElementById('notificationContainer');
+            var notification = document.createElement('div');
+            notification.className = `notification glass rounded-lg p-4 ${type === 'success' ? 'border-green-500/50' : type === 'error' ? 'border-red-500/50' : 'border-blue-500/50'}`;
+            
+            var icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            var color = type === 'success' ? 'text-green-400' : type === 'error' ? 'text-red-400' : 'text-blue-400';
+            
+            notification.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <span class="text-lg">${icon}</span>
+                    <span class="${color}">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-auto text-slate-400 hover:text-white">×</button>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            setTimeout(function() {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
 
         // Tab switching function
         function switchTab(tabName) {
@@ -619,14 +1441,15 @@
         function selectEventType(eventType) {
             document.querySelectorAll('.event-btn').forEach(function(btn) {
                 var div = btn.querySelector('div');
-                if (btn === event.currentTarget) {
-                    div.classList.remove('bg-slate-600');
-                    div.classList.add('bg-blue-600');
-                } else {
-                    div.classList.remove('bg-blue-600');
-                    div.classList.add('bg-slate-600');
-                }
+                div.classList.remove('bg-blue-600');
+                div.classList.add('bg-slate-600');
             });
+            
+            if (event && event.currentTarget) {
+                var div = event.currentTarget.querySelector('div');
+                div.classList.remove('bg-slate-600');
+                div.classList.add('bg-blue-600');
+            }
         }
 
         // Package selection
@@ -668,6 +1491,8 @@
                     statusEl.innerHTML = '<div class="flex items-center gap-2"><span class="text-green-400">✅</span><span class="text-green-400">' + files.length + ' file(s) uploaded: ' + fileNames.join(', ') + '</span></div><div class="flex items-center gap-2 mt-1"><span class="text-blue-400 text-xs">🤖</span><span class="text-blue-400 text-xs">Ready for AI photo analysis</span></div>';
                     statusEl.classList.remove('hidden');
                 }
+                
+                showNotification(`${files.length} file(s) uploaded successfully`, 'success');
             }
         }
 
@@ -690,12 +1515,14 @@
                     }
                     
                     generateAISummary();
+                    showNotification('CSV data processed and analyzed by AI', 'success');
                 };
                 reader.readAsText(file);
             } else if (statusEl) {
                 statusEl.textContent = '❌ Please upload a CSV file only';
                 statusEl.className = 'mt-2 text-sm text-red-400';
                 statusEl.classList.remove('hidden');
+                showNotification('Please upload a valid CSV file', 'error');
             }
         }
 
@@ -742,6 +1569,27 @@
             }
         }
 
+        // Save as draft function
+        function saveAsDraft() {
+            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : '';
+            var reportContent = document.getElementById('reportContent') ? document.getElementById('reportContent').value : '';
+            
+            if (!clientName || !reportContent.trim()) {
+                showNotification('Please enter client name and report content', 'error');
+                return;
+            }
+            
+            // Simulate saving to local storage (would be server-side in real app)
+            var draft = {
+                clientName: clientName,
+                content: reportContent,
+                timestamp: new Date().toLocaleString(),
+                type: document.getElementById('reportTitle') ? document.getElementById('reportTitle').textContent : 'Report'
+            };
+            
+            showNotification('Draft saved successfully', 'success');
+        }
+
         // Professional PDF generation
         function generateReport() {
             var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : 'CLIENT_NAME';
@@ -755,7 +1603,7 @@
             }
             
             if (!reportContent.trim()) {
-                alert('❌ Please enter report content or upload a CSV file for AI analysis before generating PDF.');
+                showNotification('Please enter report content or upload a CSV file for AI analysis', 'error');
                 return;
             }
             
@@ -801,11 +1649,11 @@
                 var fileName = 'VeriVault_' + reportTitle.replace(/\s+/g, '_') + '_' + clientName.replace(/\s+/g, '_') + '_' + reportDate + '.pdf';
                 doc.save(fileName);
                 
-                alert('📄 Professional PDF Report Generated Successfully!\n\n✅ Downloaded to your device\n✅ Ready for executive review');
+                showNotification('Professional PDF report generated successfully!', 'success');
                 
             } catch (error) {
                 console.error('PDF generation error:', error);
-                alert('❌ Error generating PDF. Please check your browser supports PDF generation.');
+                showNotification('Error generating PDF. Please check your browser supports PDF generation.', 'error');
             }
         }
 
@@ -814,20 +1662,102 @@
             var eventName = document.getElementById('eventName') ? document.getElementById('eventName').value : '';
             var eventAction = document.getElementById('eventAction') ? document.getElementById('eventAction').value : '';
             var eventNotes = document.getElementById('eventNotes') ? document.getElementById('eventNotes').value : '';
+            var selectedType = document.querySelector('.event-btn div.bg-blue-600');
+            var eventType = selectedType ? selectedType.parentElement.getAttribute('data-type') || 'staff' : 'staff';
             
             if (!eventName || !eventAction) {
-                alert('❌ Please enter both name and action before logging the event.');
+                showNotification('Please enter both name and action before logging the event', 'error');
                 return;
             }
             
             var timestamp = new Date().toLocaleString();
+            var event = {
+                name: eventName,
+                action: eventAction,
+                notes: eventNotes,
+                type: eventType,
+                timestamp: timestamp
+            };
+            
+            eventLog.unshift(event);
+            eventStats[eventType]++;
+            
+            updateRecentEvents();
+            updateEventStats();
             
             // Clear form
             if (document.getElementById('eventName')) document.getElementById('eventName').value = '';
             if (document.getElementById('eventAction')) document.getElementById('eventAction').value = '';
             if (document.getElementById('eventNotes')) document.getElementById('eventNotes').value = '';
             
-            alert('✅ Event logged successfully!\n\nTime: ' + timestamp + '\nName: ' + eventName + '\nAction: ' + eventAction + (eventNotes ? '\nNotes: ' + eventNotes : ''));
+            showNotification(`Event logged: ${eventName} - ${eventAction}`, 'success');
+        }
+
+        // Update recent events display
+        function updateRecentEvents() {
+            var container = document.getElementById('recentEvents');
+            if (!container) return;
+            
+            var html = '';
+            var recentEvents = eventLog.slice(0, 10); // Show last 10 events
+            
+            if (recentEvents.length === 0) {
+                html = '<p class="text-slate-400 text-center">No events logged today</p>';
+            } else {
+                recentEvents.forEach(function(event) {
+                    var icon = getEventIcon(event.type);
+                    var color = getEventColor(event.type);
+                    
+                    html += `
+                        <div class="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg">
+                            <div class="w-8 h-8 ${color} rounded-full flex items-center justify-center text-sm">${icon}</div>
+                            <div class="flex-1">
+                                <div class="text-white font-medium">${event.name} - ${event.action}</div>
+                                <div class="text-slate-400 text-sm">${event.timestamp}</div>
+                                ${event.notes ? `<div class="text-slate-300 text-xs mt-1">${event.notes}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            container.innerHTML = html;
+        }
+
+        // Update event statistics
+        function updateEventStats() {
+            var elements = {
+                staffCount: document.getElementById('staffCount'),
+                vendorCount: document.getElementById('vendorCount'),
+                deliveryCount: document.getElementById('deliveryCount'),
+                guestCount: document.getElementById('guestCount')
+            };
+            
+            if (elements.staffCount) elements.staffCount.textContent = eventStats.staff;
+            if (elements.vendorCount) elements.vendorCount.textContent = eventStats.vendor;
+            if (elements.deliveryCount) elements.deliveryCount.textContent = eventStats.delivery;
+            if (elements.guestCount) elements.guestCount.textContent = eventStats.guest;
+        }
+
+        // Helper functions for event display
+        function getEventIcon(type) {
+            var icons = {
+                staff: '👥',
+                vendor: '🔧',
+                delivery: '📦',
+                guest: '🏃'
+            };
+            return icons[type] || '📝';
+        }
+
+        function getEventColor(type) {
+            var colors = {
+                staff: 'bg-blue-500',
+                vendor: 'bg-orange-500',
+                delivery: 'bg-green-500',
+                guest: 'bg-purple-500'
+            };
+            return colors[type] || 'bg-gray-500';
         }
 
         // Generate recommendations function
@@ -842,7 +1772,7 @@
                 btn.innerHTML = '🔄 Generate AI Security Recommendations';
                 btn.classList.remove('opacity-75');
                 
-                alert('🤖 AI Security Recommendations Generated!\n\n✅ Property vulnerabilities analyzed\n✅ Budget-optimized solutions identified\n✅ Priority recommendations created\n✅ Camera placement strategy developed\n✅ Risk assessment completed\n\nYour customized security plan is ready for review!');
+                showNotification('AI Security Recommendations Generated!', 'success');
             }, 3000);
         }
 
@@ -871,11 +1801,11 @@
                 btn.innerHTML = '🎯 Generate AI Recommendations';
                 btn.classList.remove('opacity-75');
                 
-                var alertMessage = hasPhotos ? 
-                    '🎉 AI Photo Analysis Complete!\n\n✅ Photos analyzed for existing security measures\n✅ Current infrastructure assessed\n✅ Tailored recommendations generated\n✅ Gap analysis completed\n\nScroll down to view your personalized analysis results!' :
-                    '🎉 AI Security Analysis Complete!\n\n✅ Property vulnerabilities identified\n✅ Camera placement optimized\n✅ Budget recommendations generated\n✅ Implementation timeline created\n\nScroll down to view your detailed analysis results!';
+                var message = hasPhotos ? 
+                    'AI Photo Analysis Complete! Check results below.' :
+                    'AI Security Analysis Complete! Check results below.';
                 
-                alert(alertMessage);
+                showNotification(message, 'success');
                 
             }, hasPhotos ? 4500 : 3000);
         }
@@ -946,26 +1876,56 @@
                 var fileName = 'VeriVault_Security_Assessment_' + new Date().toLocaleDateString().replace(/\//g, '-') + '.pdf';
                 doc.save(fileName);
                 
-                alert('📄 Professional Security Assessment Generated!\n\n✅ Executive-level presentation\n✅ Professional formatting\n✅ Ready for client delivery\n\nPDF saved as: ' + fileName);
+                showNotification('Professional Security Assessment Generated!', 'success');
                 
             } catch (error) {
                 console.error('PDF generation error:', error);
-                alert('❌ Error generating PDF. Please check your browser supports PDF generation.');
+                showNotification('Error generating PDF. Please check your browser supports PDF generation.', 'error');
             }
         }
 
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', function() {
-            console.log('VeriVault Dashboard Loaded');
+            console.log('VeriVault B2B Daily Log System Loaded');
             
+            // Set current timestamp
+            var timestampInput = document.getElementById('logTimestamp');
+            if (timestampInput) {
+                var now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                timestampInput.value = now.toISOString().slice(0, 16);
+            }
+            
+            // Set report date
             var dateInput = document.getElementById('reportDate');
             if (dateInput) {
                 dateInput.value = new Date().toISOString().split('T')[0];
             }
             
+            // Initialize daily log system
+            selectLogCategory('staff'); // Default to staff category
+            updateLogEntriesDisplay();
+            updateLogStats();
+            updatePriorityAlerts();
+            initializeSearchAndFilters();
+            
+            // Initialize report system
             selectReport('daily-log');
             
-            console.log('Dashboard ready');
+            // Set current shift based on time
+            var hour = new Date().getHours();
+            if (hour >= 6 && hour < 14) {
+                currentShift = 'Day Shift';
+            } else if (hour >= 14 && hour < 22) {
+                currentShift = 'Evening Shift';
+            } else {
+                currentShift = 'Night Shift';
+            }
+            
+            var shiftEl = document.getElementById('currentShift');
+            if (shiftEl) shiftEl.textContent = currentShift;
+            
+            console.log('B2B Daily Log System ready - Current shift:', currentShift);
         });
     </script>
 </body>
