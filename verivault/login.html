@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In - VeriVault Security Intelligence</title>
+    <title>Admin Portal - VeriVault Security Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .glass {
@@ -26,6 +26,11 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .pulse-slow { animation: pulse 3s infinite; }
     </style>
 </head>
 <body class="hero-gradient min-h-screen flex items-center justify-center relative overflow-hidden">
@@ -34,17 +39,16 @@
         <div class="floating absolute top-20 left-10 w-20 h-20 bg-cyan-400/20 rounded-full blur-xl"></div>
         <div class="floating absolute top-40 right-20 w-32 h-32 bg-blue-400/20 rounded-full blur-xl" style="animation-delay: -2s;"></div>
         <div class="floating absolute bottom-20 left-1/4 w-24 h-24 bg-purple-400/20 rounded-full blur-xl" style="animation-delay: -4s;"></div>
-        <div class="floating absolute top-1/2 right-1/3 w-16 h-16 bg-green-400/20 rounded-full blur-xl" style="animation-delay: -3s;"></div>
     </div>
 
     <!-- Notification Container -->
     <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2 max-w-sm"></div>
 
     <!-- Main Login Container -->
-    <div class="w-full max-w-6xl mx-auto px-6 relative z-10">
+    <div class="w-full max-w-5xl mx-auto px-6 relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
-            <!-- Left Side - Branding & Features -->
+            <!-- Left Side - Admin Dashboard Preview -->
             <div class="text-center lg:text-left">
                 <!-- Logo -->
                 <div class="flex items-center justify-center lg:justify-start gap-3 mb-8">
@@ -53,92 +57,121 @@
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold text-white">VeriVault</h1>
-                        <p class="text-sm text-cyan-400">Security Intelligence Platform</p>
+                        <p class="text-sm text-cyan-400">Admin Portal</p>
                     </div>
                 </div>
 
                 <!-- Hero Content -->
                 <div class="mb-8">
                     <h2 class="text-4xl lg:text-5xl font-bold text-white mb-4">
-                        Welcome Back to Your
                         <span class="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                            Security Command Center
-                        </span>
+                            Security Operations
+                        </span><br>
+                        <span class="text-white">Command Center</span>
                     </h2>
                     <p class="text-xl text-slate-300 mb-6">
-                        Access your professional security operations dashboard and manage your daily logs with enterprise-grade intelligence.
+                        Welcome back to your professional security management dashboard. 
+                        Monitor daily operations, generate reports, and oversee your entire security network.
                     </p>
                 </div>
 
-                <!-- Feature Highlights -->
-                <div class="space-y-4 mb-8">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
-                            <span class="text-green-400 text-sm">✅</span>
+                <!-- Live Dashboard Preview -->
+                <div class="glass rounded-xl p-6 mb-6">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <span class="text-green-400 pulse-slow">🟢</span>Live Operations Status
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div>
+                            <div class="text-2xl font-bold text-cyan-400">47</div>
+                            <div class="text-sm text-slate-400">Active Guards</div>
                         </div>
-                        <span class="text-slate-300">Real-time security event logging</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                            <span class="text-blue-400 text-sm">📊</span>
+                        <div>
+                            <div class="text-2xl font-bold text-green-400">156</div>
+                            <div class="text-sm text-slate-400">Today's Logs</div>
                         </div>
-                        <span class="text-slate-300">Professional PDF report generation</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                            <span class="text-purple-400 text-sm">🔒</span>
+                        <div>
+                            <div class="text-2xl font-bold text-blue-400">12</div>
+                            <div class="text-sm text-slate-400">Client Sites</div>
                         </div>
-                        <span class="text-slate-300">Enterprise-grade security & compliance</span>
+                        <div>
+                            <div class="text-2xl font-bold text-purple-400">3</div>
+                            <div class="text-sm text-slate-400">Priority Alerts</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Trust Indicators -->
-                <div class="grid grid-cols-3 gap-6 text-center">
-                    <div>
-                        <div class="text-2xl font-bold text-cyan-400">500+</div>
-                        <div class="text-sm text-slate-400">Security Teams</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold text-blue-400">99.9%</div>
-                        <div class="text-sm text-slate-400">Uptime SLA</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold text-purple-400">24/7</div>
-                        <div class="text-sm text-slate-400">Support</div>
+                <!-- Recent Activity Preview -->
+                <div class="glass rounded-xl p-4">
+                    <h4 class="text-white font-semibold mb-3 text-sm">Recent Activity</h4>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                            <span class="text-slate-300">Guard patrol completed - Metro Plaza</span>
+                            <span class="text-slate-500 ml-auto">2 min ago</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                            <span class="text-slate-300">Vendor arrival logged - Johnson Estate</span>
+                            <span class="text-slate-500 ml-auto">5 min ago</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                            <span class="text-slate-300">System check scheduled - Downtown Office</span>
+                            <span class="text-slate-500 ml-auto">12 min ago</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Side - Login Form -->
+            <!-- Right Side - Admin Login Form -->
             <div class="flex justify-center lg:justify-end">
                 <div class="w-full max-w-md">
                     <div class="glass rounded-2xl p-8 shadow-2xl">
-                        <!-- Form Header -->
-                        <div class="text-center mb-8">
-                            <h3 class="text-2xl font-bold text-white mb-2">Sign In to Your Account</h3>
-                            <p class="text-slate-400">Enter your credentials to access your security dashboard</p>
+                        <!-- Admin Badge -->
+                        <div class="text-center mb-6">
+                            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full px-4 py-2 mb-4">
+                                <span class="text-orange-400">👑</span>
+                                <span class="text-orange-300 font-semibold text-sm">ADMIN ACCESS</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Security Operations Portal</h3>
+                            <p class="text-slate-400">Administrator login required</p>
+                        </div>
+
+                        <!-- Quick Admin Access -->
+                        <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-6">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-blue-400">ℹ️</span>
+                                <span class="text-blue-300 font-medium text-sm">Demo Admin Access</span>
+                            </div>
+                            <div class="text-xs text-blue-200 space-y-1">
+                                <div><strong>Email:</strong> admin@verivault.com</div>
+                                <div><strong>Password:</strong> admin123</div>
+                            </div>
+                            <button onclick="fillAdminCredentials()" class="mt-2 text-blue-400 hover:text-blue-300 text-xs underline">
+                                Click to auto-fill credentials
+                            </button>
                         </div>
 
                         <!-- Login Form -->
-                        <form id="loginForm" class="space-y-6">
+                        <form id="adminLoginForm" class="space-y-6">
                             <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Administrator Email</label>
                                 <input 
                                     type="email" 
-                                    id="email"
+                                    id="adminEmail"
                                     required 
                                     class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition-all"
-                                    placeholder="your@securitycompany.com"
+                                    placeholder="admin@securitycompany.com"
                                     autocomplete="email"
                                 >
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Admin Password</label>
                                 <div class="relative">
                                     <input 
                                         type="password" 
-                                        id="password"
+                                        id="adminPassword"
                                         required 
                                         class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition-all"
                                         placeholder="••••••••••••"
@@ -146,171 +179,97 @@
                                     >
                                     <button 
                                         type="button" 
-                                        onclick="togglePassword()"
+                                        onclick="toggleAdminPassword()"
                                         class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
-                                        id="togglePasswordBtn"
+                                        id="toggleAdminPasswordBtn"
                                     >
                                         👁️
                                     </button>
                                 </div>
                             </div>
 
-                            <!-- Remember me & Forgot password -->
+                            <!-- Two-Factor Authentication Simulation -->
+                            <div id="twoFactorSection" class="hidden">
+                                <label class="block text-sm font-medium text-slate-300 mb-2">
+                                    Two-Factor Authentication Code
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="twoFactorCode"
+                                    maxlength="6"
+                                    class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition-all text-center tracking-widest font-mono"
+                                    placeholder="000000"
+                                >
+                                <div class="text-xs text-slate-400 mt-1 text-center">
+                                    Demo code: <span class="text-cyan-400 font-mono">123456</span>
+                                </div>
+                            </div>
+
+                            <!-- Admin Features -->
                             <div class="flex items-center justify-between">
                                 <label class="flex items-center">
-                                    <input type="checkbox" id="rememberMe" class="mr-2 text-cyan-400 rounded focus:ring-cyan-400">
-                                    <span class="text-slate-300 text-sm">Remember me</span>
+                                    <input type="checkbox" id="rememberAdmin" class="mr-2 text-cyan-400 rounded focus:ring-cyan-400">
+                                    <span class="text-slate-300 text-sm">Keep me signed in</span>
                                 </label>
-                                <button type="button" onclick="showForgotPassword()" class="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">
-                                    Forgot password?
+                                <button type="button" onclick="showAdminHelp()" class="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">
+                                    Admin Help
                                 </button>
                             </div>
 
                             <!-- Sign In Button -->
                             <button 
                                 type="submit" 
-                                id="loginBtn"
-                                class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition-all shadow-lg transform hover:scale-[1.02]"
+                                id="adminLoginBtn"
+                                class="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-orange-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-orange-400/50 transition-all shadow-lg transform hover:scale-[1.02]"
                             >
-                                Sign In to Dashboard
+                                🔐 Access Admin Dashboard
                             </button>
 
-                            <!-- Demo Access -->
-                            <button 
-                                type="button" 
-                                onclick="demoLogin()"
-                                class="w-full border border-slate-500 text-slate-300 py-3 px-6 rounded-lg font-medium hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-400/50 transition-all"
-                            >
-                                🎬 View Demo Dashboard
-                            </button>
+                            <!-- Security Notice -->
+                            <div class="bg-slate-700/50 border border-slate-600/50 rounded-lg p-3">
+                                <div class="flex items-start gap-2">
+                                    <span class="text-yellow-400 text-sm">🔒</span>
+                                    <div class="text-xs text-slate-300">
+                                        <strong>Security Notice:</strong> Administrator sessions are logged and monitored. 
+                                        Unauthorized access attempts will be reported.
+                                    </div>
+                                </div>
+                            </div>
                         </form>
 
-                        <!-- Divider -->
-                        <div class="relative my-6">
-                            <div class="absolute inset-0 flex items-center">
-                                <div class="w-full border-t border-slate-600"></div>
-                            </div>
-                            <div class="relative flex justify-center text-sm">
-                                <span class="px-2 bg-slate-800 text-slate-400">New to VeriVault?</span>
-                            </div>
-                        </div>
-
-                        <!-- Sign Up Link -->
-                        <div class="text-center">
-                            <p class="text-slate-400 mb-4">
-                                Start your free 14-day trial today
-                            </p>
-                            <button 
-                                onclick="redirectToSignup()"
-                                class="w-full bg-slate-700 text-white py-3 px-6 rounded-lg font-medium hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400/50 transition-all"
-                            >
-                                Create Free Account
+                        <!-- Emergency Contact -->
+                        <div class="text-center mt-6">
+                            <p class="text-slate-400 text-xs mb-2">Need emergency access?</p>
+                            <button onclick="showEmergencyContact()" class="text-red-400 hover:text-red-300 text-xs transition-colors">
+                                📞 Contact IT Security: 1-800-VERIVAULT
                             </button>
                         </div>
                     </div>
 
-                    <!-- Additional Links -->
-                    <div class="text-center mt-6 space-y-2">
-                        <a href="#" class="text-slate-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
-                        <span class="text-slate-600 mx-2">•</span>
-                        <a href="#" class="text-slate-400 hover:text-white text-sm transition-colors">Terms of Service</a>
-                        <span class="text-slate-600 mx-2">•</span>
-                        <a href="#" class="text-slate-400 hover:text-white text-sm transition-colors">Support</a>
+                    <!-- Admin Status Indicator -->
+                    <div class="text-center mt-4">
+                        <div class="inline-flex items-center gap-2 text-xs text-slate-400">
+                            <span class="w-2 h-2 bg-green-500 rounded-full pulse-slow"></span>
+                            All systems operational
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Forgot Password Modal -->
-    <div id="forgotPasswordModal" class="fixed inset-0 z-50 hidden">
-        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="hideForgotPassword()"></div>
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="glass rounded-xl p-8 w-full max-w-md">
-                <div class="text-center mb-6">
-                    <h3 class="text-2xl font-bold text-white mb-2">Reset Your Password</h3>
-                    <p class="text-slate-400">Enter your email address and we'll send you a reset link</p>
-                </div>
-
-                <form id="forgotPasswordForm" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
-                        <input 
-                            type="email" 
-                            required 
-                            class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all" 
-                            placeholder="your@securitycompany.com"
-                        >
-                    </div>
-                    <button 
-                        type="submit" 
-                        class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all"
-                    >
-                        Send Reset Link
-                    </button>
-                    <button 
-                        type="button" 
-                        onclick="hideForgotPassword()"
-                        class="w-full text-slate-400 hover:text-white transition-colors"
-                    >
-                        Back to Sign In
-                    </button>
-                </form>
             </div>
         </div>
     </div>
 
     <script>
-        // Form handling
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
-            const loginBtn = document.getElementById('loginBtn');
-            
-            // Show loading state
-            loginBtn.innerHTML = '<span class="inline-block animate-spin mr-2">⏳</span>Signing in...';
-            loginBtn.disabled = true;
-            
-            // Simulate login API call
-            setTimeout(() => {
-                if (email && password) {
-                    // Demo credentials check
-                    if (email === 'demo@verivault.com' && password === 'demo123') {
-                        showNotification('Welcome back! Redirecting to your dashboard...', 'success');
-                        setTimeout(() => {
-                            // In real app, redirect to dashboard
-                            window.location.href = 'dashboard.html'; // Would be the dashboard page
-                        }, 1500);
-                    } else {
-                        // Simulate successful login for any valid email/password
-                        showNotification('Login successful! Redirecting to dashboard...', 'success');
-                        setTimeout(() => {
-                            // In real app, redirect to dashboard
-                            window.location.href = 'dashboard.html'; // Would be the dashboard page
-                        }, 1500);
-                    }
-                } else {
-                    showNotification('Please check your credentials and try again.', 'error');
-                    loginBtn.innerHTML = 'Sign In to Dashboard';
-                    loginBtn.disabled = false;
-                }
-            }, 1500);
-        });
-
-        // Demo login function
-        function demoLogin() {
-            document.getElementById('email').value = 'demo@verivault.com';
-            document.getElementById('password').value = 'demo123';
-            showNotification('Demo credentials loaded! Click "Sign In" to continue.', 'info');
+        // Auto-fill demo credentials
+        function fillAdminCredentials() {
+            document.getElementById('adminEmail').value = 'admin@verivault.com';
+            document.getElementById('adminPassword').value = 'admin123';
+            showNotification('Demo admin credentials loaded! Click "Access Admin Dashboard" to continue.', 'info');
         }
 
         // Password toggle
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleBtn = document.getElementById('togglePasswordBtn');
+        function toggleAdminPassword() {
+            const passwordInput = document.getElementById('adminPassword');
+            const toggleBtn = document.getElementById('toggleAdminPasswordBtn');
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
@@ -321,30 +280,75 @@
             }
         }
 
-        // Forgot password functions
-        function showForgotPassword() {
-            document.getElementById('forgotPasswordModal').classList.remove('hidden');
-        }
-
-        function hideForgotPassword() {
-            document.getElementById('forgotPasswordModal').classList.add('hidden');
-        }
-
-        // Forgot password form
-        document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+        // Admin login form handling
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = e.target.querySelector('input[type="email"]').value;
             
-            if (email) {
-                showNotification(`Password reset link sent to ${email}`, 'success');
-                hideForgotPassword();
-            }
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const loginBtn = document.getElementById('adminLoginBtn');
+            
+            // Show loading state
+            loginBtn.innerHTML = '<span class="inline-block animate-spin mr-2">⏳</span>Verifying Admin Access...';
+            loginBtn.disabled = true;
+            
+            // Simulate security check
+            setTimeout(() => {
+                if (email && password) {
+                    // Show two-factor authentication
+                    showTwoFactorAuth();
+                } else {
+                    showNotification('Please enter valid admin credentials.', 'error');
+                    loginBtn.innerHTML = '🔐 Access Admin Dashboard';
+                    loginBtn.disabled = false;
+                }
+            }, 2000);
         });
 
-        // Redirect to signup
-        function redirectToSignup() {
-            // In a real app, this would redirect to the signup page
-            window.location.href = 'signup.html'; // Would be the signup page
+        // Two-factor authentication simulation
+        function showTwoFactorAuth() {
+            document.getElementById('twoFactorSection').classList.remove('hidden');
+            document.getElementById('adminLoginBtn').innerHTML = '🔐 Verify & Access Dashboard';
+            showNotification('Two-factor authentication required for admin access.', 'info');
+            
+            // Auto-focus on 2FA input
+            document.getElementById('twoFactorCode').focus();
+            
+            // Handle 2FA verification
+            document.getElementById('twoFactorCode').addEventListener('input', function(e) {
+                if (e.target.value.length === 6) {
+                    setTimeout(() => {
+                        if (e.target.value === '123456') {
+                            completeAdminLogin();
+                        } else {
+                            showNotification('Invalid 2FA code. Try: 123456', 'error');
+                        }
+                    }, 1000);
+                }
+            });
+        }
+
+        // Complete admin login
+        function completeAdminLogin() {
+            showNotification('🚀 Admin authentication successful!', 'success');
+            showNotification('🛡️ Elevated privileges granted. Redirecting to admin dashboard...', 'success');
+            
+            setTimeout(() => {
+                // Simulate redirect to admin dashboard
+                alert('🎉 Welcome to VeriVault Admin Portal!\n\n✅ Full system access granted\n✅ All client data accessible\n✅ Advanced reporting unlocked\n✅ User management enabled\n\nYou now have the complete security operations experience!');
+                
+                // In real app, redirect to admin dashboard
+                window.location.href = 'dashboard.html'; // Your actual dashboard
+            }, 2000);
+        }
+
+        // Helper functions
+        function showAdminHelp() {
+            alert('🆘 VeriVault Admin Support\n\n📧 Email: admin-support@verivault.com\n📞 Phone: 1-800-VERIVAULT\n💬 Live Chat: Available 24/7\n\n🔐 For security purposes, admin credentials are only provided to authorized personnel.');
+        }
+
+        function showEmergencyContact() {
+            showNotification('Emergency IT Security contacted. Expect a call within 15 minutes.', 'info');
         }
 
         // Notification system
@@ -372,13 +376,6 @@
                 }
             }, 5000);
         }
-
-        // Close modal on escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                hideForgotPassword();
-            }
-        });
 
         // Initialize floating animations
         document.addEventListener('DOMContentLoaded', function() {
