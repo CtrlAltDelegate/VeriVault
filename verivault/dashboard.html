@@ -1,207 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VeriVault - AI Security Intelligence</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        .tab-content.hidden { display: none !important; }
-        .tab-content { display: block; }
-        body { overflow-x: hidden; }
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .notification {
-            animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        .pulse { animation: pulse 2s infinite; }
-    </style>
-</head>
-<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
-    <!-- Notification System -->
-    <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2 max-w-sm"></div>
-
-    <!-- Top Navigation Tabs -->
-    <div class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex space-x-8">
-                <button onclick="switchTab('logger')" id="tab-logger" class="py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400/10">
-                    📝 Daily Log System
-                </button>
-                <button onclick="switchTab('reports')" id="tab-reports" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
-                    📊 Report Generation
-                </button>
-                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
-                    📈 Analytics Dashboard
-                </button>
-                <!-- Hidden BTC tabs for future use -->
-                <button onclick="switchTab('intake')" id="tab-intake" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400 hidden">
-                    🔐 Security Audit Intake
-                </button>
-                <button onclick="switchTab('auditTool')" id="tab-auditTool" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400 hidden">
-                    🔍 Audit Analysis Tool
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- REPORTS TAB CONTENT -->
-    <div id="content-reports" class="tab-content">
-        <div class="flex h-screen">
-            <!-- Left Sidebar for Reports -->
-            <div class="w-80 glass border-r border-white/10 p-6">
-                <!-- Logo -->
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-lg">V</span>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold text-white">VeriVault</h1>
-                        <p class="text-sm text-cyan-400">AI Security Intelligence</p>
-                    </div>
-                </div>
-
-                <!-- Report Types -->
-                <div class="space-y-2">
-                    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
-                    
-                    <div onclick="selectReport('daily-log')" class="report-item active bg-blue-600 p-3 rounded-lg cursor-pointer transition-all hover:bg-blue-700 transform hover:scale-105">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                                <span class="text-white text-sm">📅</span>
-                            </div>
-                            <div>
-                                <div class="text-white font-medium">Daily Log</div>
-                                <div class="text-blue-200 text-xs">Daily operations summary</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div onclick="selectReport('incident-medical')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
-                                <span class="text-white text-sm">🏥</span>
-                            </div>
-                            <div>
-                                <div class="text-white font-medium">Medical Incident</div>
-                                <div class="text-slate-400 text-xs">Injury & emergency reports</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div onclick="selectReport('incident-non-medical')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                                <span class="text-white text-sm">⚠️</span>
-                            </div>
-                            <div>
-                                <div class="text-white font-medium">Security Incident</div>
-                                <div class="text-slate-400 text-xs">Non-medical incidents</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div onclick="selectReport('annual-security')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                                <span class="text-white text-sm">🛡️</span>
-                            </div>
-                            <div>
-                                <div class="text-white font-medium">Annual Security</div>
-                                <div class="text-slate-400 text-xs">Threat analysis & planning</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div onclick="selectReport('systems-audit')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                                <span class="text-white text-sm">⚙️</span>
-                            </div>
-                            <div>
-                                <div class="text-white font-medium">Systems Audit</div>
-                                <div class="text-slate-400 text-xs">Equipment & technology</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div onclick="selectReport('discrepancy')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
-                                <span class="text-white text-sm">🔍</span>
-                            </div>
-                            <div>
-                                <div class="text-white font-medium">Discrepancy Report</div>
-                                <div class="text-slate-400 text-xs">Equipment issues</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div onclick="selectReport('vehicle-inspection')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
-                                <span class="text-white text-sm">🚗</span>
-                            </div>
-                            <div>
-                                <div class="text-white font-medium">Vehicle Inspection</div>
-                                <div class="text-slate-400 text-xs">Fleet management</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Reports -->
-                <div class="mt-8">
-                    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Recent Reports</h3>
-                    <div class="space-y-2">
-                        <div class="bg-slate-700/50 p-2 rounded text-xs">
-                            <div class="text-white font-medium">Daily Log - Johnson Estate</div>
-                            <div class="text-slate-400">Generated 2 hours ago</div>
-                        </div>
-                        <div class="bg-slate-700/50 p-2 rounded text-xs">
-                            <div class="text-white font-medium">Security Audit - Metro Plaza</div>
-                            <div class="text-slate-400">Generated yesterday</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Content Area -->
-            <div class="flex-1 p-8 overflow-y-auto">
-                <div class="max-w-4xl mx-auto">
-                    <!-- Header -->
-                    <div class="mb-8">
-                        <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log</h2>
-                        <p id="reportDescription" class="text-slate-400">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
-                    </div>
-
-                    <!-- Form -->
-                    <div class="glass rounded-xl p-6">
-                        <!-- Basic Info -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">👤 Client Name</label>
-                                <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">📅 Report Date</label>
-                                <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                            </div>
-                        </div>
-
-                        <!-- CSV Upload Section -->
+<!-- CSV Upload Section -->
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data for AI Analysis (Optional)</label>
                             <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed group">
@@ -228,564 +25,6 @@
                                 💾 Save Draft
                             </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ENHANCED DAILY LOG SYSTEM TAB CONTENT -->
-    <div id="content-logger" class="tab-content">
-        <div class="w-full p-8">
-            <div class="max-w-7xl mx-auto">
-                <!-- Enhanced Header -->
-                <div class="mb-8">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h2 class="text-3xl font-bold text-white mb-2">📝 Daily Log System</h2>
-                            <p class="text-slate-400">Professional security activity logging with real-time search and categorization</p>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="text-right">
-                                <div class="text-sm text-slate-400">Current Shift</div>
-                                <div id="currentShift" class="text-lg font-semibold text-cyan-400">Day Shift</div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-sm text-slate-400">Today's Entries</div>
-                                <div id="totalEntries" class="text-lg font-semibold text-white">0</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                    <!-- Enhanced Log Entry Form -->
-                    <div class="xl:col-span-2">
-                        <div class="glass rounded-xl p-6 mb-6">
-                            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                                <span class="text-green-400">➕</span>New Log Entry
-                            </h3>
-
-                            <!-- Quick Entry Type Selection -->
-                            <div class="mb-6">
-                                <label class="block text-sm font-medium text-slate-300 mb-3">Entry Category</label>
-                                <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
-                                    <button onclick="selectLogCategory('staff')" class="log-category-btn active" data-category="staff">
-                                        <div class="bg-blue-600 p-3 rounded-lg text-center hover:bg-blue-700 transition-all transform hover:scale-105">
-                                            <div class="text-xl mb-1">👥</div>
-                                            <div class="text-white text-xs font-medium">Staff</div>
-                                        </div>
-                                    </button>
-                                    <button onclick="selectLogCategory('visitor')" class="log-category-btn" data-category="visitor">
-                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
-                                            <div class="text-xl mb-1">🏃</div>
-                                            <div class="text-white text-xs font-medium">Visitor</div>
-                                        </div>
-                                    </button>
-                                    <button onclick="selectLogCategory('vendor')" class="log-category-btn" data-category="vendor">
-                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
-                                            <div class="text-xl mb-1">🔧</div>
-                                            <div class="text-white text-xs font-medium">Vendor</div>
-                                        </div>
-                                    </button>
-                                    <button onclick="selectLogCategory('delivery')" class="log-category-btn" data-category="delivery">
-                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
-                                            <div class="text-xl mb-1">📦</div>
-                                            <div class="text-white text-xs font-medium">Delivery</div>
-                                        </div>
-                                    </button>
-                                    <button onclick="selectLogCategory('incident')" class="log-category-btn" data-category="incident">
-                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
-                                            <div class="text-xl mb-1">⚠️</div>
-                                            <div class="text-white text-xs font-medium">Incident</div>
-                                        </div>
-                                    </button>
-                                    <button onclick="selectLogCategory('patrol')" class="log-category-btn" data-category="patrol">
-                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
-                                            <div class="text-xl mb-1">🚶</div>
-                                            <div class="text-white text-xs font-medium">Patrol</div>
-                                        </div>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Enhanced Form Fields -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Timestamp</label>
-                                    <input type="datetime-local" id="logTimestamp" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Location</label>
-                                    <select id="logLocation" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                        <option value="">Select location</option>
-                                        <option value="main_entrance">Main Entrance</option>
-                                        <option value="lobby">Lobby</option>
-                                        <option value="parking_garage">Parking Garage</option>
-                                        <option value="loading_dock">Loading Dock</option>
-                                        <option value="perimeter">Perimeter</option>
-                                        <option value="office_area">Office Area</option>
-                                        <option value="emergency_exit">Emergency Exit</option>
-                                        <option value="rooftop">Rooftop</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Name/Subject</label>
-                                    <input type="text" id="logSubject" placeholder="Enter name or subject" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-300 mb-2">Action/Status</label>
-                                    <select id="logAction" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                        <option value="">Select action</option>
-                                        <option value="arrived">Arrived</option>
-                                        <option value="departed">Departed</option>
-                                        <option value="break_start">Break Started</option>
-                                        <option value="break_end">Break Ended</option>
-                                        <option value="patrol_complete">Patrol Completed</option>
-                                        <option value="incident_reported">Incident Reported</option>
-                                        <option value="system_check">System Check</option>
-                                        <option value="maintenance">Maintenance</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Priority Level -->
-                            <div class="mb-6">
-                                <label class="block text-sm font-medium text-slate-300 mb-3">Priority Level</label>
-                                <div class="flex gap-4">
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="radio" name="priority" value="low" checked class="mr-2 text-green-400">
-                                        <span class="flex items-center gap-2">
-                                            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
-                                            <span class="text-slate-300">Low</span>
-                                        </span>
-                                    </label>
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="radio" name="priority" value="medium" class="mr-2 text-yellow-400">
-                                        <span class="flex items-center gap-2">
-                                            <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
-                                            <span class="text-slate-300">Medium</span>
-                                        </span>
-                                    </label>
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="radio" name="priority" value="high" class="mr-2 text-red-400">
-                                        <span class="flex items-center gap-2">
-                                            <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-                                            <span class="text-slate-300">High</span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Enhanced Notes Field -->
-                            <div class="mb-6">
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Detailed Notes</label>
-                                <textarea id="logNotes" rows="4" placeholder="Enter detailed observations, actions taken, or additional context..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"></textarea>
-                                <div class="text-xs text-slate-400 mt-1">Tip: Include badge numbers, license plates, or specific details</div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="flex gap-4">
-                                <button onclick="addLogEntry()" class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
-                                    ✅ Add to Log
-                                </button>
-                                <button onclick="clearLogForm()" class="px-6 bg-slate-600 text-white py-4 rounded-lg font-semibold hover:bg-slate-500 transition-all">
-                                    🗑️ Clear
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Search and Filter Section -->
-                        <div class="glass rounded-xl p-6">
-                            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                                <span class="text-blue-400">🔍</span>Search & Filter
-                            </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <input type="text" id="searchLogs" placeholder="Search entries..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                </div>
-                                <div>
-                                    <select id="filterCategory" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                        <option value="">All Categories</option>
-                                        <option value="staff">Staff</option>
-                                        <option value="visitor">Visitor</option>
-                                        <option value="vendor">Vendor</option>
-                                        <option value="delivery">Delivery</option>
-                                        <option value="incident">Incident</option>
-                                        <option value="patrol">Patrol</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <select id="filterPriority" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                        <option value="">All Priorities</option>
-                                        <option value="low">Low Priority</option>
-                                        <option value="medium">Medium Priority</option>
-                                        <option value="high">High Priority</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Enhanced Sidebar -->
-                    <div class="space-y-6">
-                        <!-- Today's Summary -->
-                        <div class="glass rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <span class="text-cyan-400">📊</span>Today's Summary
-                            </h3>
-                            <div class="space-y-3">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-slate-300 flex items-center gap-2">
-                                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>Staff Events
-                                    </span>
-                                    <span id="staffLogCount" class="text-blue-400 font-semibold">0</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-slate-300 flex items-center gap-2">
-                                        <span class="w-2 h-2 bg-purple-500 rounded-full"></span>Visitor Events
-                                    </span>
-                                    <span id="visitorLogCount" class="text-purple-400 font-semibold">0</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-slate-300 flex items-center gap-2">
-                                        <span class="w-2 h-2 bg-orange-500 rounded-full"></span>Vendor Events
-                                    </span>
-                                    <span id="vendorLogCount" class="text-orange-400 font-semibold">0</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-slate-300 flex items-center gap-2">
-                                        <span class="w-2 h-2 bg-green-500 rounded-full"></span>Deliveries
-                                    </span>
-                                    <span id="deliveryLogCount" class="text-green-400 font-semibold">0</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-slate-300 flex items-center gap-2">
-                                        <span class="w-2 h-2 bg-red-500 rounded-full"></span>Incidents
-                                    </span>
-                                    <span id="incidentLogCount" class="text-red-400 font-semibold">0</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-slate-300 flex items-center gap-2">
-                                        <span class="w-2 h-2 bg-gray-500 rounded-full"></span>Patrols
-                                    </span>
-                                    <span id="patrolLogCount" class="text-gray-400 font-semibold">0</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Priority Alerts -->
-                        <div class="glass rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <span class="text-red-400">🚨</span>Priority Alerts
-                            </h3>
-                            <div id="priorityAlerts" class="space-y-2">
-                                <p class="text-slate-400 text-center text-sm">No high-priority items</p>
-                            </div>
-                        </div>
-
-                        <!-- Quick Actions -->
-                        <div class="glass rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <span class="text-yellow-400">⚡</span>Quick Actions
-                            </h3>
-                            <div class="space-y-3">
-                                <button onclick="exportTodaysLog()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-all text-sm">
-                                    📄 Export Today's Log
-                                </button>
-                                <button onclick="startPatrolLog()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-purple-700 transition-all text-sm">
-                                    🚶 Start Patrol Log
-                                </button>
-                                <button onclick="reportIncident()" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-all text-sm">
-                                    ⚠️ Report Incident
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Enhanced Log Entries Display -->
-                <div class="mt-8">
-                    <div class="glass rounded-xl p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                                <span class="text-slate-400">📋</span>Log Entries
-                            </h3>
-                            <div class="flex items-center gap-4">
-                                <select id="sortOrder" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm">
-                                    <option value="newest">Newest First</option>
-                                    <option value="oldest">Oldest First</option>
-                                    <option value="priority">By Priority</option>
-                                </select>
-                                <button onclick="refreshLogView()" class="bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition-all text-sm">
-                                    🔄 Refresh
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div id="logEntriesContainer" class="space-y-3 max-h-96 overflow-y-auto">
-                            <div class="text-center text-slate-400 py-8">
-                                <div class="text-4xl mb-4">📝</div>
-                                <p>No log entries yet today</p>
-                                <p class="text-sm mt-2">Start by adding your first entry above</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>Vendor Visits:</span>
-                                    <span id="vendorCount" class="text-orange-400 font-semibold">0</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-slate-300">Deliveries:</span>
-                                    <span id="deliveryCount" class="text-green-400 font-semibold">0</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-slate-300">Guest Visits:</span>
-                                    <span id="guestCount" class="text-purple-400 font-semibold">0</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SECURITY AUDIT INTAKE TAB -->
-    <div id="content-intake" class="tab-content hidden">
-        <div class="w-full p-8">
-            <div class="max-w-5xl mx-auto">
-                <div class="mb-8 text-center">
-                    <h2 class="text-4xl font-bold text-white mb-4">🔐 VeriVault SecureScope</h2>
-                    <p class="text-xl text-cyan-400 mb-2">AI-Powered Security Audit & Camera Placement Analysis</p>
-                    <p class="text-slate-400">Get professional security recommendations tailored to your property and budget</p>
-                </div>
-
-                <div class="glass rounded-xl p-8">
-                    <!-- Pricing Tiers -->
-                    <div class="mb-8">
-                        <h3 class="text-2xl font-bold text-white mb-6 text-center">Choose Your Security Audit Package</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div onclick="selectPackage('starter')" class="package-item cursor-pointer relative bg-gradient-to-br from-slate-700 to-slate-800 p-6 rounded-xl border border-white/10 hover:border-cyan-400/50 transition-all transform hover:scale-105">
-                                <div class="text-center">
-                                    <div class="text-3xl mb-3">🏠</div>
-                                    <h4 class="text-xl font-bold text-white mb-2">Starter Audit</h4>
-                                    <div class="text-3xl font-bold text-cyan-400 mb-4">$799</div>
-                                    <ul class="text-slate-300 text-sm space-y-2">
-                                        <li>✅ Property layout analysis</li>
-                                        <li>✅ Basic camera placement plan</li>
-                                        <li>✅ Equipment recommendations</li>
-                                        <li>✅ PDF security report</li>
-                                        <li>✅ 48-hour delivery</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div onclick="selectPackage('premium')" class="package-item cursor-pointer active relative bg-gradient-to-br from-cyan-600 to-blue-700 p-6 rounded-xl border-2 border-cyan-400 hover:border-cyan-300 transition-all transform hover:scale-105">
-                                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                                    <span class="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold">MOST POPULAR</span>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-3xl mb-3">🏢</div>
-                                    <h4 class="text-xl font-bold text-white mb-2">Premium Audit</h4>
-                                    <div class="text-3xl font-bold text-white mb-4">$2,499</div>
-                                    <ul class="text-blue-100 text-sm space-y-2">
-                                        <li>✅ Everything in Starter</li>
-                                        <li>✅ Detailed threat analysis</li>
-                                        <li>✅ 3D visualization mockups</li>
-                                        <li>✅ Budget-tier recommendations</li>
-                                        <li>✅ Installation partner referrals</li>
-                                        <li>✅ 24-hour delivery</li>
-                                        <li>✅ 30-min consultation call</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div onclick="selectPackage('enterprise')" class="package-item cursor-pointer relative bg-gradient-to-br from-purple-600 to-pink-700 p-6 rounded-xl border border-white/10 hover:border-purple-400/50 transition-all transform hover:scale-105">
-                                <div class="text-center">
-                                    <div class="text-3xl mb-3">🏰</div>
-                                    <h4 class="text-xl font-bold text-white mb-2">Enterprise Audit</h4>
-                                    <div class="text-3xl font-bold text-white mb-4">$5,999</div>
-                                    <ul class="text-purple-100 text-sm space-y-2">
-                                        <li>✅ Everything in Premium</li>
-                                        <li>✅ On-site visit option</li>
-                                        <li>✅ Multi-building analysis</li>
-                                        <li>✅ Advanced threat modeling</li>
-                                        <li>✅ Custom security protocols</li>
-                                        <li>✅ Implementation timeline</li>
-                                        <li>✅ 1-hour strategy session</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Contact Information -->
-                    <div class="bg-white/5 rounded-lg p-6">
-                        <h4 class="text-xl font-bold text-white mb-4">📞 Contact Information</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
-                                <input type="text" placeholder="Your name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
-                                <input type="email" placeholder="your.email@domain.com" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
-                                <input type="tel" placeholder="(555) 123-4567" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
-                                <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                    <option value="">Select budget range</option>
-                                    <option value="5k">$2,500 - $5,000</option>
-                                    <option value="10k">$5,000 - $10,000</option>
-                                    <option value="25000-50000">$25,000 - $50,000</option>
-                                    <option value="50000-100000">$50,000 - $100,000</option>
-                                    <option value="100000+">$100,000+</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-6">
-                            <button onclick="generateRecommendations()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
-                                🔄 Generate AI Security Recommendations
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- AUDIT ANALYSIS TOOL TAB -->
-    <div id="content-auditTool" class="tab-content hidden">
-        <div class="w-full p-8">
-            <div class="max-w-6xl mx-auto">
-                <div class="mb-8">
-                    <h2 class="text-3xl font-bold text-white mb-2">🔍 Security Audit Analysis Tool</h2>
-                    <p class="text-slate-400">Internal tool for conducting comprehensive security audits with photo analysis</p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Property Analysis Section -->
-                    <div class="glass rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-white mb-4">🏠 Property Analysis</h3>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Property Address/Name</label>
-                                <input type="text" placeholder="Enter property for analysis" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Property Type</label>
-                                <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                    <option value="">Select type</option>
-                                    <option value="residential_estate">Residential Estate</option>
-                                    <option value="commercial">Commercial Building</option>
-                                    <option value="industrial">Industrial Facility</option>
-                                    <option value="retail">Retail Location</option>
-                                    <option value="mixed_use">Mixed Use</option>
-                                    <option value="government">Government Building</option>
-                                    <option value="educational">Educational Facility</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Property Layout/Aerial View</label>
-                                <div onclick="document.getElementById('propertyLayout').click()" class="border-2 border-dashed border-cyan-400/30 rounded-lg p-4 text-center hover:border-cyan-400/50 transition-colors cursor-pointer bg-white/5 group">
-                                    <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">🛰️</div>
-                                    <p class="text-slate-300 text-sm mb-1">Upload aerial view, Google Earth screenshot, or property layout</p>
-                                    <p class="text-slate-400 text-xs">PNG, JPG, PDF up to 10MB</p>
-                                </div>
-                                <input type="file" id="propertyLayout" accept="image/*,.pdf" style="display: none;" onchange="handleFileUpload(this, 'property')">
-                                <div id="propertyStatus" class="mt-2 text-sm hidden"></div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Current Camera Locations & Views</label>
-                                <div onclick="document.getElementById('cameraPhotos').click()" class="border-2 border-dashed border-green-400/30 rounded-lg p-4 text-center hover:border-green-400/50 transition-colors cursor-pointer bg-white/5 group">
-                                    <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">📹</div>
-                                    <p class="text-slate-300 text-sm mb-1">Upload photos of existing cameras and their current views</p>
-                                    <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
-                                </div>
-                                <input type="file" id="cameraPhotos" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'camera')">
-                                <div id="cameraStatus" class="mt-2 text-sm hidden"></div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Site Photos (Optional)</label>
-                                <div onclick="document.getElementById('sitePhotos').click()" class="border-2 border-dashed border-purple-400/30 rounded-lg p-4 text-center hover:border-purple-400/50 transition-colors cursor-pointer bg-white/5 group">
-                                    <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">📸</div>
-                                    <p class="text-slate-300 text-sm mb-1">Upload additional site photos for context</p>
-                                    <p class="text-slate-400 text-xs">Multiple files accepted - PNG, JPG up to 5MB each</p>
-                                </div>
-                                <input type="file" id="sitePhotos" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(this, 'site')">
-                                <div id="siteStatus" class="mt-2 text-sm hidden"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recommendations Engine -->
-                    <div class="glass rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-white mb-4">💡 Recommendations Engine</h3>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
-                                <select class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                                    <option value="">Select budget</option>
-                                    <option value="2500-5000">$2,500 - $5,000</option>
-                                    <option value="5000-10000">$5,000 - $10,000</option>
-                                    <option value="10000-25000">$10,000 - $25,000</option>
-                                    <option value="25000-50000">$25,000 - $50,000</option>
-                                    <option value="50000+">$50,000+</option>
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Priority Focus</label>
-                                <div class="space-y-2">
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="mr-2 text-cyan-400 rounded">
-                                        <span class="text-slate-300">Perimeter Security</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="mr-2 text-cyan-400 rounded">
-                                        <span class="text-slate-300">Access Control</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="mr-2 text-cyan-400 rounded">
-                                        <span class="text-slate-300">Indoor Monitoring</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" class="mr-2 text-cyan-400 rounded">
-                                        <span class="text-slate-300">Vehicle Areas</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <button onclick="runAuditAnalysis()" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg transform hover:scale-105">
-                                🎯 Generate AI Recommendations
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Analysis Results -->
-                <div class="mt-8 glass rounded-xl p-6">
-                    <h3 class="text-xl font-bold text-white mb-4">📊 Analysis Results</h3>
-                    <div id="analysisResults" class="bg-slate-800/50 rounded-lg p-4">
-                        <p class="text-slate-400 text-center">Run analysis to see AI-powered security recommendations and camera placement suggestions.</p>
                     </div>
                 </div>
             </div>
@@ -885,6 +124,68 @@
         </div>
     </div>
 
+    <!-- SECURITY AUDIT INTAKE TAB -->
+    <div id="content-intake" class="tab-content hidden">
+        <div class="w-full p-8">
+            <div class="max-w-5xl mx-auto">
+                <div class="mb-8 text-center">
+                    <h2 class="text-4xl font-bold text-white mb-4">🔐 VeriVault SecureScope</h2>
+                    <p class="text-xl text-cyan-400 mb-2">AI-Powered Security Audit & Camera Placement Analysis</p>
+                    <p class="text-slate-400">Get professional security recommendations tailored to your property and budget</p>
+                </div>
+
+                <div class="glass rounded-xl p-8">
+                    <!-- Contact Information -->
+                    <div class="bg-white/5 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-white mb-4">📞 Contact Information</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+                                <input type="text" placeholder="Your name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+                                <input type="email" placeholder="your.email@domain.com" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <button onclick="generateRecommendations()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
+                                🔄 Generate AI Security Recommendations
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUDIT ANALYSIS TOOL TAB -->
+    <div id="content-auditTool" class="tab-content hidden">
+        <div class="w-full p-8">
+            <div class="max-w-6xl mx-auto">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">🔍 Security Audit Analysis Tool</h2>
+                    <p class="text-slate-400">Internal tool for conducting comprehensive security audits</p>
+                </div>
+
+                <div class="glass rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">🏠 Property Analysis</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Property Address/Name</label>
+                            <input type="text" placeholder="Enter property for analysis" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                        </div>
+                        
+                        <button onclick="runAuditAnalysis()" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg transform hover:scale-105">
+                            🎯 Generate AI Recommendations
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Global variables for enhanced daily log system
         var currentTab = 'logger'; // Start with daily log system
@@ -907,6 +208,30 @@
         };
         var selectedLogCategory = 'staff';
         var currentShift = 'Day Shift';
+
+        // Report templates
+        var reportTemplates = {
+            'daily-log': {
+                title: 'Daily Log',
+                description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
+                template: 'DAILY OPERATIONS LOG\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Daily Operations Summary\n\nOPERATIONAL OVERVIEW:\n• Staff deployment and assignments\n• Security checkpoint activities\n• Visitor management and access control\n• Equipment status and functionality\n• Notable incidents or observations\n• Communication logs\n\nRECOMMENDATIONS:\n• Continued monitoring protocols\n• Equipment maintenance schedules\n• Staff training updates\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'incident-medical': {
+                title: 'Medical Incident Report',
+                description: 'Detailed documentation for injury and emergency situations',
+                template: 'MEDICAL INCIDENT REPORT\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Medical Emergency Documentation\n\nINCIDENT DETAILS:\n• Time and location of incident\n• Individuals involved and injuries sustained\n• Immediate response actions taken\n• Medical personnel contacted\n\nPREVENTION MEASURES:\n• Risk assessment updates\n• Safety protocol improvements\n• Additional training requirements\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'incident-non-medical': {
+                title: 'Security Incident Report',
+                description: 'Documentation for security breaches and non-medical emergencies',
+                template: 'SECURITY INCIDENT REPORT\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Non-Medical Security Incident\n\nINCIDENT CLASSIFICATION:\n• Security breach assessment\n• Unauthorized access attempts\n• Equipment malfunction or damage\n• Suspicious activity documentation\n\nREMEDIATION PLAN:\n• Security enhancement recommendations\n• Policy updates and revisions\n• Additional monitoring requirements\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'systems-audit': {
+                title: 'Systems Audit Report',
+                description: 'Technical evaluation of security equipment and systems',
+                template: 'SYSTEMS AUDIT REPORT\n\nClient: [CLIENT_NAME]\nAudit Date: [REPORT_DATE]\nReport Type: Technology and Equipment Assessment\n\nSYSTEM PERFORMANCE ANALYSIS:\n• Security camera network status\n• Access control system functionality\n• Communication equipment assessment\n\nOPTIMIZATION RECOMMENDATIONS:\n• System upgrade priorities\n• Performance enhancement measures\n• Integration improvement opportunities\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            }
+        };
 
         // Enhanced daily log functions
         function selectLogCategory(category) {
@@ -1288,97 +613,6 @@
             showNotification('Log view refreshed', 'success');
         }
 
-        // Search and filter event listeners
-        function initializeSearchAndFilters() {
-            var searchInput = document.getElementById('searchLogs');
-            var categoryFilter = document.getElementById('filterCategory');
-            var priorityFilter = document.getElementById('filterPriority');
-            var sortOrder = document.getElementById('sortOrder');
-            
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    setTimeout(updateLogEntriesDisplay, 300);
-                });
-            }
-            
-            if (categoryFilter) {
-                categoryFilter.addEventListener('change', updateLogEntriesDisplay);
-            }
-            
-            if (priorityFilter) {
-                priorityFilter.addEventListener('change', updateLogEntriesDisplay);
-            }
-            
-            if (sortOrder) {
-                sortOrder.addEventListener('change', updateLogEntriesDisplay);
-            }
-        }
-
-        // Report templates
-        var reportTemplates = {
-            'daily-log': {
-                title: 'Daily Log',
-                description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
-                template: 'DAILY OPERATIONS LOG\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Daily Operations Summary\n\nOPERATIONAL OVERVIEW:\n• Staff deployment and assignments\n• Security checkpoint activities\n• Visitor management and access control\n• Equipment status and functionality\n• Notable incidents or observations\n• Communication logs\n\nRECOMMENDATIONS:\n• Continued monitoring protocols\n• Equipment maintenance schedules\n• Staff training updates\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
-            },
-            'incident-medical': {
-                title: 'Medical Incident Report',
-                description: 'Detailed documentation for injury and emergency situations',
-                template: 'MEDICAL INCIDENT REPORT\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Medical Emergency Documentation\n\nINCIDENT DETAILS:\n• Time and location of incident\n• Individuals involved and injuries sustained\n• Immediate response actions taken\n• Medical personnel contacted\n\nPREVENTION MEASURES:\n• Risk assessment updates\n• Safety protocol improvements\n• Additional training requirements\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
-            },
-            'incident-non-medical': {
-                title: 'Security Incident Report',
-                description: 'Documentation for security breaches and non-medical emergencies',
-                template: 'SECURITY INCIDENT REPORT\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Non-Medical Security Incident\n\nINCIDENT CLASSIFICATION:\n• Security breach assessment\n• Unauthorized access attempts\n• Equipment malfunction or damage\n• Suspicious activity documentation\n\nREMEDIATION PLAN:\n• Security enhancement recommendations\n• Policy updates and revisions\n• Additional monitoring requirements\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
-            },
-            'annual-security': {
-                title: 'Annual Security Assessment',
-                description: 'Comprehensive yearly security analysis',
-                template: 'ANNUAL SECURITY ASSESSMENT\n\nClient: [CLIENT_NAME]\nAssessment Period: [REPORT_DATE]\nReport Type: Comprehensive Security Analysis\n\nTHREAT LANDSCAPE ANALYSIS:\n• Current security environment assessment\n• Emerging threat identification\n• Risk probability and impact evaluation\n\nSTRATEGIC RECOMMENDATIONS:\n• Security enhancement priorities\n• Technology upgrade requirements\n• Budget allocation recommendations\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
-            },
-            'systems-audit': {
-                title: 'Systems Audit Report',
-                description: 'Technical evaluation of security equipment and systems',
-                template: 'SYSTEMS AUDIT REPORT\n\nClient: [CLIENT_NAME]\nAudit Date: [REPORT_DATE]\nReport Type: Technology and Equipment Assessment\n\nSYSTEM PERFORMANCE ANALYSIS:\n• Security camera network status\n• Access control system functionality\n• Communication equipment assessment\n\nOPTIMIZATION RECOMMENDATIONS:\n• System upgrade priorities\n• Performance enhancement measures\n• Integration improvement opportunities\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
-            },
-            'discrepancy': {
-                title: 'Discrepancy Report',
-                description: 'Documentation of equipment issues and operational inconsistencies',
-                template: 'DISCREPANCY REPORT\n\nClient: [CLIENT_NAME]\nReport Date: [REPORT_DATE]\nReport Type: Operational Discrepancy Documentation\n\nDISCREPANCY IDENTIFICATION:\n• Equipment malfunction details\n• Policy compliance violations\n• Procedural inconsistencies\n\nCORRECTIVE ACTION PLAN:\n• Immediate remediation steps\n• Long-term solution development\n• Prevention strategy implementation\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
-            },
-            'vehicle-inspection': {
-                title: 'Vehicle Inspection Report',
-                description: 'Vehicle safety and operational readiness assessment',
-                template: 'VEHICLE INSPECTION REPORT\n\nClient: [CLIENT_NAME]\nInspection Date: [REPORT_DATE]\nReport Type: Fleet Vehicle Assessment\n\nVEHICLE IDENTIFICATION:\n• Make, model, and year\n• Vehicle identification number\n• License plate information\n\nSAFETY INSPECTION:\n• Brake system functionality\n• Tire condition and pressure\n• Lighting system operation\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
-            }
-        };
-
-        // Notification system
-        function showNotification(message, type = 'success') {
-            var container = document.getElementById('notificationContainer');
-            var notification = document.createElement('div');
-            notification.className = `notification glass rounded-lg p-4 ${type === 'success' ? 'border-green-500/50' : type === 'error' ? 'border-red-500/50' : 'border-blue-500/50'}`;
-            
-            var icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
-            var color = type === 'success' ? 'text-green-400' : type === 'error' ? 'text-red-400' : 'text-blue-400';
-            
-            notification.innerHTML = `
-                <div class="flex items-center gap-3">
-                    <span class="text-lg">${icon}</span>
-                    <span class="${color}">${message}</span>
-                    <button onclick="this.parentElement.parentElement.remove()" class="ml-auto text-slate-400 hover:text-white">×</button>
-                </div>
-            `;
-            
-            container.appendChild(notification);
-            
-            setTimeout(function() {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 5000);
-        }
-
         // Tab switching function
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(function(content) {
@@ -1434,65 +668,6 @@
                     .replace(/\[CLIENT_NAME\]/g, clientName || 'CLIENT_NAME')
                     .replace(/\[REPORT_DATE\]/g, reportDate);
                 contentEl.value = template;
-            }
-        }
-
-        // Event type selection
-        function selectEventType(eventType) {
-            document.querySelectorAll('.event-btn').forEach(function(btn) {
-                var div = btn.querySelector('div');
-                div.classList.remove('bg-blue-600');
-                div.classList.add('bg-slate-600');
-            });
-            
-            if (event && event.currentTarget) {
-                var div = event.currentTarget.querySelector('div');
-                div.classList.remove('bg-slate-600');
-                div.classList.add('bg-blue-600');
-            }
-        }
-
-        // Package selection
-        function selectPackage(packageType) {
-            selectedPackage = packageType;
-            document.querySelectorAll('.package-item').forEach(function(pkg) {
-                pkg.classList.remove('active');
-            });
-            if (event && event.currentTarget) {
-                event.currentTarget.classList.add('active');
-            }
-        }
-
-        // File upload handler
-        function handleFileUpload(input, type) {
-            var files = input.files;
-            var statusId = type + 'Status';
-            var statusEl = document.getElementById(statusId);
-            
-            if (files.length > 0) {
-                var fileNames = [];
-                
-                if (type === 'property') {
-                    uploadedPhotos.property = files[0];
-                } else if (type === 'camera') {
-                    uploadedPhotos.camera = Array.from(files);
-                } else if (type === 'site') {
-                    uploadedPhotos.site = Array.from(files);
-                }
-                
-                for (var i = 0; i < Math.min(files.length, 3); i++) {
-                    fileNames.push(files[i].name);
-                }
-                if (files.length > 3) {
-                    fileNames.push('... and ' + (files.length - 3) + ' more');
-                }
-                
-                if (statusEl) {
-                    statusEl.innerHTML = '<div class="flex items-center gap-2"><span class="text-green-400">✅</span><span class="text-green-400">' + files.length + ' file(s) uploaded: ' + fileNames.join(', ') + '</span></div><div class="flex items-center gap-2 mt-1"><span class="text-blue-400 text-xs">🤖</span><span class="text-blue-400 text-xs">Ready for AI photo analysis</span></div>';
-                    statusEl.classList.remove('hidden');
-                }
-                
-                showNotification(`${files.length} file(s) uploaded successfully`, 'success');
             }
         }
 
@@ -1579,14 +754,6 @@
                 return;
             }
             
-            // Simulate saving to local storage (would be server-side in real app)
-            var draft = {
-                clientName: clientName,
-                content: reportContent,
-                timestamp: new Date().toLocaleString(),
-                type: document.getElementById('reportTitle') ? document.getElementById('reportTitle').textContent : 'Report'
-            };
-            
             showNotification('Draft saved successfully', 'success');
         }
 
@@ -1657,231 +824,65 @@
             }
         }
 
-        // Log event function
-        function logEvent() {
-            var eventName = document.getElementById('eventName') ? document.getElementById('eventName').value : '';
-            var eventAction = document.getElementById('eventAction') ? document.getElementById('eventAction').value : '';
-            var eventNotes = document.getElementById('eventNotes') ? document.getElementById('eventNotes').value : '';
-            var selectedType = document.querySelector('.event-btn div.bg-blue-600');
-            var eventType = selectedType ? selectedType.parentElement.getAttribute('data-type') || 'staff' : 'staff';
-            
-            if (!eventName || !eventAction) {
-                showNotification('Please enter both name and action before logging the event', 'error');
-                return;
-            }
-            
-            var timestamp = new Date().toLocaleString();
-            var event = {
-                name: eventName,
-                action: eventAction,
-                notes: eventNotes,
-                type: eventType,
-                timestamp: timestamp
-            };
-            
-            eventLog.unshift(event);
-            eventStats[eventType]++;
-            
-            updateRecentEvents();
-            updateEventStats();
-            
-            // Clear form
-            if (document.getElementById('eventName')) document.getElementById('eventName').value = '';
-            if (document.getElementById('eventAction')) document.getElementById('eventAction').value = '';
-            if (document.getElementById('eventNotes')) document.getElementById('eventNotes').value = '';
-            
-            showNotification(`Event logged: ${eventName} - ${eventAction}`, 'success');
+        // Other functions
+        function generateRecommendations() {
+            showNotification('AI Security Recommendations Generated!', 'success');
         }
 
-        // Update recent events display
-        function updateRecentEvents() {
-            var container = document.getElementById('recentEvents');
-            if (!container) return;
+        function runAuditAnalysis() {
+            showNotification('AI Security Analysis Complete!', 'success');
+        }
+
+        // Search and filter event listeners
+        function initializeSearchAndFilters() {
+            var searchInput = document.getElementById('searchLogs');
+            var categoryFilter = document.getElementById('filterCategory');
+            var priorityFilter = document.getElementById('filterPriority');
+            var sortOrder = document.getElementById('sortOrder');
             
-            var html = '';
-            var recentEvents = eventLog.slice(0, 10); // Show last 10 events
-            
-            if (recentEvents.length === 0) {
-                html = '<p class="text-slate-400 text-center">No events logged today</p>';
-            } else {
-                recentEvents.forEach(function(event) {
-                    var icon = getEventIcon(event.type);
-                    var color = getEventColor(event.type);
-                    
-                    html += `
-                        <div class="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg">
-                            <div class="w-8 h-8 ${color} rounded-full flex items-center justify-center text-sm">${icon}</div>
-                            <div class="flex-1">
-                                <div class="text-white font-medium">${event.name} - ${event.action}</div>
-                                <div class="text-slate-400 text-sm">${event.timestamp}</div>
-                                ${event.notes ? `<div class="text-slate-300 text-xs mt-1">${event.notes}</div>` : ''}
-                            </div>
-                        </div>
-                    `;
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    setTimeout(updateLogEntriesDisplay, 300);
                 });
             }
             
-            container.innerHTML = html;
-        }
-
-        // Update event statistics
-        function updateEventStats() {
-            var elements = {
-                staffCount: document.getElementById('staffCount'),
-                vendorCount: document.getElementById('vendorCount'),
-                deliveryCount: document.getElementById('deliveryCount'),
-                guestCount: document.getElementById('guestCount')
-            };
-            
-            if (elements.staffCount) elements.staffCount.textContent = eventStats.staff;
-            if (elements.vendorCount) elements.vendorCount.textContent = eventStats.vendor;
-            if (elements.deliveryCount) elements.deliveryCount.textContent = eventStats.delivery;
-            if (elements.guestCount) elements.guestCount.textContent = eventStats.guest;
-        }
-
-        // Helper functions for event display
-        function getEventIcon(type) {
-            var icons = {
-                staff: '👥',
-                vendor: '🔧',
-                delivery: '📦',
-                guest: '🏃'
-            };
-            return icons[type] || '📝';
-        }
-
-        function getEventColor(type) {
-            var colors = {
-                staff: 'bg-blue-500',
-                vendor: 'bg-orange-500',
-                delivery: 'bg-green-500',
-                guest: 'bg-purple-500'
-            };
-            return colors[type] || 'bg-gray-500';
-        }
-
-        // Generate recommendations function
-        function generateRecommendations() {
-            var btn = event.target;
-            btn.disabled = true;
-            btn.innerHTML = '<span class="inline-block animate-spin">🤖</span> <span class="ml-2">AI Generating Recommendations...</span>';
-            btn.classList.add('opacity-75');
-            
-            setTimeout(function() {
-                btn.disabled = false;
-                btn.innerHTML = '🔄 Generate AI Security Recommendations';
-                btn.classList.remove('opacity-75');
-                
-                showNotification('AI Security Recommendations Generated!', 'success');
-            }, 3000);
-        }
-
-        // Audit analysis function
-        function runAuditAnalysis() {
-            var btn = event.target;
-            var hasPhotos = uploadedPhotos.property || uploadedPhotos.camera.length > 0 || uploadedPhotos.site.length > 0;
-            
-            btn.disabled = true;
-            if (hasPhotos) {
-                btn.innerHTML = '<span class="inline-block animate-spin">📸</span> <span class="ml-2">AI Analyzing Photos & Property...</span>';
-            } else {
-                btn.innerHTML = '<span class="inline-block animate-spin">⚡</span> <span class="ml-2">AI Analyzing Property...</span>';
+            if (categoryFilter) {
+                categoryFilter.addEventListener('change', updateLogEntriesDisplay);
             }
-            btn.classList.add('opacity-75');
+            
+            if (priorityFilter) {
+                priorityFilter.addEventListener('change', updateLogEntriesDisplay);
+            }
+            
+            if (sortOrder) {
+                sortOrder.addEventListener('change', updateLogEntriesDisplay);
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            var container = document.getElementById('notificationContainer');
+            var notification = document.createElement('div');
+            notification.className = `notification glass rounded-lg p-4 ${type === 'success' ? 'border-green-500/50' : type === 'error' ? 'border-red-500/50' : 'border-blue-500/50'}`;
+            
+            var icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            var color = type === 'success' ? 'text-green-400' : type === 'error' ? 'text-red-400' : 'text-blue-400';
+            
+            notification.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <span class="text-lg">${icon}</span>
+                    <span class="${color}">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-auto text-slate-400 hover:text-white">×</button>
+                </div>
+            `;
+            
+            container.appendChild(notification);
             
             setTimeout(function() {
-                var resultsDiv = document.getElementById('analysisResults');
-                var analysisHTML = generateAnalysisResults(hasPhotos);
-                
-                if (resultsDiv) {
-                    resultsDiv.innerHTML = analysisHTML;
+                if (notification.parentElement) {
+                    notification.remove();
                 }
-                
-                btn.disabled = false;
-                btn.innerHTML = '🎯 Generate AI Recommendations';
-                btn.classList.remove('opacity-75');
-                
-                var message = hasPhotos ? 
-                    'AI Photo Analysis Complete! Check results below.' :
-                    'AI Security Analysis Complete! Check results below.';
-                
-                showNotification(message, 'success');
-                
-            }, hasPhotos ? 4500 : 3000);
-        }
-
-        function generateAnalysisResults(hasPhotos) {
-            var html = '<div class="space-y-6">';
-            
-            html += '<div class="bg-gradient-to-r from-green-500/20 to-emerald-600/20 border border-green-500/30 rounded-lg p-4">';
-            html += '<div class="flex items-center gap-2 mb-3">';
-            html += '<span class="text-green-400 text-lg">🤖</span>';
-            html += '<h4 class="text-green-300 font-semibold">AI Security Analysis Complete</h4>';
-            html += '</div>';
-            html += '<p class="text-green-200 text-sm">Property analyzed using advanced threat modeling algorithms and industry best practices.</p>';
-            html += '</div>';
-            
-            html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-6">';
-            html += '<div class="bg-slate-700/50 rounded-lg p-4">';
-            html += '<h5 class="text-white font-semibold mb-3 flex items-center gap-2">';
-            html += '<span class="text-red-400">🎯</span>Critical Vulnerabilities Detected</h5>';
-            html += '<ul class="text-slate-300 text-sm space-y-2">';
-            html += '<li>• Main entrance lacks adequate coverage (Priority 1)</li>';
-            html += '<li>• Parking area completely unmonitored</li>';
-            html += '<li>• Loading dock blind spot identified</li>';
-            html += '<li>• No perimeter intrusion detection</li>';
-            html += '</ul></div>';
-            
-            html += '<div class="bg-slate-700/50 rounded-lg p-4">';
-            html += '<h5 class="text-white font-semibold mb-3 flex items-center gap-2">';
-            html += '<span class="text-blue-400">📹</span>Recommended Camera Placement</h5>';
-            html += '<ul class="text-slate-300 text-sm space-y-2">';
-            html += '<li>• 2x 4K cameras at main entrance (facial ID)</li>';
-            html += '<li>• 4x outdoor cameras for parking coverage</li>';
-            html += '<li>• 1x PTZ camera for loading dock monitoring</li>';
-            html += '<li>• 2x perimeter cameras with motion detection</li>';
-            html += '</ul></div></div>';
-            
-            html += '<div class="text-center">';
-            html += '<button onclick="generateAuditPDF()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">';
-            html += '📄 Generate Professional Audit Report</button></div></div>';
-            
-            return html;
-        }
-
-        // Generate audit PDF
-        function generateAuditPDF() {
-            try {
-                var jsPDF = window.jspdf.jsPDF;
-                var doc = new jsPDF();
-                
-                // Professional cover page
-                doc.setFillColor(0, 150, 200);
-                doc.rect(0, 0, 210, 297, 'F');
-                
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(28);
-                doc.setFont('helvetica', 'bold');
-                doc.text('VERIVAULT', 105, 100, { align: 'center' });
-                doc.text('SECURITY ASSESSMENT', 105, 120, { align: 'center' });
-                
-                doc.setFontSize(18);
-                doc.setFont('helvetica', 'normal');
-                doc.text('Professional Security Analysis', 105, 140, { align: 'center' });
-                
-                doc.setFontSize(12);
-                doc.text('Analysis Date: ' + new Date().toLocaleDateString(), 105, 200, { align: 'center' });
-                doc.text('Confidential & Proprietary', 105, 220, { align: 'center' });
-                
-                var fileName = 'VeriVault_Security_Assessment_' + new Date().toLocaleDateString().replace(/\//g, '-') + '.pdf';
-                doc.save(fileName);
-                
-                showNotification('Professional Security Assessment Generated!', 'success');
-                
-            } catch (error) {
-                console.error('PDF generation error:', error);
-                showNotification('Error generating PDF. Please check your browser supports PDF generation.', 'error');
-            }
+            }, 5000);
         }
 
         // Initialize on page load
@@ -1929,4 +930,479 @@
         });
     </script>
 </body>
-</html>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeriVault - AI Security Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        .tab-content.hidden { display: none !important; }
+        .tab-content { display: block; }
+        body { overflow-x: hidden; }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .notification {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .pulse { animation: pulse 2s infinite; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
+    <!-- Notification System -->
+    <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2 max-w-sm"></div>
+
+    <!-- Top Navigation Tabs -->
+    <div class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex space-x-8">
+                <button onclick="switchTab('logger')" id="tab-logger" class="py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400/10">
+                    📝 Daily Log System
+                </button>
+                <button onclick="switchTab('reports')" id="tab-reports" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                    📊 Report Generation
+                </button>
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                    📈 Analytics Dashboard
+                </button>
+                <!-- Hidden BTC tabs for future use -->
+                <button onclick="switchTab('intake')" id="tab-intake" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400 hidden">
+                    🔐 Security Audit Intake
+                </button>
+                <button onclick="switchTab('auditTool')" id="tab-auditTool" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400 hidden">
+                    🔍 Audit Analysis Tool
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ENHANCED DAILY LOG SYSTEM TAB CONTENT -->
+    <div id="content-logger" class="tab-content">
+        <div class="w-full p-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Enhanced Header -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-3xl font-bold text-white mb-2">📝 Daily Log System</h2>
+                            <p class="text-slate-400">Professional security activity logging with real-time search and categorization</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-right">
+                                <div class="text-sm text-slate-400">Current Shift</div>
+                                <div id="currentShift" class="text-lg font-semibold text-cyan-400">Day Shift</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm text-slate-400">Today's Entries</div>
+                                <div id="totalEntries" class="text-lg font-semibold text-white">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    <!-- Enhanced Log Entry Form -->
+                    <div class="xl:col-span-2">
+                        <div class="glass rounded-xl p-6 mb-6">
+                            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                                <span class="text-green-400">➕</span>New Log Entry
+                            </h3>
+
+                            <!-- Quick Entry Type Selection -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-slate-300 mb-3">Entry Category</label>
+                                <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+                                    <button onclick="selectLogCategory('staff')" class="log-category-btn active" data-category="staff">
+                                        <div class="bg-blue-600 p-3 rounded-lg text-center hover:bg-blue-700 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">👥</div>
+                                            <div class="text-white text-xs font-medium">Staff</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="selectLogCategory('visitor')" class="log-category-btn" data-category="visitor">
+                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">🏃</div>
+                                            <div class="text-white text-xs font-medium">Visitor</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="selectLogCategory('vendor')" class="log-category-btn" data-category="vendor">
+                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">🔧</div>
+                                            <div class="text-white text-xs font-medium">Vendor</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="selectLogCategory('delivery')" class="log-category-btn" data-category="delivery">
+                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">📦</div>
+                                            <div class="text-white text-xs font-medium">Delivery</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="selectLogCategory('incident')" class="log-category-btn" data-category="incident">
+                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">⚠️</div>
+                                            <div class="text-white text-xs font-medium">Incident</div>
+                                        </div>
+                                    </button>
+                                    <button onclick="selectLogCategory('patrol')" class="log-category-btn" data-category="patrol">
+                                        <div class="bg-slate-600 p-3 rounded-lg text-center hover:bg-slate-500 transition-all transform hover:scale-105">
+                                            <div class="text-xl mb-1">🚶</div>
+                                            <div class="text-white text-xs font-medium">Patrol</div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Enhanced Form Fields -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Timestamp</label>
+                                    <input type="datetime-local" id="logTimestamp" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Location</label>
+                                    <select id="logLocation" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                        <option value="">Select location</option>
+                                        <option value="main_entrance">Main Entrance</option>
+                                        <option value="lobby">Lobby</option>
+                                        <option value="parking_garage">Parking Garage</option>
+                                        <option value="loading_dock">Loading Dock</option>
+                                        <option value="perimeter">Perimeter</option>
+                                        <option value="office_area">Office Area</option>
+                                        <option value="emergency_exit">Emergency Exit</option>
+                                        <option value="rooftop">Rooftop</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Name/Subject</label>
+                                    <input type="text" id="logSubject" placeholder="Enter name or subject" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">Action/Status</label>
+                                    <select id="logAction" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                        <option value="">Select action</option>
+                                        <option value="arrived">Arrived</option>
+                                        <option value="departed">Departed</option>
+                                        <option value="break_start">Break Started</option>
+                                        <option value="break_end">Break Ended</option>
+                                        <option value="patrol_complete">Patrol Completed</option>
+                                        <option value="incident_reported">Incident Reported</option>
+                                        <option value="system_check">System Check</option>
+                                        <option value="maintenance">Maintenance</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Priority Level -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-slate-300 mb-3">Priority Level</label>
+                                <div class="flex gap-4">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="priority" value="low" checked class="mr-2 text-green-400">
+                                        <span class="flex items-center gap-2">
+                                            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                                            <span class="text-slate-300">Low</span>
+                                        </span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="priority" value="medium" class="mr-2 text-yellow-400">
+                                        <span class="flex items-center gap-2">
+                                            <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                                            <span class="text-slate-300">Medium</span>
+                                        </span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="priority" value="high" class="mr-2 text-red-400">
+                                        <span class="flex items-center gap-2">
+                                            <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+                                            <span class="text-slate-300">High</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Enhanced Notes Field -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Detailed Notes</label>
+                                <textarea id="logNotes" rows="4" placeholder="Enter detailed observations, actions taken, or additional context..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"></textarea>
+                                <div class="text-xs text-slate-400 mt-1">Tip: Include badge numbers, license plates, or specific details</div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex gap-4">
+                                <button onclick="addLogEntry()" class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
+                                    ✅ Add to Log
+                                </button>
+                                <button onclick="clearLogForm()" class="px-6 bg-slate-600 text-white py-4 rounded-lg font-semibold hover:bg-slate-500 transition-all">
+                                    🗑️ Clear
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Search and Filter Section -->
+                        <div class="glass rounded-xl p-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-blue-400">🔍</span>Search & Filter
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <input type="text" id="searchLogs" placeholder="Search entries..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                </div>
+                                <div>
+                                    <select id="filterCategory" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                        <option value="">All Categories</option>
+                                        <option value="staff">Staff</option>
+                                        <option value="visitor">Visitor</option>
+                                        <option value="vendor">Vendor</option>
+                                        <option value="delivery">Delivery</option>
+                                        <option value="incident">Incident</option>
+                                        <option value="patrol">Patrol</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select id="filterPriority" class="w-full bg-white border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                        <option value="">All Priorities</option>
+                                        <option value="low">Low Priority</option>
+                                        <option value="medium">Medium Priority</option>
+                                        <option value="high">High Priority</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Sidebar -->
+                    <div class="space-y-6">
+                        <!-- Today's Summary -->
+                        <div class="glass rounded-xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-cyan-400">📊</span>Today's Summary
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>Staff Events
+                                    </span>
+                                    <span id="staffLogCount" class="text-blue-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-purple-500 rounded-full"></span>Visitor Events
+                                    </span>
+                                    <span id="visitorLogCount" class="text-purple-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-orange-500 rounded-full"></span>Vendor Events
+                                    </span>
+                                    <span id="vendorLogCount" class="text-orange-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-green-500 rounded-full"></span>Deliveries
+                                    </span>
+                                    <span id="deliveryLogCount" class="text-green-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-red-500 rounded-full"></span>Incidents
+                                    </span>
+                                    <span id="incidentLogCount" class="text-red-400 font-semibold">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 bg-gray-500 rounded-full"></span>Patrols
+                                    </span>
+                                    <span id="patrolLogCount" class="text-gray-400 font-semibold">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Priority Alerts -->
+                        <div class="glass rounded-xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-red-400">🚨</span>Priority Alerts
+                            </h3>
+                            <div id="priorityAlerts" class="space-y-2">
+                                <p class="text-slate-400 text-center text-sm">No high-priority items</p>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="glass rounded-xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-yellow-400">⚡</span>Quick Actions
+                            </h3>
+                            <div class="space-y-3">
+                                <button onclick="exportTodaysLog()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-all text-sm">
+                                    📄 Export Today's Log
+                                </button>
+                                <button onclick="startPatrolLog()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-purple-700 transition-all text-sm">
+                                    🚶 Start Patrol Log
+                                </button>
+                                <button onclick="reportIncident()" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-all text-sm">
+                                    ⚠️ Report Incident
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Log Entries Display -->
+                <div class="mt-8">
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                                <span class="text-slate-400">📋</span>Log Entries
+                            </h3>
+                            <div class="flex items-center gap-4">
+                                <select id="sortOrder" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm">
+                                    <option value="newest">Newest First</option>
+                                    <option value="oldest">Oldest First</option>
+                                    <option value="priority">By Priority</option>
+                                </select>
+                                <button onclick="refreshLogView()" class="bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition-all text-sm">
+                                    🔄 Refresh
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="logEntriesContainer" class="space-y-3 max-h-96 overflow-y-auto">
+                            <div class="text-center text-slate-400 py-8">
+                                <div class="text-4xl mb-4">📝</div>
+                                <p>No log entries yet today</p>
+                                <p class="text-sm mt-2">Start by adding your first entry above</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REPORTS TAB CONTENT -->
+    <div id="content-reports" class="tab-content hidden">
+        <div class="flex h-screen">
+            <!-- Left Sidebar for Reports -->
+            <div class="w-80 glass border-r border-white/10 p-6">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">V</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">VeriVault</h1>
+                        <p class="text-sm text-cyan-400">AI Security Intelligence</p>
+                    </div>
+                </div>
+
+                <!-- Report Types -->
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
+                    
+                    <div onclick="selectReport('daily-log')" class="report-item active bg-blue-600 p-3 rounded-lg cursor-pointer transition-all hover:bg-blue-700 transform hover:scale-105">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">📅</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Daily Log</div>
+                                <div class="text-blue-200 text-xs">Daily operations summary</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="selectReport('incident-medical')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">🏥</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Medical Incident</div>
+                                <div class="text-slate-400 text-xs">Injury & emergency reports</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="selectReport('incident-non-medical')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">⚠️</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Security Incident</div>
+                                <div class="text-slate-400 text-xs">Non-medical incidents</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="selectReport('systems-audit')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">⚙️</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Systems Audit</div>
+                                <div class="text-slate-400 text-xs">Equipment & technology</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Reports -->
+                <div class="mt-8">
+                    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Recent Reports</h3>
+                    <div class="space-y-2">
+                        <div class="bg-slate-700/50 p-2 rounded text-xs">
+                            <div class="text-white font-medium">Daily Log - Johnson Estate</div>
+                            <div class="text-slate-400">Generated 2 hours ago</div>
+                        </div>
+                        <div class="bg-slate-700/50 p-2 rounded text-xs">
+                            <div class="text-white font-medium">Security Audit - Metro Plaza</div>
+                            <div class="text-slate-400">Generated yesterday</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="flex-1 p-8 overflow-y-auto">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Header -->
+                    <div class="mb-8">
+                        <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log</h2>
+                        <p id="reportDescription" class="text-slate-400">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
+                    </div>
+
+                    <!-- Form -->
+                    <div class="glass rounded-xl p-6">
+                        <!-- Basic Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">👤 Client Name</label>
+                                <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">📅 Report Date</label>
+                                <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                            </div>
+                        </div>
+
+                        <!-- CSV Upload Section -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data for AI Analysis (Optional)</label>
