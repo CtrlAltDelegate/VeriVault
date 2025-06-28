@@ -1,6 +1,6 @@
-<!-- CSV Upload Section -->
+<!-- CSV Upload -->
                         <div class="mb-6">
-                            <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data for AI Analysis (Optional)</label>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data (Optional)</label>
                             <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed group">
                                 <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">📁</div>
                                 <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
@@ -16,7 +16,7 @@
                             <textarea id="reportContent" rows="15" placeholder="Enter report details or upload CSV for AI-generated content..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm transition-all"></textarea>
                         </div>
 
-                        <!-- Generate Button -->
+                        <!-- Generate Buttons -->
                         <div class="flex gap-4">
                             <button onclick="generateReport()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105">
                                 📄 Generate Professional PDF Report
@@ -31,8 +31,8 @@
         </div>
     </div>
 
-    <!-- ANALYTICS DASHBOARD TAB -->
-    <div id="content-dashboard" class="tab-content hidden">
+    <!-- ANALYTICS TAB -->
+    <div id="content-analytics" class="tab-content hidden">
         <div class="w-full p-8">
             <div class="max-w-7xl mx-auto">
                 <div class="mb-8">
@@ -106,7 +106,7 @@
                             <div class="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg">
                                 <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-sm">✅</div>
                                 <div class="flex-1">
-                                    <div class="text-white font-medium">Security audit completed</div>
+                                    <div class="text-white font-medium">Security patrol completed</div>
                                     <div class="text-slate-400 text-sm">Metro Plaza - 15 minutes ago</div>
                                 </div>
                             </div>
@@ -124,79 +124,9 @@
         </div>
     </div>
 
-    <!-- SECURITY AUDIT INTAKE TAB -->
-    <div id="content-intake" class="tab-content hidden">
-        <div class="w-full p-8">
-            <div class="max-w-5xl mx-auto">
-                <div class="mb-8 text-center">
-                    <h2 class="text-4xl font-bold text-white mb-4">🔐 VeriVault SecureScope</h2>
-                    <p class="text-xl text-cyan-400 mb-2">AI-Powered Security Audit & Camera Placement Analysis</p>
-                    <p class="text-slate-400">Get professional security recommendations tailored to your property and budget</p>
-                </div>
-
-                <div class="glass rounded-xl p-8">
-                    <!-- Contact Information -->
-                    <div class="bg-white/5 rounded-lg p-6">
-                        <h4 class="text-xl font-bold text-white mb-4">📞 Contact Information</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
-                                <input type="text" placeholder="Your name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
-                                <input type="email" placeholder="your.email@domain.com" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                            </div>
-                        </div>
-                        
-                        <div class="mt-6">
-                            <button onclick="generateRecommendations()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
-                                🔄 Generate AI Security Recommendations
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- AUDIT ANALYSIS TOOL TAB -->
-    <div id="content-auditTool" class="tab-content hidden">
-        <div class="w-full p-8">
-            <div class="max-w-6xl mx-auto">
-                <div class="mb-8">
-                    <h2 class="text-3xl font-bold text-white mb-2">🔍 Security Audit Analysis Tool</h2>
-                    <p class="text-slate-400">Internal tool for conducting comprehensive security audits</p>
-                </div>
-
-                <div class="glass rounded-xl p-6">
-                    <h3 class="text-xl font-bold text-white mb-4">🏠 Property Analysis</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-300 mb-2">Property Address/Name</label>
-                            <input type="text" placeholder="Enter property for analysis" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                        </div>
-                        
-                        <button onclick="runAuditAnalysis()" class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg transform hover:scale-105">
-                            🎯 Generate AI Recommendations
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Global variables for enhanced daily log system
-        var currentTab = 'logger'; // Start with daily log system
-        var uploadedCSVData = null;
-        var csvFileName = null;
-        var selectedPackage = 'premium';
-        var uploadedPhotos = {
-            property: null,
-            camera: [],
-            site: []
-        };
+        // Global variables
+        var currentTab = 'logger';
         var dailyLogEntries = [];
         var logStats = {
             staff: 0,
@@ -208,11 +138,13 @@
         };
         var selectedLogCategory = 'staff';
         var currentShift = 'Day Shift';
+        var uploadedCSVData = null;
+        var csvFileName = null;
 
         // Report templates
         var reportTemplates = {
             'daily-log': {
-                title: 'Daily Log',
+                title: 'Daily Log Report',
                 description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
                 template: 'DAILY OPERATIONS LOG\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Daily Operations Summary\n\nOPERATIONAL OVERVIEW:\n• Staff deployment and assignments\n• Security checkpoint activities\n• Visitor management and access control\n• Equipment status and functionality\n• Notable incidents or observations\n• Communication logs\n\nRECOMMENDATIONS:\n• Continued monitoring protocols\n• Equipment maintenance schedules\n• Staff training updates\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
             },
@@ -233,7 +165,36 @@
             }
         };
 
-        // Enhanced daily log functions
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(function(content) {
+                content.classList.add('hidden');
+            });
+            
+            // Reset all tab buttons
+            document.querySelectorAll('[id^="tab-"]').forEach(function(btn) {
+                btn.classList.remove('text-white', 'border-cyan-400', 'bg-cyan-400/10');
+                btn.classList.add('text-slate-400', 'border-transparent');
+            });
+            
+            // Show selected tab
+            var targetTab = document.getElementById('content-' + tabName);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+            }
+            
+            // Highlight selected tab button
+            var targetBtn = document.getElementById('tab-' + tabName);
+            if (targetBtn) {
+                targetBtn.classList.remove('text-slate-400', 'border-transparent');
+                targetBtn.classList.add('text-white', 'border-cyan-400', 'bg-cyan-400/10');
+            }
+            
+            currentTab = tabName;
+        }
+
+        // Log category selection
         function selectLogCategory(category) {
             selectedLogCategory = category;
             
@@ -251,7 +212,6 @@
                 div.classList.add('bg-blue-600');
             }
             
-            // Update action dropdown based on category
             updateActionOptions(category);
         }
 
@@ -264,14 +224,12 @@
                     { value: 'arrived', text: 'Arrived' },
                     { value: 'departed', text: 'Departed' },
                     { value: 'break_start', text: 'Break Started' },
-                    { value: 'break_end', text: 'Break Ended' },
-                    { value: 'shift_change', text: 'Shift Change' }
+                    { value: 'break_end', text: 'Break Ended' }
                 ],
                 visitor: [
                     { value: 'arrived', text: 'Arrived' },
                     { value: 'departed', text: 'Departed' },
-                    { value: 'escorted', text: 'Escorted' },
-                    { value: 'waiting', text: 'Waiting' }
+                    { value: 'escorted', text: 'Escorted' }
                 ],
                 vendor: [
                     { value: 'arrived', text: 'Arrived' },
@@ -282,20 +240,17 @@
                 delivery: [
                     { value: 'arrived', text: 'Arrived' },
                     { value: 'departed', text: 'Departed' },
-                    { value: 'delivered', text: 'Package Delivered' },
-                    { value: 'refused', text: 'Delivery Refused' }
+                    { value: 'delivered', text: 'Package Delivered' }
                 ],
                 incident: [
                     { value: 'reported', text: 'Incident Reported' },
                     { value: 'investigating', text: 'Under Investigation' },
-                    { value: 'resolved', text: 'Resolved' },
-                    { value: 'escalated', text: 'Escalated' }
+                    { value: 'resolved', text: 'Resolved' }
                 ],
                 patrol: [
                     { value: 'started', text: 'Patrol Started' },
                     { value: 'completed', text: 'Patrol Completed' },
-                    { value: 'checkpoint', text: 'Checkpoint Reached' },
-                    { value: 'anomaly', text: 'Anomaly Detected' }
+                    { value: 'checkpoint', text: 'Checkpoint Reached' }
                 ]
             };
             
@@ -310,21 +265,20 @@
             }
         }
 
+        // Add log entry
         function addLogEntry() {
-            var timestamp = document.getElementById('logTimestamp') ? document.getElementById('logTimestamp').value : '';
-            var location = document.getElementById('logLocation') ? document.getElementById('logLocation').value : '';
-            var subject = document.getElementById('logSubject') ? document.getElementById('logSubject').value : '';
-            var action = document.getElementById('logAction') ? document.getElementById('logAction').value : '';
-            var notes = document.getElementById('logNotes') ? document.getElementById('logNotes').value : '';
-            var priority = document.querySelector('input[name="priority"]:checked') ? document.querySelector('input[name="priority"]:checked').value : 'low';
+            var timestamp = document.getElementById('logTimestamp').value;
+            var location = document.getElementById('logLocation').value;
+            var subject = document.getElementById('logSubject').value;
+            var action = document.getElementById('logAction').value;
+            var notes = document.getElementById('logNotes').value;
+            var priority = document.querySelector('input[name="priority"]:checked').value;
             
-            // Validation
             if (!timestamp || !subject || !action) {
                 showNotification('Please fill in timestamp, subject/name, and action fields', 'error');
                 return;
             }
             
-            // Create log entry
             var entry = {
                 id: Date.now(),
                 timestamp: timestamp,
@@ -338,90 +292,53 @@
                 createdAt: new Date().toISOString()
             };
             
-            // Add to log
             dailyLogEntries.unshift(entry);
             logStats[selectedLogCategory]++;
             
-            // Update displays
             updateLogEntriesDisplay();
             updateLogStats();
             updatePriorityAlerts();
-            
-            // Clear form
             clearLogForm();
             
             showNotification(`Log entry added: ${subject} - ${action}`, 'success');
         }
 
+        // Clear form
         function clearLogForm() {
-            if (document.getElementById('logTimestamp')) {
-                var now = new Date();
-                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-                document.getElementById('logTimestamp').value = now.toISOString().slice(0, 16);
-            }
-            if (document.getElementById('logLocation')) document.getElementById('logLocation').value = '';
-            if (document.getElementById('logSubject')) document.getElementById('logSubject').value = '';
-            if (document.getElementById('logAction')) document.getElementById('logAction').value = '';
-            if (document.getElementById('logNotes')) document.getElementById('logNotes').value = '';
-            
-            // Reset priority to low
-            var lowPriority = document.querySelector('input[name="priority"][value="low"]');
-            if (lowPriority) lowPriority.checked = true;
+            var now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('logTimestamp').value = now.toISOString().slice(0, 16);
+            document.getElementById('logLocation').value = '';
+            document.getElementById('logSubject').value = '';
+            document.getElementById('logAction').value = '';
+            document.getElementById('logNotes').value = '';
+            document.querySelector('input[name="priority"][value="low"]').checked = true;
         }
 
+        // Update displays
         function updateLogEntriesDisplay() {
             var container = document.getElementById('logEntriesContainer');
             if (!container) return;
             
-            var searchTerm = document.getElementById('searchLogs') ? document.getElementById('searchLogs').value.toLowerCase() : '';
-            var categoryFilter = document.getElementById('filterCategory') ? document.getElementById('filterCategory').value : '';
-            var priorityFilter = document.getElementById('filterPriority') ? document.getElementById('filterPriority').value : '';
-            var sortOrder = document.getElementById('sortOrder') ? document.getElementById('sortOrder').value : 'newest';
-            
-            // Filter entries
-            var filteredEntries = dailyLogEntries.filter(function(entry) {
-                var matchesSearch = !searchTerm || 
-                    entry.subject.toLowerCase().includes(searchTerm) ||
-                    entry.notes.toLowerCase().includes(searchTerm) ||
-                    entry.location.toLowerCase().includes(searchTerm);
-                var matchesCategory = !categoryFilter || entry.category === categoryFilter;
-                var matchesPriority = !priorityFilter || entry.priority === priorityFilter;
-                
-                return matchesSearch && matchesCategory && matchesPriority;
-            });
-            
-            // Sort entries
-            filteredEntries.sort(function(a, b) {
-                if (sortOrder === 'oldest') {
-                    return new Date(a.timestamp) - new Date(b.timestamp);
-                } else if (sortOrder === 'priority') {
-                    var priorityOrder = { high: 3, medium: 2, low: 1 };
-                    return priorityOrder[b.priority] - priorityOrder[a.priority];
-                } else {
-                    return new Date(b.timestamp) - new Date(a.timestamp);
-                }
-            });
-            
-            if (filteredEntries.length === 0) {
+            if (dailyLogEntries.length === 0) {
                 container.innerHTML = `
                     <div class="text-center text-slate-400 py-8">
                         <div class="text-4xl mb-4">📝</div>
-                        <p>${dailyLogEntries.length === 0 ? 'No log entries yet today' : 'No entries match your filters'}</p>
-                        <p class="text-sm mt-2">${dailyLogEntries.length === 0 ? 'Start by adding your first entry above' : 'Try adjusting your search or filters'}</p>
+                        <p>No log entries yet today</p>
+                        <p class="text-sm mt-2">Start by adding your first entry above</p>
                     </div>
                 `;
                 return;
             }
             
             var html = '';
-            filteredEntries.forEach(function(entry) {
+            dailyLogEntries.forEach(function(entry) {
                 var priorityColor = entry.priority === 'high' ? 'border-red-500/50 bg-red-500/10' : 
                                   entry.priority === 'medium' ? 'border-yellow-500/50 bg-yellow-500/10' : 
                                   'border-green-500/50 bg-green-500/10';
                 
                 var categoryIcon = getCategoryIcon(entry.category);
                 var categoryColor = getCategoryColor(entry.category);
-                
                 var formattedTime = new Date(entry.timestamp).toLocaleString();
                 
                 html += `
@@ -449,34 +366,20 @@
             });
             
             container.innerHTML = html;
-            
-            // Update total count
-            var totalEl = document.getElementById('totalEntries');
-            if (totalEl) totalEl.textContent = dailyLogEntries.length;
+            document.getElementById('totalEntries').textContent = dailyLogEntries.length;
         }
 
         function updateLogStats() {
-            var elements = {
-                staffLogCount: document.getElementById('staffLogCount'),
-                visitorLogCount: document.getElementById('visitorLogCount'),
-                vendorLogCount: document.getElementById('vendorLogCount'),
-                deliveryLogCount: document.getElementById('deliveryLogCount'),
-                incidentLogCount: document.getElementById('incidentLogCount'),
-                patrolLogCount: document.getElementById('patrolLogCount')
-            };
-            
-            if (elements.staffLogCount) elements.staffLogCount.textContent = logStats.staff;
-            if (elements.visitorLogCount) elements.visitorLogCount.textContent = logStats.visitor;
-            if (elements.vendorLogCount) elements.vendorLogCount.textContent = logStats.vendor;
-            if (elements.deliveryLogCount) elements.deliveryLogCount.textContent = logStats.delivery;
-            if (elements.incidentLogCount) elements.incidentLogCount.textContent = logStats.incident;
-            if (elements.patrolLogCount) elements.patrolLogCount.textContent = logStats.patrol;
+            document.getElementById('staffLogCount').textContent = logStats.staff;
+            document.getElementById('visitorLogCount').textContent = logStats.visitor;
+            document.getElementById('vendorLogCount').textContent = logStats.vendor;
+            document.getElementById('deliveryLogCount').textContent = logStats.delivery;
+            document.getElementById('incidentLogCount').textContent = logStats.incident;
+            document.getElementById('patrolLogCount').textContent = logStats.patrol;
         }
 
         function updatePriorityAlerts() {
             var container = document.getElementById('priorityAlerts');
-            if (!container) return;
-            
             var highPriorityEntries = dailyLogEntries.filter(function(entry) {
                 return entry.priority === 'high';
             });
@@ -522,24 +425,16 @@
         // Helper functions
         function getCategoryIcon(category) {
             var icons = {
-                staff: '👥',
-                visitor: '🏃',
-                vendor: '🔧',
-                delivery: '📦',
-                incident: '⚠️',
-                patrol: '🚶'
+                staff: '👥', visitor: '🏃', vendor: '🔧',
+                delivery: '📦', incident: '⚠️', patrol: '🚶'
             };
             return icons[category] || '📝';
         }
 
         function getCategoryColor(category) {
             var colors = {
-                staff: 'bg-blue-500',
-                visitor: 'bg-purple-500',
-                vendor: 'bg-orange-500',
-                delivery: 'bg-green-500',
-                incident: 'bg-red-500',
-                patrol: 'bg-gray-500'
+                staff: 'bg-blue-500', visitor: 'bg-purple-500', vendor: 'bg-orange-500',
+                delivery: 'bg-green-500', incident: 'bg-red-500', patrol: 'bg-gray-500'
             };
             return colors[category] || 'bg-gray-500';
         }
@@ -559,7 +454,7 @@
             }).join(' ');
         }
 
-        // Quick action functions
+        // Quick actions
         function exportTodaysLog() {
             if (dailyLogEntries.length === 0) {
                 showNotification('No log entries to export', 'error');
@@ -569,14 +464,9 @@
             var csvContent = 'Timestamp,Category,Location,Subject,Action,Priority,Notes,Shift\n';
             dailyLogEntries.forEach(function(entry) {
                 var row = [
-                    entry.timestamp,
-                    entry.category,
-                    entry.location || '',
-                    entry.subject,
-                    entry.action,
-                    entry.priority,
-                    (entry.notes || '').replace(/"/g, '""'),
-                    entry.shift
+                    entry.timestamp, entry.category, entry.location || '',
+                    entry.subject, entry.action, entry.priority,
+                    (entry.notes || '').replace(/"/g, '""'), entry.shift
                 ].map(function(field) {
                     return '"' + field + '"';
                 }).join(',');
@@ -597,7 +487,10 @@
         function startPatrolLog() {
             selectLogCategory('patrol');
             document.getElementById('logSubject').value = 'Security Patrol';
-            document.getElementById('logAction').value = 'started';
+            updateActionOptions('patrol');
+            setTimeout(function() {
+                document.getElementById('logAction').value = 'started';
+            }, 100);
             showNotification('Patrol log initiated - complete the entry details', 'info');
         }
 
@@ -613,32 +506,7 @@
             showNotification('Log view refreshed', 'success');
         }
 
-        // Tab switching function
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(function(content) {
-                content.classList.add('hidden');
-            });
-            
-            document.querySelectorAll('[id^="tab-"]').forEach(function(btn) {
-                btn.classList.remove('text-white', 'border-cyan-400', 'bg-cyan-400/10');
-                btn.classList.add('text-slate-400', 'border-transparent');
-            });
-            
-            var targetTab = document.getElementById('content-' + tabName);
-            if (targetTab) {
-                targetTab.classList.remove('hidden');
-            }
-            
-            var targetBtn = document.getElementById('tab-' + tabName);
-            if (targetBtn) {
-                targetBtn.classList.remove('text-slate-400', 'border-transparent');
-                targetBtn.classList.add('text-white', 'border-cyan-400', 'bg-cyan-400/10');
-            }
-            
-            currentTab = tabName;
-        }
-
-        // Report selection function
+        // Report functions
         function selectReport(reportType) {
             var report = reportTemplates[reportType];
             if (!report) return;
@@ -653,124 +521,45 @@
                 event.currentTarget.classList.add('active', 'bg-blue-600');
             }
             
-            var titleEl = document.getElementById('reportTitle');
-            var descEl = document.getElementById('reportDescription');
-            var contentEl = document.getElementById('reportContent');
+            document.getElementById('reportTitle').textContent = report.title;
+            document.getElementById('reportDescription').textContent = report.description;
             
-            if (titleEl) titleEl.textContent = report.title;
-            if (descEl) descEl.textContent = report.description;
+            var clientName = document.getElementById('clientName').value || '';
+            var reportDate = document.getElementById('reportDate').value || new Date().toISOString().split('T')[0];
             
-            if (contentEl && !uploadedCSVData) {
-                var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : '';
-                var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
-                
-                var template = report.template
-                    .replace(/\[CLIENT_NAME\]/g, clientName || 'CLIENT_NAME')
-                    .replace(/\[REPORT_DATE\]/g, reportDate);
-                contentEl.value = template;
-            }
+            var template = report.template
+                .replace(/\[CLIENT_NAME\]/g, clientName || 'CLIENT_NAME')
+                .replace(/\[REPORT_DATE\]/g, reportDate);
+            document.getElementById('reportContent').value = template;
         }
 
-        // CSV upload handler
         function handleCSVUpload(input) {
             var file = input.files[0];
-            var statusEl = document.getElementById('uploadStatus');
-            
-            if (file && file.name.toLowerCase().endsWith('.csv')) {
-                csvFileName = file.name;
-                
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    var csvText = e.target.result;
-                    uploadedCSVData = parseCSVData(csvText);
-                    
-                    if (statusEl) {
-                        statusEl.innerHTML = '<div class="flex items-center gap-2"><span class="text-green-400">✅</span><span class="text-green-400">File uploaded: ' + file.name + '</span></div><div class="flex items-center gap-2 mt-1"><span class="text-blue-400 text-xs">🤖</span><span class="text-blue-400 text-xs">AI ready to analyze ' + uploadedCSVData.length + ' log entries</span></div>';
-                        statusEl.classList.remove('hidden');
-                    }
-                    
-                    generateAISummary();
-                    showNotification('CSV data processed and analyzed by AI', 'success');
-                };
-                reader.readAsText(file);
-            } else if (statusEl) {
-                statusEl.textContent = '❌ Please upload a CSV file only';
-                statusEl.className = 'mt-2 text-sm text-red-400';
-                statusEl.classList.remove('hidden');
+            if (!file || !file.name.toLowerCase().endsWith('.csv')) {
                 showNotification('Please upload a valid CSV file', 'error');
-            }
-        }
-
-        // CSV parsing function
-        function parseCSVData(csvText) {
-            var lines = csvText.split('\n');
-            var data = [];
-            var headers = null;
-            
-            for (var i = 0; i < lines.length; i++) {
-                var line = lines[i].trim();
-                if (!line) continue;
-                
-                var row = line.split(',').map(function(cell) {
-                    return cell.replace(/"/g, '').trim();
-                });
-                
-                if (i === 0) {
-                    headers = row;
-                } else {
-                    var entry = {};
-                    for (var j = 0; j < headers.length && j < row.length; j++) {
-                        entry[headers[j]] = row[j];
-                    }
-                    data.push(entry);
-                }
-            }
-            
-            return data;
-        }
-
-        // AI summary generation
-        function generateAISummary() {
-            if (!uploadedCSVData || uploadedCSVData.length === 0) return;
-            
-            var contentEl = document.getElementById('reportContent');
-            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : 'CLIENT_NAME';
-            var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
-            
-            var aiGeneratedContent = 'EXECUTIVE SECURITY OPERATIONS BRIEFING\n\nCLIENT: ' + clientName + '\nREPORTING PERIOD: ' + reportDate + '\nCLASSIFICATION: CONFIDENTIAL - EXECUTIVE LEVEL\nDATA SOURCE: ' + csvFileName + ' | ENTRIES ANALYZED: ' + uploadedCSVData.length + '\nANALYSIS ENGINE: VeriVault AI Security Intelligence Platform\nGENERATED: ' + new Date().toLocaleString() + '\n\nEXECUTIVE SUMMARY:\nThis comprehensive security operations analysis evaluated ' + uploadedCSVData.length + ' documented activities. All security personnel maintained professional standards throughout the reporting period. No critical security incidents requiring immediate attention were identified.\n\nOPERATIONAL OVERVIEW:\n• Total log entries processed: ' + uploadedCSVData.length + '\n• Security personnel deployed across multiple locations\n• All activities conducted within normal operational parameters\n• Equipment functionality maintained at optimal levels\n\nSTRATEGIC RECOMMENDATIONS:\n• Maintain current security protocols and procedures\n• Continue regular patrol rotations across all monitored areas\n• Ensure consistent documentation standards for all security activities\n\nCOMPLIANCE NOTES:\n• All security protocols followed per established procedures\n• Documentation standards maintained throughout reporting period\n• Personnel deployment aligned with operational requirements\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL\nGenerated: ' + new Date().toLocaleString() + '\nReport ID: VV-' + Date.now().toString().slice(-6);
-
-            if (contentEl) {
-                contentEl.value = aiGeneratedContent;
-            }
-        }
-
-        // Save as draft function
-        function saveAsDraft() {
-            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : '';
-            var reportContent = document.getElementById('reportContent') ? document.getElementById('reportContent').value : '';
-            
-            if (!clientName || !reportContent.trim()) {
-                showNotification('Please enter client name and report content', 'error');
                 return;
             }
             
-            showNotification('Draft saved successfully', 'success');
+            csvFileName = file.name;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedCSVData = e.target.result;
+                document.getElementById('uploadStatus').innerHTML = 
+                    '<div class="text-green-400">✅ File uploaded: ' + file.name + '</div>';
+                document.getElementById('uploadStatus').classList.remove('hidden');
+                showNotification('CSV data uploaded successfully', 'success');
+            };
+            reader.readAsText(file);
         }
 
-        // Professional PDF generation
         function generateReport() {
-            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : 'CLIENT_NAME';
-            var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
-            var reportContent = document.getElementById('reportContent') ? document.getElementById('reportContent').value : '';
-            var reportTitle = document.getElementById('reportTitle') ? document.getElementById('reportTitle').textContent : 'Report';
-            
-            if (!reportContent.trim() && uploadedCSVData && uploadedCSVData.length > 0) {
-                generateAISummary();
-                reportContent = document.getElementById('reportContent').value;
-            }
+            var clientName = document.getElementById('clientName').value;
+            var reportDate = document.getElementById('reportDate').value;
+            var reportContent = document.getElementById('reportContent').value;
+            var reportTitle = document.getElementById('reportTitle').textContent;
             
             if (!reportContent.trim()) {
-                showNotification('Please enter report content or upload a CSV file for AI analysis', 'error');
+                showNotification('Please enter report content', 'error');
                 return;
             }
             
@@ -778,7 +567,7 @@
                 var jsPDF = window.jspdf.jsPDF;
                 var doc = new jsPDF();
                 
-                // Professional header
+                // Header
                 doc.setFillColor(0, 150, 200);
                 doc.rect(0, 0, 210, 25, 'F');
                 
@@ -788,10 +577,9 @@
                 doc.text('VERIVAULT', 20, 16);
                 
                 doc.setFontSize(12);
-                doc.setFont('helvetica', 'normal');
-                doc.text('AI Security Intelligence Platform', 120, 16);
+                doc.text('Security Intelligence Platform', 120, 16);
                 
-                // Report title
+                // Title
                 doc.setTextColor(40, 40, 40);
                 doc.setFontSize(20);
                 doc.setFont('helvetica', 'bold');
@@ -799,12 +587,10 @@
                 
                 doc.setFontSize(14);
                 doc.setFont('helvetica', 'normal');
-                doc.text('Executive Security Analysis - ' + clientName, 20, 55);
+                doc.text('Client: ' + (clientName || 'CLIENT_NAME'), 20, 55);
                 
                 // Content
                 doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-                
                 var splitContent = doc.splitTextToSize(reportContent, 170);
                 doc.text(splitContent, 20, 75);
                 
@@ -812,51 +598,18 @@
                 doc.setFontSize(8);
                 doc.text('VeriVault Security Intelligence | CONFIDENTIAL | ' + new Date().toLocaleDateString(), 20, 285);
                 
-                // Save PDF
-                var fileName = 'VeriVault_' + reportTitle.replace(/\s+/g, '_') + '_' + clientName.replace(/\s+/g, '_') + '_' + reportDate + '.pdf';
+                var fileName = 'VeriVault_' + reportTitle.replace(/\s+/g, '_') + '_' + (reportDate || new Date().toISOString().split('T')[0]) + '.pdf';
                 doc.save(fileName);
                 
                 showNotification('Professional PDF report generated successfully!', 'success');
                 
             } catch (error) {
-                console.error('PDF generation error:', error);
-                showNotification('Error generating PDF. Please check your browser supports PDF generation.', 'error');
+                showNotification('Error generating PDF', 'error');
             }
         }
 
-        // Other functions
-        function generateRecommendations() {
-            showNotification('AI Security Recommendations Generated!', 'success');
-        }
-
-        function runAuditAnalysis() {
-            showNotification('AI Security Analysis Complete!', 'success');
-        }
-
-        // Search and filter event listeners
-        function initializeSearchAndFilters() {
-            var searchInput = document.getElementById('searchLogs');
-            var categoryFilter = document.getElementById('filterCategory');
-            var priorityFilter = document.getElementById('filterPriority');
-            var sortOrder = document.getElementById('sortOrder');
-            
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    setTimeout(updateLogEntriesDisplay, 300);
-                });
-            }
-            
-            if (categoryFilter) {
-                categoryFilter.addEventListener('change', updateLogEntriesDisplay);
-            }
-            
-            if (priorityFilter) {
-                priorityFilter.addEventListener('change', updateLogEntriesDisplay);
-            }
-            
-            if (sortOrder) {
-                sortOrder.addEventListener('change', updateLogEntriesDisplay);
-            }
+        function saveAsDraft() {
+            showNotification('Draft saved successfully', 'success');
         }
 
         // Notification system
@@ -887,28 +640,21 @@
 
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', function() {
-            console.log('VeriVault B2B Daily Log System Loaded');
+            console.log('VeriVault Dashboard Loaded');
             
             // Set current timestamp
-            var timestampInput = document.getElementById('logTimestamp');
-            if (timestampInput) {
-                var now = new Date();
-                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-                timestampInput.value = now.toISOString().slice(0, 16);
-            }
+            var now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('logTimestamp').value = now.toISOString().slice(0, 16);
             
             // Set report date
-            var dateInput = document.getElementById('reportDate');
-            if (dateInput) {
-                dateInput.value = new Date().toISOString().split('T')[0];
-            }
+            document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
             
             // Initialize daily log system
-            selectLogCategory('staff'); // Default to staff category
+            selectLogCategory('staff');
             updateLogEntriesDisplay();
             updateLogStats();
             updatePriorityAlerts();
-            initializeSearchAndFilters();
             
             // Initialize report system
             selectReport('daily-log');
@@ -923,10 +669,32 @@
                 currentShift = 'Night Shift';
             }
             
-            var shiftEl = document.getElementById('currentShift');
-            if (shiftEl) shiftEl.textContent = currentShift;
+            document.getElementById('currentShift').textContent = currentShift;
             
-            console.log('B2B Daily Log System ready - Current shift:', currentShift);
+            // Add search functionality
+            var searchInput = document.getElementById('searchLogs');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    setTimeout(updateLogEntriesDisplay, 300);
+                });
+            }
+            
+            var categoryFilter = document.getElementById('filterCategory');
+            if (categoryFilter) {
+                categoryFilter.addEventListener('change', updateLogEntriesDisplay);
+            }
+            
+            var priorityFilter = document.getElementById('filterPriority');
+            if (priorityFilter) {
+                priorityFilter.addEventListener('change', updateLogEntriesDisplay);
+            }
+            
+            var sortOrder = document.getElementById('sortOrder');
+            if (sortOrder) {
+                sortOrder.addEventListener('change', updateLogEntriesDisplay);
+            }
+            
+            console.log('VeriVault Dashboard ready - Current shift:', currentShift);
         });
     </script>
 </body>
@@ -935,7 +703,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VeriVault - AI Security Intelligence</title>
+    <title>VeriVault Dashboard - Security Intelligence Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -965,40 +733,58 @@
     <!-- Notification System -->
     <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2 max-w-sm"></div>
 
-    <!-- Top Navigation Tabs -->
+    <!-- Top Navigation -->
     <div class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex space-x-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">V</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">VeriVault</h1>
+                        <p class="text-sm text-cyan-400">Security Intelligence Platform</p>
+                    </div>
+                </div>
+
+                <!-- User Info -->
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <div class="text-sm text-slate-400">Welcome back</div>
+                        <div class="text-white font-semibold">Security Admin</div>
+                    </div>
+                    <div class="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">SA</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex space-x-8 -mb-px">
                 <button onclick="switchTab('logger')" id="tab-logger" class="py-4 px-6 text-white font-medium border-b-2 border-cyan-400 bg-cyan-400/10">
                     📝 Daily Log System
                 </button>
                 <button onclick="switchTab('reports')" id="tab-reports" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
-                    📊 Report Generation
+                    📊 Report Generator
                 </button>
-                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
-                    📈 Analytics Dashboard
-                </button>
-                <!-- Hidden BTC tabs for future use -->
-                <button onclick="switchTab('intake')" id="tab-intake" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400 hidden">
-                    🔐 Security Audit Intake
-                </button>
-                <button onclick="switchTab('auditTool')" id="tab-auditTool" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400 hidden">
-                    🔍 Audit Analysis Tool
+                <button onclick="switchTab('analytics')" id="tab-analytics" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
+                    📈 Analytics
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- ENHANCED DAILY LOG SYSTEM TAB CONTENT -->
+    <!-- DAILY LOG SYSTEM TAB -->
     <div id="content-logger" class="tab-content">
         <div class="w-full p-8">
             <div class="max-w-7xl mx-auto">
-                <!-- Enhanced Header -->
+                <!-- Header -->
                 <div class="mb-8">
                     <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-3xl font-bold text-white mb-2">📝 Daily Log System</h2>
-                            <p class="text-slate-400">Professional security activity logging with real-time search and categorization</p>
+                            <p class="text-slate-400">Professional security activity logging with real-time tracking</p>
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="text-right">
@@ -1014,14 +800,14 @@
                 </div>
 
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                    <!-- Enhanced Log Entry Form -->
+                    <!-- Log Entry Form -->
                     <div class="xl:col-span-2">
                         <div class="glass rounded-xl p-6 mb-6">
                             <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                                 <span class="text-green-400">➕</span>New Log Entry
                             </h3>
 
-                            <!-- Quick Entry Type Selection -->
+                            <!-- Category Selection -->
                             <div class="mb-6">
                                 <label class="block text-sm font-medium text-slate-300 mb-3">Entry Category</label>
                                 <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
@@ -1064,7 +850,7 @@
                                 </div>
                             </div>
 
-                            <!-- Enhanced Form Fields -->
+                            <!-- Form Fields -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label class="block text-sm font-medium text-slate-300 mb-2">Timestamp</label>
@@ -1136,7 +922,7 @@
                                 </div>
                             </div>
 
-                            <!-- Enhanced Notes Field -->
+                            <!-- Notes Field -->
                             <div class="mb-6">
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Detailed Notes</label>
                                 <textarea id="logNotes" rows="4" placeholder="Enter detailed observations, actions taken, or additional context..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"></textarea>
@@ -1154,7 +940,7 @@
                             </div>
                         </div>
 
-                        <!-- Search and Filter Section -->
+                        <!-- Search and Filter -->
                         <div class="glass rounded-xl p-6">
                             <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
                                 <span class="text-blue-400">🔍</span>Search & Filter
@@ -1186,7 +972,7 @@
                         </div>
                     </div>
 
-                    <!-- Enhanced Sidebar -->
+                    <!-- Sidebar -->
                     <div class="space-y-6">
                         <!-- Today's Summary -->
                         <div class="glass rounded-xl p-6">
@@ -1263,7 +1049,7 @@
                     </div>
                 </div>
 
-                <!-- Enhanced Log Entries Display -->
+                <!-- Log Entries Display -->
                 <div class="mt-8">
                     <div class="glass rounded-xl p-6">
                         <div class="flex items-center justify-between mb-6">
@@ -1295,19 +1081,18 @@
         </div>
     </div>
 
-    <!-- REPORTS TAB CONTENT -->
+    <!-- REPORT GENERATOR TAB -->
     <div id="content-reports" class="tab-content hidden">
         <div class="flex h-screen">
-            <!-- Left Sidebar for Reports -->
+            <!-- Left Sidebar -->
             <div class="w-80 glass border-r border-white/10 p-6">
-                <!-- Logo -->
                 <div class="flex items-center gap-3 mb-8">
                     <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
                         <span class="text-white font-bold text-lg">V</span>
                     </div>
                     <div>
                         <h1 class="text-xl font-bold text-white">VeriVault</h1>
-                        <p class="text-sm text-cyan-400">AI Security Intelligence</p>
+                        <p class="text-sm text-cyan-400">Report Generator</p>
                     </div>
                 </div>
 
@@ -1363,33 +1148,16 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Recent Reports -->
-                <div class="mt-8">
-                    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Recent Reports</h3>
-                    <div class="space-y-2">
-                        <div class="bg-slate-700/50 p-2 rounded text-xs">
-                            <div class="text-white font-medium">Daily Log - Johnson Estate</div>
-                            <div class="text-slate-400">Generated 2 hours ago</div>
-                        </div>
-                        <div class="bg-slate-700/50 p-2 rounded text-xs">
-                            <div class="text-white font-medium">Security Audit - Metro Plaza</div>
-                            <div class="text-slate-400">Generated yesterday</div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <!-- Main Content Area -->
+            <!-- Main Content -->
             <div class="flex-1 p-8 overflow-y-auto">
                 <div class="max-w-4xl mx-auto">
-                    <!-- Header -->
                     <div class="mb-8">
-                        <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log</h2>
-                        <p id="reportDescription" class="text-slate-400">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
+                        <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log Report</h2>
+                        <p id="reportDescription" class="text-slate-400">Generate comprehensive daily operations reports</p>
                     </div>
 
-                    <!-- Form -->
                     <div class="glass rounded-xl p-6">
                         <!-- Basic Info -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -1403,6 +1171,7 @@
                             </div>
                         </div>
 
-                        <!-- CSV Upload Section -->
+                        <!-- CSV Upload -->
                         <div class="mb-6">
-                            <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data for AI Analysis (Optional)</label>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data (Optional)</label>
+                            <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg
