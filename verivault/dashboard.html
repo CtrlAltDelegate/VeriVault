@@ -637,20 +637,29 @@
 
         // Tab switching function
         function switchTab(tabName) {
+            console.log('Switching to tab:', tabName);
+            
+            // Hide all tab content
             document.querySelectorAll('.tab-content').forEach(function(content) {
                 content.classList.add('hidden');
             });
             
+            // Reset all tab buttons
             document.querySelectorAll('[id^="tab-"]').forEach(function(btn) {
                 btn.classList.remove('text-white', 'border-cyan-400', 'bg-cyan-400/10');
                 btn.classList.add('text-slate-400', 'border-transparent');
             });
             
+            // Show selected tab content
             var targetTab = document.getElementById('content-' + tabName);
             if (targetTab) {
                 targetTab.classList.remove('hidden');
+                console.log('Showing tab content:', tabName);
+            } else {
+                console.error('Tab content not found:', 'content-' + tabName);
             }
             
+            // Update selected tab button
             var targetBtn = document.getElementById('tab-' + tabName);
             if (targetBtn) {
                 targetBtn.classList.remove('text-slate-400', 'border-transparent');
@@ -663,8 +672,12 @@
         // Report selection function
         function selectReport(reportType) {
             var report = reportTemplates[reportType];
-            if (!report) return;
+            if (!report) {
+                console.error('Report template not found:', reportType);
+                return;
+            }
             
+            // Update report selection UI
             document.querySelectorAll('.report-item').forEach(function(item) {
                 item.classList.remove('active', 'bg-blue-600');
                 item.classList.add('bg-slate-700');
@@ -675,6 +688,7 @@
                 event.currentTarget.classList.add('active', 'bg-blue-600');
             }
             
+            // Update report content only if elements exist
             var titleEl = document.getElementById('reportTitle');
             var descEl = document.getElementById('reportDescription');
             var contentEl = document.getElementById('reportContent');
@@ -878,8 +892,10 @@
             updatePriorityAlerts();
             initializeSearchAndFilters();
             
-            // Initialize report system
-            selectReport('daily-log');
+            // Initialize report system - ONLY call this if the element exists
+            if (document.getElementById('reportTitle')) {
+                selectReport('daily-log');
+            }
             
             // Set current shift based on time
             var hour = new Date().getHours();
