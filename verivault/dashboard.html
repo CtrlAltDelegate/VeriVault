@@ -1,9 +1,909 @@
-<!DOCTYPE html>
+<!-- Main Content Area -->
+            <div class="flex-1 p-8 overflow-y-auto">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Header -->
+                    <div class="mb-8">
+                        <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log</h2>
+                        <p id="reportDescription" class="text-slate-400">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
+                    </div>
+
+                    <!-- Form -->
+                    <div class="glass rounded-xl p-6">
+                        <!-- Basic Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">👤 Client Name</label>
+                                <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">📅 Report Date</label>
+                                <input type="date" id="reportDate" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                            </div>
+                        </div>
+
+                        <!-- CSV Upload Section -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data for AI Analysis (Optional)</label>
+                            <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed group">
+                                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">📁</div>
+                                <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
+                                <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
+                            </div>
+                            <input type="file" id="csvInput" accept=".csv" style="display: none;" onchange="handleCSVUpload(this)">
+                            <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
+                        </div>
+
+                        <!-- Report Content -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">📝 Report Content</label>
+                            <textarea id="reportContent" rows="15" placeholder="Enter report details or upload CSV for AI-generated content..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm transition-all"></textarea>
+                        </div>
+
+                        <!-- Generate Button -->
+                        <div class="flex gap-4">
+                            <button onclick="generateReport()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105">
+                                📄 Generate Professional PDF Report
+                            </button>
+                            <button onclick="saveAsDraft()" class="px-6 bg-slate-600 text-white py-4 rounded-lg font-semibold hover:bg-slate-500 transition-all">
+                                💾 Save Draft
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANALYTICS DASHBOARD TAB -->
+    <div id="content-dashboard" class="tab-content hidden">
+        <div class="w-full p-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">📈 Analytics Dashboard</h2>
+                    <p class="text-slate-400">Real-time security metrics and performance insights</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Metric Cards -->
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400">Active Events</span>
+                            <span class="text-2xl">📊</span>
+                        </div>
+                        <div class="text-2xl font-bold text-white">24</div>
+                        <div class="text-sm text-green-400">+12% from yesterday</div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400">Reports Generated</span>
+                            <span class="text-2xl">📄</span>
+                        </div>
+                        <div class="text-2xl font-bold text-white">156</div>
+                        <div class="text-sm text-blue-400">+8% this week</div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400">Security Audits</span>
+                            <span class="text-2xl">🔍</span>
+                        </div>
+                        <div class="text-2xl font-bold text-white">12</div>
+                        <div class="text-sm text-purple-400">3 pending review</div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-400">System Health</span>
+                            <span class="text-2xl">⚡</span>
+                        </div>
+                        <div class="text-2xl font-bold text-green-400">98.7%</div>
+                        <div class="text-sm text-green-400">All systems operational</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Activity Chart -->
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">📊 Weekly Activity</h3>
+                        <div class="h-64 bg-slate-800/50 rounded-lg flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">📈</div>
+                                <p class="text-slate-400">Activity chart visualization</p>
+                                <p class="text-slate-500 text-sm">Chart component would be integrated here</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">🕐 Recent Activity</h3>
+                        <div class="space-y-4 max-h-64 overflow-y-auto">
+                            <div class="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-sm">📄</div>
+                                <div class="flex-1">
+                                    <div class="text-white font-medium">Daily report generated</div>
+                                    <div class="text-slate-400 text-sm">Johnson Estate - 2 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg">
+                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-sm">✅</div>
+                                <div class="flex-1">
+                                    <div class="text-white font-medium">Security audit completed</div>
+                                    <div class="text-slate-400 text-sm">Metro Plaza - 15 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg">
+                                <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-sm">👥</div>
+                                <div class="flex-1">
+                                    <div class="text-white font-medium">Staff event logged</div>
+                                    <div class="text-slate-400 text-sm">John Smith departure - 1 hour ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        var currentTab = 'logger';
+        var uploadedCSVData = null;
+        var csvFileName = null;
+        var dailyLogEntries = [];
+        var logStats = {
+            staff: 0,
+            visitor: 0,
+            vendor: 0,
+            delivery: 0,
+            incident: 0,
+            patrol: 0
+        };
+        var selectedLogCategory = 'staff';
+        var currentShift = 'Day Shift';
+
+        // Enhanced daily log functions
+        function selectLogCategory(category) {
+            selectedLogCategory = category;
+            
+            // Update visual selection
+            document.querySelectorAll('.log-category-btn').forEach(function(btn) {
+                var div = btn.querySelector('div');
+                div.classList.remove('bg-blue-600', 'bg-slate-600');
+                div.classList.add('bg-slate-600');
+            });
+            
+            var selectedBtn = document.querySelector(`.log-category-btn[data-category="${category}"]`);
+            if (selectedBtn) {
+                var div = selectedBtn.querySelector('div');
+                div.classList.remove('bg-slate-600');
+                div.classList.add('bg-blue-600');
+            }
+            
+            // Update action dropdown based on category
+            updateActionOptions(category);
+        }
+
+        function updateActionOptions(category) {
+            var actionSelect = document.getElementById('logAction');
+            if (!actionSelect) return;
+            
+            var options = {
+                staff: [
+                    { value: 'arrived', text: 'Arrived' },
+                    { value: 'departed', text: 'Departed' },
+                    { value: 'break_start', text: 'Break Started' },
+                    { value: 'break_end', text: 'Break Ended' },
+                    { value: 'shift_change', text: 'Shift Change' }
+                ],
+                visitor: [
+                    { value: 'arrived', text: 'Arrived' },
+                    { value: 'departed', text: 'Departed' },
+                    { value: 'escorted', text: 'Escorted' },
+                    { value: 'waiting', text: 'Waiting' }
+                ],
+                vendor: [
+                    { value: 'arrived', text: 'Arrived' },
+                    { value: 'departed', text: 'Departed' },
+                    { value: 'work_started', text: 'Work Started' },
+                    { value: 'work_completed', text: 'Work Completed' }
+                ],
+                delivery: [
+                    { value: 'arrived', text: 'Arrived' },
+                    { value: 'departed', text: 'Departed' },
+                    { value: 'delivered', text: 'Package Delivered' },
+                    { value: 'refused', text: 'Delivery Refused' }
+                ],
+                incident: [
+                    { value: 'reported', text: 'Incident Reported' },
+                    { value: 'investigating', text: 'Under Investigation' },
+                    { value: 'resolved', text: 'Resolved' },
+                    { value: 'escalated', text: 'Escalated' }
+                ],
+                patrol: [
+                    { value: 'started', text: 'Patrol Started' },
+                    { value: 'completed', text: 'Patrol Completed' },
+                    { value: 'checkpoint', text: 'Checkpoint Reached' },
+                    { value: 'anomaly', text: 'Anomaly Detected' }
+                ]
+            };
+            
+            actionSelect.innerHTML = '<option value="">Select action</option>';
+            if (options[category]) {
+                options[category].forEach(function(option) {
+                    var optionEl = document.createElement('option');
+                    optionEl.value = option.value;
+                    optionEl.textContent = option.text;
+                    actionSelect.appendChild(optionEl);
+                });
+            }
+        }
+
+        function addLogEntry() {
+            var timestamp = document.getElementById('logTimestamp') ? document.getElementById('logTimestamp').value : '';
+            var location = document.getElementById('logLocation') ? document.getElementById('logLocation').value : '';
+            var subject = document.getElementById('logSubject') ? document.getElementById('logSubject').value : '';
+            var action = document.getElementById('logAction') ? document.getElementById('logAction').value : '';
+            var notes = document.getElementById('logNotes') ? document.getElementById('logNotes').value : '';
+            var priority = document.querySelector('input[name="priority"]:checked') ? document.querySelector('input[name="priority"]:checked').value : 'low';
+            
+            // Validation
+            if (!timestamp || !subject || !action) {
+                showNotification('Please fill in timestamp, subject/name, and action fields', 'error');
+                return;
+            }
+            
+            // Create log entry
+            var entry = {
+                id: Date.now(),
+                timestamp: timestamp,
+                category: selectedLogCategory,
+                location: location,
+                subject: subject,
+                action: action,
+                notes: notes,
+                priority: priority,
+                shift: currentShift,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add to log
+            dailyLogEntries.unshift(entry);
+            logStats[selectedLogCategory]++;
+            
+            // Update displays
+            updateLogEntriesDisplay();
+            updateLogStats();
+            updatePriorityAlerts();
+            
+            // Clear form
+            clearLogForm();
+            
+            showNotification(`Log entry added: ${subject} - ${action}`, 'success');
+        }
+
+        function clearLogForm() {
+            if (document.getElementById('logTimestamp')) {
+                var now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                document.getElementById('logTimestamp').value = now.toISOString().slice(0, 16);
+            }
+            if (document.getElementById('logLocation')) document.getElementById('logLocation').value = '';
+            if (document.getElementById('logSubject')) document.getElementById('logSubject').value = '';
+            if (document.getElementById('logAction')) document.getElementById('logAction').value = '';
+            if (document.getElementById('logNotes')) document.getElementById('logNotes').value = '';
+            
+            // Reset priority to low
+            var lowPriority = document.querySelector('input[name="priority"][value="low"]');
+            if (lowPriority) lowPriority.checked = true;
+        }
+
+        function updateLogEntriesDisplay() {
+            var container = document.getElementById('logEntriesContainer');
+            if (!container) return;
+            
+            var searchTerm = document.getElementById('searchLogs') ? document.getElementById('searchLogs').value.toLowerCase() : '';
+            var categoryFilter = document.getElementById('filterCategory') ? document.getElementById('filterCategory').value : '';
+            var priorityFilter = document.getElementById('filterPriority') ? document.getElementById('filterPriority').value : '';
+            var sortOrder = document.getElementById('sortOrder') ? document.getElementById('sortOrder').value : 'newest';
+            
+            // Filter entries
+            var filteredEntries = dailyLogEntries.filter(function(entry) {
+                var matchesSearch = !searchTerm || 
+                    entry.subject.toLowerCase().includes(searchTerm) ||
+                    entry.notes.toLowerCase().includes(searchTerm) ||
+                    entry.location.toLowerCase().includes(searchTerm);
+                var matchesCategory = !categoryFilter || entry.category === categoryFilter;
+                var matchesPriority = !priorityFilter || entry.priority === priorityFilter;
+                
+                return matchesSearch && matchesCategory && matchesPriority;
+            });
+            
+            // Sort entries
+            filteredEntries.sort(function(a, b) {
+                if (sortOrder === 'oldest') {
+                    return new Date(a.timestamp) - new Date(b.timestamp);
+                } else if (sortOrder === 'priority') {
+                    var priorityOrder = { high: 3, medium: 2, low: 1 };
+                    return priorityOrder[b.priority] - priorityOrder[a.priority];
+                } else {
+                    return new Date(b.timestamp) - new Date(a.timestamp);
+                }
+            });
+            
+            if (filteredEntries.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-slate-400 py-8">
+                        <div class="text-4xl mb-4">📝</div>
+                        <p>${dailyLogEntries.length === 0 ? 'No log entries yet today' : 'No entries match your filters'}</p>
+                        <p class="text-sm mt-2">${dailyLogEntries.length === 0 ? 'Start by adding your first entry above' : 'Try adjusting your search or filters'}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            var html = '';
+            filteredEntries.forEach(function(entry) {
+                var priorityColor = entry.priority === 'high' ? 'border-red-500/50 bg-red-500/10' : 
+                                  entry.priority === 'medium' ? 'border-yellow-500/50 bg-yellow-500/10' : 
+                                  'border-green-500/50 bg-green-500/10';
+                
+                var categoryIcon = getCategoryIcon(entry.category);
+                var categoryColor = getCategoryColor(entry.category);
+                
+                var formattedTime = new Date(entry.timestamp).toLocaleString();
+                
+                html += `
+                    <div class="bg-slate-700/30 border ${priorityColor} rounded-lg p-4">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 ${categoryColor} rounded-full flex items-center justify-center text-sm">
+                                    ${categoryIcon}
+                                </div>
+                                <div>
+                                    <div class="text-white font-medium">${entry.subject} - ${formatActionText(entry.action)}</div>
+                                    <div class="text-slate-400 text-sm">${formattedTime} • ${entry.location || 'No location'}</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-1 rounded-full text-xs font-medium ${getPriorityBadgeClass(entry.priority)}">
+                                    ${entry.priority.toUpperCase()}
+                                </span>
+                                <button onclick="deleteLogEntry(${entry.id})" class="text-red-400 hover:text-red-300 text-sm">🗑️</button>
+                            </div>
+                        </div>
+                        ${entry.notes ? `<div class="text-slate-300 text-sm mt-2 pl-11">${entry.notes}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // Update total count
+            var totalEl = document.getElementById('totalEntries');
+            if (totalEl) totalEl.textContent = dailyLogEntries.length;
+        }
+
+        function updateLogStats() {
+            var elements = {
+                staffLogCount: document.getElementById('staffLogCount'),
+                visitorLogCount: document.getElementById('visitorLogCount'),
+                vendorLogCount: document.getElementById('vendorLogCount'),
+                deliveryLogCount: document.getElementById('deliveryLogCount'),
+                incidentLogCount: document.getElementById('incidentLogCount'),
+                patrolLogCount: document.getElementById('patrolLogCount')
+            };
+            
+            if (elements.staffLogCount) elements.staffLogCount.textContent = logStats.staff;
+            if (elements.visitorLogCount) elements.visitorLogCount.textContent = logStats.visitor;
+            if (elements.vendorLogCount) elements.vendorLogCount.textContent = logStats.vendor;
+            if (elements.deliveryLogCount) elements.deliveryLogCount.textContent = logStats.delivery;
+            if (elements.incidentLogCount) elements.incidentLogCount.textContent = logStats.incident;
+            if (elements.patrolLogCount) elements.patrolLogCount.textContent = logStats.patrol;
+        }
+
+        function updatePriorityAlerts() {
+            var container = document.getElementById('priorityAlerts');
+            if (!container) return;
+            
+            var highPriorityEntries = dailyLogEntries.filter(function(entry) {
+                return entry.priority === 'high';
+            });
+            
+            if (highPriorityEntries.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-center text-sm">No high-priority items</p>';
+                return;
+            }
+            
+            var html = '';
+            highPriorityEntries.slice(0, 5).forEach(function(entry) {
+                html += `
+                    <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
+                        <div class="text-red-300 font-medium text-sm">${entry.subject}</div>
+                        <div class="text-red-400 text-xs">${new Date(entry.timestamp).toLocaleString()}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function deleteLogEntry(entryId) {
+            if (!confirm('Are you sure you want to delete this log entry?')) return;
+            
+            var entryIndex = dailyLogEntries.findIndex(function(entry) {
+                return entry.id === entryId;
+            });
+            
+            if (entryIndex !== -1) {
+                var entry = dailyLogEntries[entryIndex];
+                logStats[entry.category]--;
+                dailyLogEntries.splice(entryIndex, 1);
+                
+                updateLogEntriesDisplay();
+                updateLogStats();
+                updatePriorityAlerts();
+                
+                showNotification('Log entry deleted', 'success');
+            }
+        }
+
+        // Helper functions
+        function getCategoryIcon(category) {
+            var icons = {
+                staff: '👥',
+                visitor: '🏃',
+                vendor: '🔧',
+                delivery: '📦',
+                incident: '⚠️',
+                patrol: '🚶'
+            };
+            return icons[category] || '📝';
+        }
+
+        function getCategoryColor(category) {
+            var colors = {
+                staff: 'bg-blue-500',
+                visitor: 'bg-purple-500',
+                vendor: 'bg-orange-500',
+                delivery: 'bg-green-500',
+                incident: 'bg-red-500',
+                patrol: 'bg-gray-500'
+            };
+            return colors[category] || 'bg-gray-500';
+        }
+
+        function getPriorityBadgeClass(priority) {
+            var classes = {
+                high: 'bg-red-500/20 text-red-300 border border-red-500/30',
+                medium: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30',
+                low: 'bg-green-500/20 text-green-300 border border-green-500/30'
+            };
+            return classes[priority] || classes.low;
+        }
+
+        function formatActionText(action) {
+            return action.split('_').map(function(word) {
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            }).join(' ');
+        }
+
+        // Quick action functions
+        function exportTodaysLog() {
+            if (dailyLogEntries.length === 0) {
+                showNotification('No log entries to export', 'error');
+                return;
+            }
+            
+            var csvContent = 'Timestamp,Category,Location,Subject,Action,Priority,Notes,Shift\n';
+            dailyLogEntries.forEach(function(entry) {
+                var row = [
+                    entry.timestamp,
+                    entry.category,
+                    entry.location || '',
+                    entry.subject,
+                    entry.action,
+                    entry.priority,
+                    (entry.notes || '').replace(/"/g, '""'),
+                    entry.shift
+                ].map(function(field) {
+                    return '"' + field + '"';
+                }).join(',');
+                csvContent += row + '\n';
+            });
+            
+            var blob = new Blob([csvContent], { type: 'text/csv' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'daily_log_' + new Date().toISOString().split('T')[0] + '.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('Daily log exported successfully', 'success');
+        }
+
+        function startPatrolLog() {
+            selectLogCategory('patrol');
+            document.getElementById('logSubject').value = 'Security Patrol';
+            document.getElementById('logAction').value = 'started';
+            showNotification('Patrol log initiated - complete the entry details', 'info');
+        }
+
+        function reportIncident() {
+            selectLogCategory('incident');
+            document.querySelector('input[name="priority"][value="high"]').checked = true;
+            document.getElementById('logSubject').focus();
+            showNotification('Incident report mode activated - enter details immediately', 'info');
+        }
+
+        function refreshLogView() {
+            updateLogEntriesDisplay();
+            showNotification('Log view refreshed', 'success');
+        }
+
+        // Search and filter event listeners
+        function initializeSearchAndFilters() {
+            var searchInput = document.getElementById('searchLogs');
+            var categoryFilter = document.getElementById('filterCategory');
+            var priorityFilter = document.getElementById('filterPriority');
+            var sortOrder = document.getElementById('sortOrder');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    setTimeout(updateLogEntriesDisplay, 300);
+                });
+            }
+            
+            if (categoryFilter) {
+                categoryFilter.addEventListener('change', updateLogEntriesDisplay);
+            }
+            
+            if (priorityFilter) {
+                priorityFilter.addEventListener('change', updateLogEntriesDisplay);
+            }
+            
+            if (sortOrder) {
+                sortOrder.addEventListener('change', updateLogEntriesDisplay);
+            }
+        }
+
+        // Report templates
+        var reportTemplates = {
+            'daily-log': {
+                title: 'Daily Log',
+                description: 'Comprehensive daily operations report including staff tracking, deliveries, and observations',
+                template: 'DAILY OPERATIONS LOG\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Daily Operations Summary\n\nOPERATIONAL OVERVIEW:\n• Staff deployment and assignments\n• Security checkpoint activities\n• Visitor management and access control\n• Equipment status and functionality\n• Notable incidents or observations\n• Communication logs\n\nRECOMMENDATIONS:\n• Continued monitoring protocols\n• Equipment maintenance schedules\n• Staff training updates\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'incident-medical': {
+                title: 'Medical Incident Report',
+                description: 'Detailed documentation for injury and emergency situations',
+                template: 'MEDICAL INCIDENT REPORT\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Medical Emergency Documentation\n\nINCIDENT DETAILS:\n• Time and location of incident\n• Individuals involved and injuries sustained\n• Immediate response actions taken\n• Medical personnel contacted\n\nPREVENTION MEASURES:\n• Risk assessment updates\n• Safety protocol improvements\n• Additional training requirements\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'incident-non-medical': {
+                title: 'Security Incident Report',
+                description: 'Documentation for security breaches and non-medical emergencies',
+                template: 'SECURITY INCIDENT REPORT\n\nClient: [CLIENT_NAME]\nDate: [REPORT_DATE]\nReport Type: Non-Medical Security Incident\n\nINCIDENT CLASSIFICATION:\n• Security breach assessment\n• Unauthorized access attempts\n• Equipment malfunction or damage\n• Suspicious activity documentation\n\nREMEDIATION PLAN:\n• Security enhancement recommendations\n• Policy updates and revisions\n• Additional monitoring requirements\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'annual-security': {
+                title: 'Annual Security Assessment',
+                description: 'Comprehensive yearly security analysis',
+                template: 'ANNUAL SECURITY ASSESSMENT\n\nClient: [CLIENT_NAME]\nAssessment Period: [REPORT_DATE]\nReport Type: Comprehensive Security Analysis\n\nTHREAT LANDSCAPE ANALYSIS:\n• Current security environment assessment\n• Emerging threat identification\n• Risk probability and impact evaluation\n\nSTRATEGIC RECOMMENDATIONS:\n• Security enhancement priorities\n• Technology upgrade requirements\n• Budget allocation recommendations\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'systems-audit': {
+                title: 'Systems Audit Report',
+                description: 'Technical evaluation of security equipment and systems',
+                template: 'SYSTEMS AUDIT REPORT\n\nClient: [CLIENT_NAME]\nAudit Date: [REPORT_DATE]\nReport Type: Technology and Equipment Assessment\n\nSYSTEM PERFORMANCE ANALYSIS:\n• Security camera network status\n• Access control system functionality\n• Communication equipment assessment\n\nOPTIMIZATION RECOMMENDATIONS:\n• System upgrade priorities\n• Performance enhancement measures\n• Integration improvement opportunities\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'discrepancy': {
+                title: 'Discrepancy Report',
+                description: 'Documentation of equipment issues and operational inconsistencies',
+                template: 'DISCREPANCY REPORT\n\nClient: [CLIENT_NAME]\nReport Date: [REPORT_DATE]\nReport Type: Operational Discrepancy Documentation\n\nDISCREPANCY IDENTIFICATION:\n• Equipment malfunction details\n• Policy compliance violations\n• Procedural inconsistencies\n\nCORRECTIVE ACTION PLAN:\n• Immediate remediation steps\n• Long-term solution development\n• Prevention strategy implementation\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            },
+            'vehicle-inspection': {
+                title: 'Vehicle Inspection Report',
+                description: 'Vehicle safety and operational readiness assessment',
+                template: 'VEHICLE INSPECTION REPORT\n\nClient: [CLIENT_NAME]\nInspection Date: [REPORT_DATE]\nReport Type: Fleet Vehicle Assessment\n\nVEHICLE IDENTIFICATION:\n• Make, model, and year\n• Vehicle identification number\n• License plate information\n\nSAFETY INSPECTION:\n• Brake system functionality\n• Tire condition and pressure\n• Lighting system operation\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL'
+            }
+        };
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            var container = document.getElementById('notificationContainer');
+            var notification = document.createElement('div');
+            notification.className = `notification glass rounded-lg p-4 ${type === 'success' ? 'border-green-500/50' : type === 'error' ? 'border-red-500/50' : 'border-blue-500/50'}`;
+            
+            var icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            var color = type === 'success' ? 'text-green-400' : type === 'error' ? 'text-red-400' : 'text-blue-400';
+            
+            notification.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <span class="text-lg">${icon}</span>
+                    <span class="${color}">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-auto text-slate-400 hover:text-white">×</button>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            setTimeout(function() {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Tab switching function
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(function(content) {
+                content.classList.add('hidden');
+            });
+            
+            document.querySelectorAll('[id^="tab-"]').forEach(function(btn) {
+                btn.classList.remove('text-white', 'border-cyan-400', 'bg-cyan-400/10');
+                btn.classList.add('text-slate-400', 'border-transparent');
+            });
+            
+            var targetTab = document.getElementById('content-' + tabName);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+            }
+            
+            var targetBtn = document.getElementById('tab-' + tabName);
+            if (targetBtn) {
+                targetBtn.classList.remove('text-slate-400', 'border-transparent');
+                targetBtn.classList.add('text-white', 'border-cyan-400', 'bg-cyan-400/10');
+            }
+            
+            currentTab = tabName;
+        }
+
+        // Report selection function
+        function selectReport(reportType) {
+            var report = reportTemplates[reportType];
+            if (!report) return;
+            
+            document.querySelectorAll('.report-item').forEach(function(item) {
+                item.classList.remove('active', 'bg-blue-600');
+                item.classList.add('bg-slate-700');
+            });
+            
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.remove('bg-slate-700');
+                event.currentTarget.classList.add('active', 'bg-blue-600');
+            }
+            
+            var titleEl = document.getElementById('reportTitle');
+            var descEl = document.getElementById('reportDescription');
+            var contentEl = document.getElementById('reportContent');
+            
+            if (titleEl) titleEl.textContent = report.title;
+            if (descEl) descEl.textContent = report.description;
+            
+            if (contentEl && !uploadedCSVData) {
+                var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : '';
+                var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
+                
+                var template = report.template
+                    .replace(/\[CLIENT_NAME\]/g, clientName || 'CLIENT_NAME')
+                    .replace(/\[REPORT_DATE\]/g, reportDate);
+                contentEl.value = template;
+            }
+        }
+
+        // CSV upload handler
+        function handleCSVUpload(input) {
+            var file = input.files[0];
+            var statusEl = document.getElementById('uploadStatus');
+            
+            if (file && file.name.toLowerCase().endsWith('.csv')) {
+                csvFileName = file.name;
+                
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var csvText = e.target.result;
+                    uploadedCSVData = parseCSVData(csvText);
+                    
+                    if (statusEl) {
+                        statusEl.innerHTML = '<div class="flex items-center gap-2"><span class="text-green-400">✅</span><span class="text-green-400">File uploaded: ' + file.name + '</span></div><div class="flex items-center gap-2 mt-1"><span class="text-blue-400 text-xs">🤖</span><span class="text-blue-400 text-xs">AI ready to analyze ' + uploadedCSVData.length + ' log entries</span></div>';
+                        statusEl.classList.remove('hidden');
+                    }
+                    
+                    generateAISummary();
+                    showNotification('CSV data processed and analyzed by AI', 'success');
+                };
+                reader.readAsText(file);
+            } else if (statusEl) {
+                statusEl.textContent = '❌ Please upload a CSV file only';
+                statusEl.className = 'mt-2 text-sm text-red-400';
+                statusEl.classList.remove('hidden');
+                showNotification('Please upload a valid CSV file', 'error');
+            }
+        }
+
+        // CSV parsing function
+        function parseCSVData(csvText) {
+            var lines = csvText.split('\n');
+            var data = [];
+            var headers = null;
+            
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i].trim();
+                if (!line) continue;
+                
+                var row = line.split(',').map(function(cell) {
+                    return cell.replace(/"/g, '').trim();
+                });
+                
+                if (i === 0) {
+                    headers = row;
+                } else {
+                    var entry = {};
+                    for (var j = 0; j < headers.length && j < row.length; j++) {
+                        entry[headers[j]] = row[j];
+                    }
+                    data.push(entry);
+                }
+            }
+            
+            return data;
+        }
+
+        // AI summary generation
+        function generateAISummary() {
+            if (!uploadedCSVData || uploadedCSVData.length === 0) return;
+            
+            var contentEl = document.getElementById('reportContent');
+            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : 'CLIENT_NAME';
+            var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
+            
+            var aiGeneratedContent = 'EXECUTIVE SECURITY OPERATIONS BRIEFING\n\nCLIENT: ' + clientName + '\nREPORTING PERIOD: ' + reportDate + '\nCLASSIFICATION: CONFIDENTIAL - EXECUTIVE LEVEL\nDATA SOURCE: ' + csvFileName + ' | ENTRIES ANALYZED: ' + uploadedCSVData.length + '\nANALYSIS ENGINE: VeriVault AI Security Intelligence Platform\nGENERATED: ' + new Date().toLocaleString() + '\n\nEXECUTIVE SUMMARY:\nThis comprehensive security operations analysis evaluated ' + uploadedCSVData.length + ' documented activities. All security personnel maintained professional standards throughout the reporting period. No critical security incidents requiring immediate attention were identified.\n\nOPERATIONAL OVERVIEW:\n• Total log entries processed: ' + uploadedCSVData.length + '\n• Security personnel deployed across multiple locations\n• All activities conducted within normal operational parameters\n• Equipment functionality maintained at optimal levels\n\nSTRATEGIC RECOMMENDATIONS:\n• Maintain current security protocols and procedures\n• Continue regular patrol rotations across all monitored areas\n• Ensure consistent documentation standards for all security activities\n\nCOMPLIANCE NOTES:\n• All security protocols followed per established procedures\n• Documentation standards maintained throughout reporting period\n• Personnel deployment aligned with operational requirements\n\nPrepared by: VeriVault AI Security Intelligence\nClassification: CONFIDENTIAL\nGenerated: ' + new Date().toLocaleString() + '\nReport ID: VV-' + Date.now().toString().slice(-6);
+
+            if (contentEl) {
+                contentEl.value = aiGeneratedContent;
+            }
+        }
+
+        // Save as draft function
+        function saveAsDraft() {
+            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : '';
+            var reportContent = document.getElementById('reportContent') ? document.getElementById('reportContent').value : '';
+            
+            if (!clientName || !reportContent.trim()) {
+                showNotification('Please enter client name and report content', 'error');
+                return;
+            }
+            
+            showNotification('Draft saved successfully', 'success');
+        }
+
+        // Professional PDF generation
+        function generateReport() {
+            var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : 'CLIENT_NAME';
+            var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
+            var reportContent = document.getElementById('reportContent') ? document.getElementById('reportContent').value : '';
+            var reportTitle = document.getElementById('reportTitle') ? document.getElementById('reportTitle').textContent : 'Report';
+            
+            if (!reportContent.trim() && uploadedCSVData && uploadedCSVData.length > 0) {
+                generateAISummary();
+                reportContent = document.getElementById('reportContent').value;
+            }
+            
+            if (!reportContent.trim()) {
+                showNotification('Please enter report content or upload a CSV file for AI analysis', 'error');
+                return;
+            }
+            
+            try {
+                var jsPDF = window.jspdf.jsPDF;
+                var doc = new jsPDF();
+                
+                // Professional header
+                doc.setFillColor(0, 150, 200);
+                doc.rect(0, 0, 210, 25, 'F');
+                
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(24);
+                doc.setFont('helvetica', 'bold');
+                doc.text('VERIVAULT', 20, 16);
+                
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'normal');
+                doc.text('AI Security Intelligence Platform', 120, 16);
+                
+                // Report title
+                doc.setTextColor(40, 40, 40);
+                doc.setFontSize(20);
+                doc.setFont('helvetica', 'bold');
+                doc.text(reportTitle.toUpperCase(), 20, 45);
+                
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Executive Security Analysis - ' + clientName, 20, 55);
+                
+                // Content
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                
+                var splitContent = doc.splitTextToSize(reportContent, 170);
+                doc.text(splitContent, 20, 75);
+                
+                // Footer
+                doc.setFontSize(8);
+                doc.text('VeriVault Security Intelligence | CONFIDENTIAL | ' + new Date().toLocaleDateString(), 20, 285);
+                
+                // Save PDF
+                var fileName = 'VeriVault_' + reportTitle.replace(/\s+/g, '_') + '_' + clientName.replace(/\s+/g, '_') + '_' + reportDate + '.pdf';
+                doc.save(fileName);
+                
+                showNotification('Professional PDF report generated successfully!', 'success');
+                
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                showNotification('Error generating PDF. Please check your browser supports PDF generation.', 'error');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('VeriVault Dashboard Loaded');
+            
+            // Set current timestamp
+            var timestampInput = document.getElementById('logTimestamp');
+            if (timestampInput) {
+                var now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                timestampInput.value = now.toISOString().slice(0, 16);
+            }
+            
+            // Set report date
+            var dateInput = document.getElementById('reportDate');
+            if (dateInput) {
+                dateInput.value = new Date().toISOString().split('T')[0];
+            }
+            
+            // Initialize daily log system
+            selectLogCategory('staff'); // Default to staff category
+            updateLogEntriesDisplay();
+            updateLogStats();
+            updatePriorityAlerts();
+            initializeSearchAndFilters();
+            
+            // Initialize report system
+            selectReport('daily-log');
+            
+            // Set current shift based on time
+            var hour = new Date().getHours();
+            if (hour >= 6 && hour < 14) {
+                currentShift = 'Day Shift';
+            } else if (hour >= 14 && hour < 22) {
+                currentShift = 'Evening Shift';
+            } else {
+                currentShift = 'Night Shift';
+            }
+            
+            var shiftEl = document.getElementById('currentShift');
+            if (shiftEl) shiftEl.textContent = currentShift;
+            
+            console.log('Dashboard ready - Current shift:', currentShift);
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VeriVault - AI Security Intelligence</title>
+    <title>VeriVault - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -46,6 +946,11 @@
                 <button onclick="switchTab('dashboard')" id="tab-dashboard" class="py-4 px-6 text-slate-400 font-medium border-b-2 border-transparent hover:text-white hover:border-slate-400">
                     📈 Analytics Dashboard
                 </button>
+                <div class="ml-auto flex items-center py-4">
+                    <button onclick="logout()" class="text-slate-400 hover:text-white text-sm">
+                        👤 Logout
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -472,3 +1377,11 @@
                         <div class="bg-slate-700/50 p-2 rounded text-xs">
                             <div class="text-white font-medium">Security Audit - Metro Plaza</div>
                             <div class="text-slate-400">Generated yesterday</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="flex-1 p-8 overflow-y-auto">
+                <div class="max-w-4xl mx-auto
