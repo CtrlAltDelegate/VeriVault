@@ -365,50 +365,134 @@
 
         <!-- Reports Tab -->
         <div id="content-reports" class="tab-content hidden">
-            <div class="p-8">
-                <div class="max-w-4xl mx-auto">
-                    <div class="mb-8">
-                        <h2 class="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-                            📊 Report Generation
-                        </h2>
-                        <p class="text-slate-400">Generate professional security reports with AI assistance</p>
+            <div class="flex h-[calc(100vh-73px)]">
+                <!-- Report Type Sidebar -->
+                <div class="w-80 glass border-r border-white/10 p-6">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">V</span>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-white">VeriVault</h1>
+                            <p class="text-sm text-cyan-400">AI Security Intelligence</p>
+                        </div>
                     </div>
 
-                    <div class="glass rounded-xl p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">👤 Client Name</label>
-                                <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">📅 Report Date</label>
-                                <input type="date" id="reportDate" class="w-full bg-white/90 border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                    <div class="space-y-2">
+                        <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
+                        
+                        <div onclick="selectReport('daily-summary')" class="report-item active bg-blue-600 p-3 rounded-lg cursor-pointer transition-all hover:bg-blue-700 transform hover:scale-105">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                    <span class="text-white text-sm">📅</span>
+                                </div>
+                                <div>
+                                    <div class="text-white font-medium">Daily Summary</div>
+                                    <div class="text-blue-200 text-xs">Comprehensive daily operations</div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data for AI Analysis (Optional)</label>
-                            <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed group">
-                                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">📁</div>
-                                <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
-                                <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
+                        <div onclick="selectReport('medical-incident')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                                    <span class="text-white text-sm">🏥</span>
+                                </div>
+                                <div>
+                                    <div class="text-white font-medium">Medical Incident</div>
+                                    <div class="text-slate-400 text-xs">Injury & emergency documentation</div>
+                                </div>
                             </div>
-                            <input type="file" id="csvInput" accept=".csv" style="display: none;" onchange="handleCSVUpload(this)">
-                            <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
                         </div>
 
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium text-slate-300 mb-2">📝 Report Content</label>
-                            <textarea id="reportContent" rows="15" placeholder="Enter report details or upload CSV for AI-generated content..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm transition-all"></textarea>
+                        <div onclick="selectReport('security-incident')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                                    <span class="text-white text-sm">⚠️</span>
+                                </div>
+                                <div>
+                                    <div class="text-white font-medium">Security Incident</div>
+                                    <div class="text-slate-400 text-xs">Security breach documentation</div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="flex gap-4">
-                            <button onclick="generateReport()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105">
-                                📄 Generate Professional PDF Report
-                            </button>
-                            <button onclick="saveAsDraft()" class="px-6 bg-slate-600 text-white py-4 rounded-lg font-semibold hover:bg-slate-500 transition-all">
-                                💾 Save Draft
-                            </button>
+                        <div onclick="selectReport('security-audit')" class="report-item bg-slate-700 p-3 rounded-lg cursor-pointer transition-all hover:bg-slate-600 transform hover:scale-105">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                                    <span class="text-white text-sm">🔍</span>
+                                </div>
+                                <div>
+                                    <div class="text-white font-medium">Security Audit Report</div>
+                                    <div class="text-slate-400 text-xs">System functionality verification</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Recent Reports</h3>
+                        <div class="space-y-2">
+                            <div class="bg-slate-700/50 p-2 rounded text-xs">
+                                <div class="text-white font-medium">Daily Summary - Johnson Estate</div>
+                                <div class="text-slate-400">Generated 2 hours ago</div>
+                            </div>
+                            <div class="bg-slate-700/50 p-2 rounded text-xs">
+                                <div class="text-white font-medium">Security Audit - Metro Plaza</div>
+                                <div class="text-slate-400">Generated yesterday</div>
+                            </div>
+                            <div class="bg-slate-700/50 p-2 rounded text-xs">
+                                <div class="text-white font-medium">Medical Incident - Oak Building</div>
+                                <div class="text-slate-400">Generated 3 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Content Area -->
+                <div class="flex-1 p-8 overflow-y-auto">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="mb-8">
+                            <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Summary Report</h2>
+                            <p id="reportDescription" class="text-slate-400">Comprehensive daily operations summary including all security activities</p>
+                        </div>
+
+                        <div class="glass rounded-xl p-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">👤 Client Name</label>
+                                    <input type="text" id="clientName" placeholder="Enter client name" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-300 mb-2">📅 Report Date</label>
+                                    <input type="date" id="reportDate" class="w-full bg-white/90 border border-white/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data for AI Analysis (Optional)</label>
+                                <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed group">
+                                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">📁</div>
+                                    <p class="text-slate-300 mb-2">Drop CSV file here or click to upload</p>
+                                    <p class="text-slate-400 text-sm">AI will analyze your data and generate intelligent summaries</p>
+                                </div>
+                                <input type="file" id="csvInput" accept=".csv" style="display: none;" onchange="handleCSVUpload(this)">
+                                <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
+                            </div>
+
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-slate-300 mb-2">📝 Report Content</label>
+                                <textarea id="reportContent" rows="15" placeholder="Enter report details or upload CSV for AI-generated content..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm transition-all"></textarea>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <button onclick="generateReport()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105">
+                                    📄 Generate Professional PDF Report
+                                </button>
+                                <button onclick="saveAsDraft()" class="px-6 bg-slate-600 text-white py-4 rounded-lg font-semibold hover:bg-slate-500 transition-all">
+                                    💾 Save Draft
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
