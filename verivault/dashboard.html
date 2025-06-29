@@ -1,31 +1,11 @@
-<!-- Recent Reports -->
-                    <div class="mt-8">
-                        <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Recent Reports</h3>
-                        <div class="space-y-2">
-                            <div class="bg-slate-700/50 p-2 rounded text-xs">
-                                <div class="text-white font-medium">Daily Log - Johnson Estate</div>
-                                <div class="text-slate-400">Generated 2 hours ago</div>
-                            </div>
-                            <div class="bg-slate-700/50 p-2 rounded text-xs">
-                                <div class="text-white font-medium">Security Audit - Metro Plaza</div>
-                                <div class="text-slate-400">Generated yesterday</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Content Area -->
-                <div class="flex-1 p-8 overflow-y-auto">
+<div class="flex-1 p-8 overflow-y-auto">
                     <div class="max-w-4xl mx-auto">
-                        <!-- Header -->
                         <div class="mb-8">
                             <h2 id="reportTitle" class="text-3xl font-bold text-white mb-2">Daily Log</h2>
                             <p id="reportDescription" class="text-slate-400">Comprehensive daily operations report including staff tracking, deliveries, and observations</p>
                         </div>
 
-                        <!-- Form -->
                         <div class="glass rounded-xl p-6">
-                            <!-- Basic Info -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label class="block text-sm font-medium text-slate-300 mb-2">👤 Client Name</label>
@@ -37,7 +17,6 @@
                                 </div>
                             </div>
 
-                            <!-- CSV Upload Section -->
                             <div class="mb-6">
                                 <label class="block text-sm font-medium text-slate-300 mb-2">📊 Upload CSV Data for AI Analysis (Optional)</label>
                                 <div onclick="document.getElementById('csvInput').click()" class="w-full p-6 bg-white/5 border border-white/20 rounded-lg text-center cursor-pointer hover:bg-white/10 transition-colors border-dashed group">
@@ -49,13 +28,11 @@
                                 <div id="uploadStatus" class="mt-2 text-sm hidden"></div>
                             </div>
 
-                            <!-- Report Content -->
                             <div class="mb-6">
                                 <label class="block text-sm font-medium text-slate-300 mb-2">📝 Report Content</label>
                                 <textarea id="reportContent" rows="15" placeholder="Enter report details or upload CSV for AI-generated content..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-mono text-sm transition-all"></textarea>
                             </div>
 
-                            <!-- Generate Button -->
                             <div class="flex gap-4">
                                 <button onclick="generateReport()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105">
                                     📄 Generate Professional PDF Report
@@ -80,7 +57,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                        <!-- Metric Cards -->
                         <div class="glass rounded-xl p-6">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-slate-400">Active Events</span>
@@ -119,7 +95,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Activity Chart -->
                         <div class="glass rounded-xl p-6">
                             <h3 class="text-xl font-bold text-white mb-4">📊 Weekly Activity</h3>
                             <div class="h-64 bg-slate-800/50 rounded-lg flex items-center justify-center">
@@ -131,7 +106,6 @@
                             </div>
                         </div>
 
-                        <!-- Recent Activity -->
                         <div class="glass rounded-xl p-6">
                             <h3 class="text-xl font-bold text-white mb-4">🕐 Recent Activity</h3>
                             <div class="space-y-4 max-h-64 overflow-y-auto">
@@ -224,18 +198,15 @@
         function switchTab(tabName) {
             console.log('Switching to tab:', tabName);
             
-            // Hide all tab content
             document.querySelectorAll('.tab-content').forEach(function(content) {
                 content.classList.add('hidden');
             });
             
-            // Reset all tab buttons
             document.querySelectorAll('[id^="tab-"]').forEach(function(btn) {
                 btn.classList.remove('text-white', 'border-cyan-400', 'bg-cyan-400/10');
                 btn.classList.add('text-slate-400', 'border-transparent');
             });
             
-            // Show selected tab content
             var targetTab = document.getElementById('content-' + tabName);
             if (targetTab) {
                 targetTab.classList.remove('hidden');
@@ -244,7 +215,6 @@
                 console.error('Tab content not found:', 'content-' + tabName);
             }
             
-            // Update selected tab button
             var targetBtn = document.getElementById('tab-' + tabName);
             if (targetBtn) {
                 targetBtn.classList.remove('text-slate-400', 'border-transparent');
@@ -254,11 +224,10 @@
             currentTab = tabName;
         }
 
-        // Enhanced daily log functions
+        // Daily log functions
         function selectLogCategory(category) {
             selectedLogCategory = category;
             
-            // Update visual selection
             document.querySelectorAll('.log-category-btn').forEach(function(btn) {
                 var div = btn.querySelector('div');
                 div.classList.remove('bg-blue-600', 'bg-slate-600');
@@ -272,7 +241,6 @@
                 div.classList.add('bg-blue-600');
             }
             
-            // Update action dropdown based on category
             updateActionOptions(category);
         }
 
@@ -339,13 +307,11 @@
             var notes = document.getElementById('logNotes') ? document.getElementById('logNotes').value : '';
             var priority = document.querySelector('input[name="priority"]:checked') ? document.querySelector('input[name="priority"]:checked').value : 'low';
             
-            // Validation
             if (!timestamp || !subject || !action) {
                 showNotification('Please fill in timestamp, subject/name, and action fields', 'error');
                 return;
             }
             
-            // Create log entry
             var entry = {
                 id: Date.now(),
                 timestamp: timestamp,
@@ -359,16 +325,12 @@
                 createdAt: new Date().toISOString()
             };
             
-            // Add to log
             dailyLogEntries.unshift(entry);
             logStats[selectedLogCategory]++;
             
-            // Update displays
             updateLogEntriesDisplay();
             updateLogStats();
             updatePriorityAlerts();
-            
-            // Clear form
             clearLogForm();
             
             showNotification(`Log entry added: ${subject} - ${action}`, 'success');
@@ -385,7 +347,6 @@
             if (document.getElementById('logAction')) document.getElementById('logAction').value = '';
             if (document.getElementById('logNotes')) document.getElementById('logNotes').value = '';
             
-            // Reset priority to low
             var lowPriority = document.querySelector('input[name="priority"][value="low"]');
             if (lowPriority) lowPriority.checked = true;
         }
@@ -399,7 +360,6 @@
             var priorityFilter = document.getElementById('filterPriority') ? document.getElementById('filterPriority').value : '';
             var sortOrder = document.getElementById('sortOrder') ? document.getElementById('sortOrder').value : 'newest';
             
-            // Filter entries
             var filteredEntries = dailyLogEntries.filter(function(entry) {
                 var matchesSearch = !searchTerm || 
                     entry.subject.toLowerCase().includes(searchTerm) ||
@@ -411,7 +371,6 @@
                 return matchesSearch && matchesCategory && matchesPriority;
             });
             
-            // Sort entries
             filteredEntries.sort(function(a, b) {
                 if (sortOrder === 'oldest') {
                     return new Date(a.timestamp) - new Date(b.timestamp);
@@ -442,7 +401,6 @@
                 
                 var categoryIcon = getCategoryIcon(entry.category);
                 var categoryColor = getCategoryColor(entry.category);
-                
                 var formattedTime = new Date(entry.timestamp).toLocaleString();
                 
                 html += `
@@ -471,7 +429,6 @@
             
             container.innerHTML = html;
             
-            // Update total count
             var totalEl = document.getElementById('totalEntries');
             if (totalEl) totalEl.textContent = dailyLogEntries.length;
         }
@@ -660,7 +617,7 @@
             }
         }
 
-        // Report selection function
+        // Report functions
         function selectReport(reportType) {
             var report = reportTemplates[reportType];
             if (!report) {
@@ -668,7 +625,6 @@
                 return;
             }
             
-            // Update report selection UI
             document.querySelectorAll('.report-item').forEach(function(item) {
                 item.classList.remove('active', 'bg-blue-600');
                 item.classList.add('bg-slate-700');
@@ -679,7 +635,6 @@
                 event.currentTarget.classList.add('active', 'bg-blue-600');
             }
             
-            // Update report content only if elements exist
             var titleEl = document.getElementById('reportTitle');
             var descEl = document.getElementById('reportDescription');
             var contentEl = document.getElementById('reportContent');
@@ -698,7 +653,6 @@
             }
         }
 
-        // CSV upload handler
         function handleCSVUpload(input) {
             var file = input.files[0];
             var statusEl = document.getElementById('uploadStatus');
@@ -728,7 +682,6 @@
             }
         }
 
-        // CSV parsing function
         function parseCSVData(csvText) {
             var lines = csvText.split('\n');
             var data = [];
@@ -756,7 +709,6 @@
             return data;
         }
 
-        // AI summary generation
         function generateAISummary() {
             if (!uploadedCSVData || uploadedCSVData.length === 0) return;
             
@@ -771,7 +723,6 @@
             }
         }
 
-        // Save as draft function
         function saveAsDraft() {
             var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : '';
             var reportContent = document.getElementById('reportContent') ? document.getElementById('reportContent').value : '';
@@ -784,7 +735,6 @@
             showNotification('Draft saved successfully', 'success');
         }
 
-        // Professional PDF generation
         function generateReport() {
             var clientName = document.getElementById('clientName') ? document.getElementById('clientName').value : 'CLIENT_NAME';
             var reportDate = document.getElementById('reportDate') ? document.getElementById('reportDate').value : new Date().toISOString().split('T')[0];
@@ -805,7 +755,6 @@
                 var jsPDF = window.jspdf.jsPDF;
                 var doc = new jsPDF();
                 
-                // Professional header
                 doc.setFillColor(0, 150, 200);
                 doc.rect(0, 0, 210, 25, 'F');
                 
@@ -818,7 +767,6 @@
                 doc.setFont('helvetica', 'normal');
                 doc.text('AI Security Intelligence Platform', 120, 16);
                 
-                // Report title
                 doc.setTextColor(40, 40, 40);
                 doc.setFontSize(20);
                 doc.setFont('helvetica', 'bold');
@@ -828,18 +776,15 @@
                 doc.setFont('helvetica', 'normal');
                 doc.text('Executive Security Analysis - ' + clientName, 20, 55);
                 
-                // Content
                 doc.setFontSize(10);
                 doc.setFont('helvetica', 'normal');
                 
                 var splitContent = doc.splitTextToSize(reportContent, 170);
                 doc.text(splitContent, 20, 75);
                 
-                // Footer
                 doc.setFontSize(8);
                 doc.text('VeriVault Security Intelligence | CONFIDENTIAL | ' + new Date().toLocaleDateString(), 20, 285);
                 
-                // Save PDF
                 var fileName = 'VeriVault_' + reportTitle.replace(/\s+/g, '_') + '_' + clientName.replace(/\s+/g, '_') + '_' + reportDate + '.pdf';
                 doc.save(fileName);
                 
@@ -877,7 +822,6 @@
             }, 5000);
         }
 
-        // Logout function
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
                 window.location.href = 'index.html';
@@ -888,7 +832,6 @@
         window.addEventListener('DOMContentLoaded', function() {
             console.log('VeriVault Dashboard Loaded');
             
-            // Set current timestamp
             var timestampInput = document.getElementById('logTimestamp');
             if (timestampInput) {
                 var now = new Date();
@@ -896,25 +839,21 @@
                 timestampInput.value = now.toISOString().slice(0, 16);
             }
             
-            // Set report date
             var dateInput = document.getElementById('reportDate');
             if (dateInput) {
                 dateInput.value = new Date().toISOString().split('T')[0];
             }
             
-            // Initialize daily log system
-            selectLogCategory('staff'); // Default to staff category
+            selectLogCategory('staff');
             updateLogEntriesDisplay();
             updateLogStats();
             updatePriorityAlerts();
             initializeSearchAndFilters();
             
-            // Initialize report system - ONLY call this if the element exists
             if (document.getElementById('reportTitle')) {
                 selectReport('daily-log');
             }
             
-            // Set current shift based on time
             var hour = new Date().getHours();
             if (hour >= 6 && hour < 14) {
                 currentShift = 'Day Shift';
@@ -966,7 +905,7 @@
     <!-- Notification System -->
     <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2 max-w-sm"></div>
 
-    <!-- Top Navigation Tabs - ABSOLUTE FIRST ELEMENT -->
+    <!-- Top Navigation Tabs - FIRST ELEMENT -->
     <nav class="bg-slate-800/90 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex space-x-8">
@@ -988,13 +927,12 @@
         </div>
     </nav>
 
-    <!-- ALL TAB CONTENT CONTAINERS -->
+    <!-- MAIN CONTENT CONTAINER -->
     <main class="relative">
-        <!-- DAILY LOG SYSTEM TAB CONTENT -->
+        <!-- DAILY LOG SYSTEM TAB -->
         <div id="content-logger" class="tab-content">
             <div class="w-full p-8">
                 <div class="max-w-7xl mx-auto">
-                    <!-- Enhanced Header -->
                     <div class="mb-8">
                         <div class="flex items-center justify-between">
                             <div>
@@ -1015,14 +953,12 @@
                     </div>
 
                     <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                        <!-- Enhanced Log Entry Form -->
                         <div class="xl:col-span-2">
                             <div class="glass rounded-xl p-6 mb-6">
                                 <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                                     <span class="text-green-400">➕</span>New Log Entry
                                 </h3>
 
-                                <!-- Quick Entry Type Selection -->
                                 <div class="mb-6">
                                     <label class="block text-sm font-medium text-slate-300 mb-3">Entry Category</label>
                                     <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
@@ -1065,7 +1001,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Enhanced Form Fields -->
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                     <div>
                                         <label class="block text-sm font-medium text-slate-300 mb-2">Timestamp</label>
@@ -1109,7 +1044,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Priority Level -->
                                 <div class="mb-6">
                                     <label class="block text-sm font-medium text-slate-300 mb-3">Priority Level</label>
                                     <div class="flex gap-4">
@@ -1137,14 +1071,12 @@
                                     </div>
                                 </div>
 
-                                <!-- Enhanced Notes Field -->
                                 <div class="mb-6">
                                     <label class="block text-sm font-medium text-slate-300 mb-2">Detailed Notes</label>
                                     <textarea id="logNotes" rows="4" placeholder="Enter detailed observations, actions taken, or additional context..." class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"></textarea>
                                     <div class="text-xs text-slate-400 mt-1">Tip: Include badge numbers, license plates, or specific details</div>
                                 </div>
 
-                                <!-- Action Buttons -->
                                 <div class="flex gap-4">
                                     <button onclick="addLogEntry()" class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg transform hover:scale-105">
                                         ✅ Add to Log
@@ -1155,7 +1087,6 @@
                                 </div>
                             </div>
 
-                            <!-- Search and Filter Section -->
                             <div class="glass rounded-xl p-6">
                                 <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
                                     <span class="text-blue-400">🔍</span>Search & Filter
@@ -1187,9 +1118,7 @@
                             </div>
                         </div>
 
-                        <!-- Enhanced Sidebar -->
                         <div class="space-y-6">
-                            <!-- Today's Summary -->
                             <div class="glass rounded-xl p-6">
                                 <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                                     <span class="text-cyan-400">📊</span>Today's Summary
@@ -1234,7 +1163,6 @@
                                 </div>
                             </div>
 
-                            <!-- Priority Alerts -->
                             <div class="glass rounded-xl p-6">
                                 <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                                     <span class="text-red-400">🚨</span>Priority Alerts
@@ -1244,7 +1172,6 @@
                                 </div>
                             </div>
 
-                            <!-- Quick Actions -->
                             <div class="glass rounded-xl p-6">
                                 <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                                     <span class="text-yellow-400">⚡</span>Quick Actions
@@ -1264,7 +1191,6 @@
                         </div>
                     </div>
 
-                    <!-- Enhanced Log Entries Display -->
                     <div class="mt-8">
                         <div class="glass rounded-xl p-6">
                             <div class="flex items-center justify-between mb-6">
@@ -1296,12 +1222,10 @@
             </div>
         </div>
 
-        <!-- REPORTS TAB CONTENT -->
+        <!-- REPORTS TAB -->
         <div id="content-reports" class="tab-content hidden">
             <div class="flex h-[calc(100vh-73px)]">
-                <!-- Left Sidebar for Reports -->
                 <div class="w-80 glass border-r border-white/10 p-6">
-                    <!-- Logo -->
                     <div class="flex items-center gap-3 mb-8">
                         <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
                             <span class="text-white font-bold text-lg">V</span>
@@ -1312,7 +1236,6 @@
                         </div>
                     </div>
 
-                    <!-- Report Types -->
                     <div class="space-y-2">
                         <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Report Types</h3>
                         
@@ -1401,7 +1324,19 @@
                         </div>
                     </div>
 
-                    <!-- Recent Reports -->
                     <div class="mt-8">
                         <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Recent Reports</h3>
                         <div class="space-y-2">
+                            <div class="bg-slate-700/50 p-2 rounded text-xs">
+                                <div class="text-white font-medium">Daily Log - Johnson Estate</div>
+                                <div class="text-slate-400">Generated 2 hours ago</div>
+                            </div>
+                            <div class="bg-slate-700/50 p-2 rounded text-xs">
+                                <div class="text-white font-medium">Security Audit - Metro Plaza</div>
+                                <div class="text-slate-400">Generated yesterday</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 p-8 overflow-y-auto">
