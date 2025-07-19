@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import PinConfirmationModal from './PinConfirmationModal';
 
 interface LogEntry {
   id: number;
@@ -17,6 +18,9 @@ const Dashboard: React.FC = () => {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [pinModalOpen, setPinModalOpen] = useState(false);
+  const [currentReportType, setCurrentReportType] = useState('');
+  const [currentReportData, setCurrentReportData] = useState<any>(null);
   const navigate = useNavigate();
 
   // Form states
@@ -106,6 +110,91 @@ const Dashboard: React.FC = () => {
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const isAdmin = user.role === 'administrator' || user.username === 'admin';
+
+  // PIN confirmation handlers
+  const handleReportSubmit = (reportType: string, formData: any) => {
+    // TODO: FUTURE - Check if LLM review is required for this report type
+    // if (LLM_REVIEW_CONFIG.REVIEW_REQUIREMENTS[reportType]) {
+    //   setShowLLMReviewInfo(true);
+    // }
+    
+    setCurrentReportType(reportType);
+    setCurrentReportData(formData);
+    setPinModalOpen(true);
+  };
+
+  const handlePinConfirmed = async (verificationData: any) => {
+    try {
+      // TODO: FUTURE PHASE - Multi-LLM Review Pipeline Integration
+      // ========================================================
+      // PLANNED FRONTEND ENHANCEMENTS:
+      // 1. Pre-submission LLM Analysis Progress Tracking:
+      //    - Show loading states for each LLM analysis phase
+      //    - Display real-time progress: "GPT-4o analyzing..." -> "Claude 3 analyzing..." -> "Command R+ consensus..."
+      //    - Estimated time remaining based on report complexity
+      //
+      // 2. LLM Review Results Display:
+      //    - Modal showing confidence scores from each LLM
+      //    - Highlighted discrepancies or flagged concerns
+      //    - Option to proceed with consensus or request human review
+      //
+      // 3. Enhanced User Experience:
+      //    - Progressive disclosure of LLM findings
+      //    - Interactive confidence meter
+      //    - Options to refine report based on AI suggestions
+      //    - Preview of consensus improvements before final submission
+      //
+      // EXAMPLE FUTURE IMPLEMENTATION:
+      // const llmReviewModal = new LLMReviewProgressModal();
+      // llmReviewModal.show(currentReportType, currentReportData);
+      // 
+      // const llmResults = await performLLMAnalysis({
+      //   reportType: currentReportType,
+      //   reportData: currentReportData,
+      //   onProgress: (phase, progress) => llmReviewModal.updateProgress(phase, progress)
+      // });
+      //
+      // if (llmResults.requiresUserReview) {
+      //   const userChoice = await showLLMResultsModal(llmResults);
+      //   if (userChoice === 'human-review') {
+      //     await requestManualReview(currentReportData, llmResults.concerns);
+      //     return;
+      //   }
+      // }
+      // ========================================================
+
+      // Generate PDF with watermark using the verification data
+      const response = await axios.post('http://localhost:5000/api/reports/generate-with-watermark', {
+        reportType: currentReportType,
+        reportData: currentReportData,
+        verificationData: verificationData
+      });
+
+      if (response.data.success) {
+        // Open the HTML report in a new window for printing/PDF generation
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(response.data.pdfContent);
+          newWindow.document.close();
+          
+          // The HTML includes auto-print functionality
+          // User can save as PDF from the print dialog
+        }
+
+        // Show success notification with submission details
+        alert(`✅ ${currentReportType} report generated successfully!\n\n🔐 Security Features Applied:\n• PIN Authentication Verified\n• Invisible Watermark Applied\n• Submission ID: ${response.data.submissionId}\n\nReport opened in new window for printing/saving as PDF.`);
+      }
+    } catch (error) {
+      console.error('Error generating report:', error);
+      alert('❌ Error generating report. Please try again.');
+    }
+  };
+
+  const handlePinModalClose = () => {
+    setPinModalOpen(false);
+    setCurrentReportType('');
+    setCurrentReportData(null);
+  };
 
   // Define navigation tabs
   const navigationTabs = [
@@ -700,49 +789,7 @@ const Dashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Digital Signature */}
-                  <div>
-                    <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', color: '#06b6d4' }}>✍️ Digital Signature & Verification</h4>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                      <div className="form-group">
-                        <label className="form-label">Officer Signature</label>
-                        <div style={{ 
-                          border: '1px solid rgba(255,255,255,0.2)', 
-                          borderRadius: '8px', 
-                          height: '80px', 
-                          background: 'rgba(255,255,255,0.05)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#94a3b8',
-                          fontSize: '14px',
-                          cursor: 'pointer'
-                        }}>
-                          ✍️ Click to sign digitally
-                        </div>
-                      </div>
-                                             <div className="form-group">
-                         <label className="form-label">Timestamp</label>
-                         <input 
-                           type="text" 
-                           className="form-input" 
-                           defaultValue={new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC'}
-                           readOnly
-                           style={{ background: 'rgba(255,255,255,0.05)' }}
-                         />
-                       </div>
-                       <div className="form-group">
-                         <label className="form-label">Verification Code</label>
-                         <input 
-                           type="text" 
-                           className="form-input" 
-                           defaultValue={"VV-" + Math.random().toString(36).substr(2, 9).toUpperCase()}
-                           readOnly
-                           style={{ background: 'rgba(255,255,255,0.05)' }}
-                         />
-                       </div>
-                    </div>
-                  </div>
+                                    {/* Removed Digital Signature - Now handled by PIN confirmation */}
 
                   {/* Action Buttons */}
                   <div style={{ display: 'flex', gap: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
@@ -752,8 +799,13 @@ const Dashboard: React.FC = () => {
                     <button type="button" className="btn" style={{ flex: 1 }}>
                       🤖 Review with AI
                     </button>
-                    <button type="submit" className="btn" style={{ flex: 1 }}>
-                      📄 Generate PDF
+                    <button 
+                      type="button" 
+                      className="btn" 
+                      style={{ flex: 1 }}
+                      onClick={() => handleReportSubmit('Daily Log', {})}
+                    >
+                      🔐 Submit with PIN
                     </button>
                   </div>
                 </form>
@@ -846,27 +898,15 @@ const Dashboard: React.FC = () => {
                   </div>
 
                   <div>
-                    <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', color: '#06b6d4' }}>✍️ Medical Report Verification</h4>
+                    <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', color: '#06b6d4' }}>👨‍⚕️ Medical Professional Information</h4>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                      <div className="form-group">
-                        <label className="form-label">Reporting Officer Signature</label>
-                        <div style={{ 
-                          border: '1px solid rgba(255,255,255,0.2)', 
-                          borderRadius: '8px', 
-                          height: '60px', 
-                          background: 'rgba(255,255,255,0.05)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#94a3b8',
-                          fontSize: '14px'
-                        }}>
-                          ✍️ Digital Signature Required
-                        </div>
-                      </div>
                       <div className="form-group">
                         <label className="form-label">Medical Professional (if present)</label>
                         <input type="text" className="form-input" placeholder="Name and credentials" />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Medical License Number</label>
+                        <input type="text" className="form-input" placeholder="License number if applicable" />
                       </div>
                     </div>
                   </div>
@@ -878,8 +918,13 @@ const Dashboard: React.FC = () => {
                     <button type="button" className="btn" style={{ flex: 1 }}>
                       🤖 AI Medical Review
                     </button>
-                    <button type="submit" className="btn" style={{ flex: 1 }}>
-                      📄 Generate Medical PDF
+                    <button 
+                      type="button" 
+                      className="btn" 
+                      style={{ flex: 1 }}
+                      onClick={() => handleReportSubmit('Medical Incident', {})}
+                    >
+                      🔐 Submit with PIN
                     </button>
                   </div>
                 </form>
@@ -1029,26 +1074,10 @@ const Dashboard: React.FC = () => {
                      </div>
                    </div>
 
-                   {/* Incident Report Verification */}
+                   {/* Incident Report Review */}
                    <div>
-                     <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', color: '#06b6d4' }}>✍️ Incident Report Verification</h4>
+                     <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', color: '#06b6d4' }}>📋 Incident Report Review</h4>
                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                       <div className="form-group">
-                         <label className="form-label">Reporting Officer Signature</label>
-                         <div style={{ 
-                           border: '1px solid rgba(255,255,255,0.2)', 
-                           borderRadius: '8px', 
-                           height: '60px', 
-                           background: 'rgba(255,255,255,0.05)',
-                           display: 'flex',
-                           alignItems: 'center',
-                           justifyContent: 'center',
-                           color: '#94a3b8',
-                           fontSize: '14px'
-                         }}>
-                           ✍️ Digital Signature Required
-                         </div>
-                       </div>
                        <div className="form-group">
                          <label className="form-label">Supervisor Review Status</label>
                          <select className="form-input">
@@ -1065,6 +1094,15 @@ const Dashboard: React.FC = () => {
                            <option value="investigation">Investigation Ongoing</option>
                          </select>
                        </div>
+                       <div className="form-group">
+                         <label className="form-label">Incident Priority</label>
+                         <select className="form-input">
+                           <option value="low">🟢 Low Priority</option>
+                           <option value="medium">🟡 Medium Priority</option>
+                           <option value="high">🔴 High Priority</option>
+                           <option value="critical">🚨 Critical</option>
+                         </select>
+                       </div>
                      </div>
                    </div>
 
@@ -1075,8 +1113,13 @@ const Dashboard: React.FC = () => {
                      <button type="button" className="btn" style={{ flex: 1 }}>
                        🤖 AI Incident Review
                      </button>
-                     <button type="submit" className="btn" style={{ flex: 1 }}>
-                       📄 Generate Incident PDF
+                     <button 
+                       type="button" 
+                       className="btn" 
+                       style={{ flex: 1 }}
+                       onClick={() => handleReportSubmit('Non-Medical Incident', {})}
+                     >
+                       🔐 Submit with PIN
                      </button>
                    </div>
                  </form>
@@ -1211,32 +1254,24 @@ const Dashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Audit Verification */}
+                  {/* Audit Review */}
                   <div>
-                    <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', color: '#06b6d4' }}>✍️ Audit Verification</h4>
+                    <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', color: '#06b6d4' }}>📋 Audit Review & Approval</h4>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                      <div className="form-group">
-                        <label className="form-label">Auditor Digital Signature</label>
-                        <div style={{ 
-                          border: '1px solid rgba(255,255,255,0.2)', 
-                          borderRadius: '8px', 
-                          height: '60px', 
-                          background: 'rgba(255,255,255,0.05)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#94a3b8',
-                          fontSize: '14px'
-                        }}>
-                          ✍️ Auditor Signature Required
-                        </div>
-                      </div>
                       <div className="form-group">
                         <label className="form-label">Supervisor Review</label>
                         <select className="form-input">
                           <option value="pending">Pending Review</option>
                           <option value="approved">Approved</option>
                           <option value="needs-revision">Needs Revision</option>
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Audit Completion Status</label>
+                        <select className="form-input">
+                          <option value="in-progress">🔄 In Progress</option>
+                          <option value="completed">✅ Completed</option>
+                          <option value="requires-followup">⚠️ Requires Follow-up</option>
                         </select>
                       </div>
                     </div>
@@ -1249,8 +1284,13 @@ const Dashboard: React.FC = () => {
                     <button type="button" className="btn" style={{ flex: 1 }}>
                       🤖 AI Audit Review
                     </button>
-                    <button type="submit" className="btn" style={{ flex: 1 }}>
-                      📄 Generate Audit PDF
+                    <button 
+                      type="button" 
+                      className="btn" 
+                      style={{ flex: 1 }}
+                      onClick={() => handleReportSubmit('Security Systems Audit', {})}
+                    >
+                      🔐 Submit with PIN
                     </button>
                   </div>
                 </form>
@@ -3007,6 +3047,15 @@ const Dashboard: React.FC = () => {
           </section>
         </div>
       )}
+
+      {/* PIN Confirmation Modal */}
+      <PinConfirmationModal
+        isOpen={pinModalOpen}
+        onClose={handlePinModalClose}
+        onConfirm={handlePinConfirmed}
+        reportType={currentReportType}
+        reportData={currentReportData}
+      />
     </div>
   );
 };

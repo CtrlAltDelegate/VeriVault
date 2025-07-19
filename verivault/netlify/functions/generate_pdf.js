@@ -179,15 +179,16 @@ exports.handler = async (event, context) => {
             ` : ''}
             <div class="content-section">${pageContent}</div>
             ${isLastPage ? `
-            <div class="digital-signature">
-                <div class="signature-line">
-                    <div class="signature-title">Digital Signature</div>
-                    <div class="signature-info">
-                        <div class="signature-hash">Hash: ${hashValue}</div>
-                        <div class="signature-timestamp">Verified: ${timestamp}</div>
-                    </div>
+            <div class="pin-verification">
+                <div class="verification-title">PIN Authentication Verified</div>
+                <div class="verification-info">
+                    <div class="verification-hash">Auth: ${hashValue}</div>
+                    <div class="verification-timestamp">Verified: ${timestamp}</div>
                 </div>
             </div>
+            
+            <!-- INVISIBLE WATERMARK FOR ADMIN/AUDITOR VERIFICATION -->
+            <div class="security-watermark">WM:${hashValue}|${timestamp}|VV2.0</div>
             ` : ''}
         </div>`;
     });
@@ -430,44 +431,49 @@ exports.handler = async (event, context) => {
             line-height: 1.7;
         }
 
-        .digital-signature {
+        .pin-verification {
             margin-top: 30px;
             padding: 15px;
-            background: linear-gradient(135deg, #1E3A8A 0%, rgba(0, 207, 255, 0.1) 100%);
-            border: 2px solid #00CFFF;
+            background: linear-gradient(135deg, #22c55e 0%, rgba(34, 197, 94, 0.1) 100%);
+            border: 2px solid #22c55e;
             border-radius: 6px;
             text-align: center;
             font-size: 8px;
             color: white;
         }
 
-        .signature-line {
-            display: flex;
-            justify-content: space-between;
-            margin: 4px 0;
-            color: #F3F4F6;
+        .security-watermark {
+            position: absolute;
+            bottom: 0.1in;
+            right: 1in;
+            font-size: 6px;
+            color: rgba(30, 58, 138, 0.15);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+            user-select: none;
+            pointer-events: none;
         }
 
-        .signature-title {
+        .verification-title {
             font-weight: 700;
             margin-bottom: 8px;
-            color: #F59E0B;
+            color: #F3F4F6;
             font-family: 'Rajdhani', sans-serif;
         }
 
-        .signature-info {
+        .verification-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .signature-hash {
+        .verification-hash {
             font-family: 'Courier New', monospace;
-            color: #22c55e;
+            color: #F3F4F6;
             font-weight: 700;
         }
 
-        .signature-timestamp {
+        .verification-timestamp {
             color: #F3F4F6;
         }
 
