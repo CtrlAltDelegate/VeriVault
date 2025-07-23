@@ -1,5 +1,5 @@
 [build]
-  base = "verivault-v2/client"
+  base = "VeriVault/verivault-v2/client"
   command = "npm run build"
   publish = "build"
 
