@@ -9,6 +9,7 @@ healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 startCommand = "npm start"
+rootDirectory = "VeriVault/verivault-v2/server"
 
 [env]
 NODE_ENV = "production"
