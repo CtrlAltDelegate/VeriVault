@@ -1846,8 +1846,8 @@ const Dashboard: React.FC = () => {
         <EnhancedDailyLog />
       )}
 
-      {/* Report Generation Tab */}
-      {activeTab === 'report-generation' && (
+      {/* Report Review Tab */}
+      {activeTab === 'report-review' && (
         <div>
           {/* Header Section */}
           <section style={{ padding: '80px 24px 40px', textAlign: 'center' }}>
