@@ -33,14 +33,16 @@ railway up
 # Set production environment
 railway variables set NODE_ENV=production
 
-# Set client URL (update with your frontend URL)
-railway variables set CLIENT_URL=https://your-frontend-domain.com
+# CRITICAL: Set client URL to match your Netlify frontend URL
+railway variables set CLIENT_URL=https://your-netlify-site-name.netlify.app
 
 # Optional: Set custom admin credentials
-railway variables set DEFAULT_ADMIN_USERNAME=your_admin_username
-railway variables set DEFAULT_ADMIN_PASSWORD=your_secure_password
-railway variables set DEFAULT_ADMIN_PIN=your_4_digit_pin
+railway variables set DEFAULT_ADMIN_USERNAME=admin
+railway variables set DEFAULT_ADMIN_PASSWORD=password
+railway variables set DEFAULT_ADMIN_PIN=1234
 ```
+
+**Important:** Replace `your-netlify-site-name.netlify.app` with your actual Netlify URL!
 
 ### 4. Generate Domain
 ```bash
@@ -109,25 +111,65 @@ This backend is ready for:
 
 ## 🆘 Troubleshooting
 
-### Build Issues
+### Connection Issues Between Frontend and Backend
+
+**1. CORS Errors:**
 ```bash
-# Clear build cache
+# Check your environment variables
+railway variables
+
+# Ensure CLIENT_URL matches your Netlify URL exactly
+railway variables set CLIENT_URL=https://your-actual-netlify-url.netlify.app
+```
+
+**2. Frontend Can't Reach Backend:**
+- Check that `REACT_APP_API_URL` is set in Netlify dashboard
+- Verify Railway backend is running: visit `https://your-railway-app.up.railway.app/api/health`
+- Check browser network tab for actual error messages
+
+**3. Environment Variable Issues:**
+```bash
+# List all variables
+railway variables
+
+# Check specific variable
+railway variables get CLIENT_URL
+railway variables get NODE_ENV
+```
+
+**4. Build Issues:**
+```bash
+# Clear build cache and rebuild
 railway run npm run build
 
 # Check build logs
 railway logs --tail
 ```
 
-### Environment Issues
-```bash
-# List all variables
-railway variables
+**5. URL Verification:**
+- Railway URL: Check your Railway project settings > Domains
+- Netlify URL: Check your Netlify site overview page
+- Make sure both URLs use HTTPS in production
 
-# Check specific variable
-railway variables get NODE_ENV
-```
+### Quick Connection Test
 
-### Connection Issues
-- Ensure `CLIENT_URL` matches your frontend domain
-- Check CORS settings in server.ts
-- Verify health check responds: `/api/health` 
+1. **Test Backend Health:**
+   ```
+   curl https://your-railway-app.up.railway.app/api/health
+   ```
+
+2. **Test CORS from Frontend:**
+   Open browser console on your Netlify site and run:
+   ```javascript
+   fetch('https://your-railway-app.up.railway.app/api/health')
+     .then(r => r.json())
+     .then(console.log)
+     .catch(console.error)
+   ```
+
+### Common Fixes
+
+- **Wrong URLs:** Update environment variables with correct URLs
+- **Missing HTTPS:** Ensure production URLs use HTTPS
+- **Typos:** Double-check spelling in environment variable names
+- **Case Sensitivity:** Environment variables are case-sensitive 

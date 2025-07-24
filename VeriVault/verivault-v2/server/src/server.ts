@@ -12,12 +12,44 @@ const PORT = parseInt(process.env.PORT || '8080', 10); // Railway uses PORT env 
 
 // Middleware
 app.use(helmet());
+
+// Dynamic CORS configuration
+const corsOrigins = [
+  'http://localhost:3000', // Local development
+  'http://localhost:3001', // Alternative local port
+  ...(process.env.CLIENT_URL ? [process.env.CLIENT_URL] : [])
+];
+
+// Add any additional Netlify-style domains if CLIENT_URL is not set
+if (!process.env.CLIENT_URL) {
+  corsOrigins.push(
+    'https://*.netlify.app', // Allow any Netlify subdomain
+    'https://coruscating-starlight-ac42de.netlify.app' // Fallback for existing deployment
+  );
+}
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://coruscating-starlight-ac42de.netlify.app',
-    ...(process.env.CLIENT_URL ? [process.env.CLIENT_URL] : [])
-  ],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin matches any allowed origins
+    const isAllowed = corsOrigins.some(allowedOrigin => {
+      if (allowedOrigin.includes('*')) {
+        // Handle wildcard domains like *.netlify.app
+        const pattern = allowedOrigin.replace(/\*/g, '.*');
+        return new RegExp(pattern).test(origin);
+      }
+      return allowedOrigin === origin;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked request from origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(morgan('combined'));
@@ -39,11 +71,17 @@ app.get('/api/health', (req, res) => {
 import authRoutes from './routes/auth';
 import logsRoutes from './routes/logs';
 import reportsRoutes from './routes/reports';
+import dailyLogsRoutes from './routes/daily-logs';
+import peopleRoutes from './routes/people';
+import dailyEntriesRoutes from './routes/daily-entries';
 
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/logs', logsRoutes);
 app.use('/api/reports', reportsRoutes);
+app.use('/api/daily-logs', dailyLogsRoutes);
+app.use('/api/people', peopleRoutes);
+app.use('/api/daily-entries', dailyEntriesRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -62,7 +100,8 @@ app.use('*', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 VeriVault Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🌐 CORS enabled for: ${process.env.CLIENT_URL || 'http://localhost:3000'}`);
+  console.log(`🌐 CORS enabled for origins:`, corsOrigins);
   console.log(`🔒 Security: Helmet enabled`);
   console.log(`📋 Multi-LLM Review: Planned for future implementation`);
+  console.log(`💡 Health check available at: http://localhost:${PORT}/api/health`);
 }); 

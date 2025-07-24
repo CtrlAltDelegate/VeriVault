@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PinConfirmationModal from './PinConfirmationModal';
+import EnhancedDailyLog from './EnhancedDailyLog';
+import ReportGenerationSystem from './ReportGenerationSystem';
 
 interface LogEntry {
   id: number;
@@ -165,7 +167,7 @@ const Dashboard: React.FC = () => {
   const navigationTabs = [
     { id: 'dashboard', label: '📊 Dashboard', active: activeTab === 'dashboard' },
     { id: 'report-generation', label: '📈 Report Generation', active: activeTab === 'report-generation' },
-    { id: 'daily-log', label: '📝 Daily Log Tab', active: activeTab === 'daily-log' },
+    { id: 'daily-log', label: '📝 Daily Log', active: activeTab === 'daily-log' },
     { id: 'report-review', label: '📋 Report Review', active: activeTab === 'report-review' },
     ...(isAdmin ? [{ id: 'user-management', label: '👥 User & Vendor Management', active: activeTab === 'user-management' }] : []),
     { id: 'settings', label: '⚙️ Settings', active: activeTab === 'settings' }
@@ -289,8 +291,8 @@ const Dashboard: React.FC = () => {
               
               <div style={{ 
                 display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-                gap: '32px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+                gap: '24px',
                 marginBottom: '64px'
               }}>
                 <div className="card" style={{ textAlign: 'center' }}>
@@ -306,15 +308,23 @@ const Dashboard: React.FC = () => {
                   <h3 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px', color: '#10b981' }}>
                     {stats.todayLogs}
                   </h3>
-                  <p style={{ color: '#94a3b8', fontSize: '16px' }}>Today's Activities</p>
+                  <p style={{ color: '#94a3b8', fontSize: '16px' }}>Today's Entries</p>
                 </div>
                 
                 <div className="card" style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '32px', marginBottom: '16px' }}>⚠️</div>
-                  <h3 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px', color: '#f59e0b' }}>
-                    {stats.highPriority}
+                  <div style={{ fontSize: '32px', marginBottom: '16px' }}>👥</div>
+                  <h3 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px', color: '#8b5cf6' }}>
+                    12
                   </h3>
-                  <p style={{ color: '#94a3b8', fontSize: '16px' }}>High Priority Items</p>
+                  <p style={{ color: '#94a3b8', fontSize: '16px' }}>Active Visitors</p>
+                </div>
+
+                <div className="card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '32px', marginBottom: '16px' }}>📦</div>
+                  <h3 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px', color: '#f59e0b' }}>
+                    7
+                  </h3>
+                  <p style={{ color: '#94a3b8', fontSize: '16px' }}>Pending Packages</p>
                 </div>
                 
                 <div className="card" style={{ textAlign: 'center' }}>
@@ -322,7 +332,15 @@ const Dashboard: React.FC = () => {
                   <h3 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px', color: '#ef4444' }}>
                     {stats.incidents}
                   </h3>
-                  <p style={{ color: '#94a3b8', fontSize: '16px' }}>Security Incidents</p>
+                  <p style={{ color: '#94a3b8', fontSize: '16px' }}>Incidents Today</p>
+                </div>
+
+                <div className="card" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '32px', marginBottom: '16px' }}>👨‍💼</div>
+                  <h3 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px', color: '#10b981' }}>
+                    24
+                  </h3>
+                  <p style={{ color: '#94a3b8', fontSize: '16px' }}>Staff On-Site</p>
                 </div>
               </div>
             </div>
@@ -636,7 +654,11 @@ const Dashboard: React.FC = () => {
                   <p style={{ color: '#94a3b8', marginBottom: '20px', fontSize: '14px', lineHeight: '1.5' }}>
                     Comprehensive daily security activity summary with all events and observations.
                   </p>
-                  <button className="btn" style={{ width: '100%', fontSize: '14px' }}>
+                  <button 
+                    onClick={() => setActiveTab('daily-log')}
+                    className="btn" 
+                    style={{ width: '100%', fontSize: '14px' }}
+                  >
                     📝 Create Daily Log
                   </button>
                 </div>
@@ -647,7 +669,14 @@ const Dashboard: React.FC = () => {
                   <p style={{ color: '#94a3b8', marginBottom: '20px', fontSize: '14px', lineHeight: '1.5' }}>
                     Medical emergency documentation with injury details and response actions.
                   </p>
-                  <button className="btn" style={{ width: '100%', fontSize: '14px' }}>
+                  <button 
+                    onClick={() => {
+                      setCurrentReportType('medical');
+                      setActiveTab('report-generation');
+                    }}
+                    className="btn" 
+                    style={{ width: '100%', fontSize: '14px' }}
+                  >
                     🏥 Create Medical Report
                   </button>
                 </div>
@@ -658,7 +687,14 @@ const Dashboard: React.FC = () => {
                   <p style={{ color: '#94a3b8', marginBottom: '20px', fontSize: '14px', lineHeight: '1.5' }}>
                     Security incidents, breaches, and non-medical emergency documentation.
                   </p>
-                  <button className="btn" style={{ width: '100%', fontSize: '14px' }}>
+                  <button 
+                    onClick={() => {
+                      setCurrentReportType('non-medical');
+                      setActiveTab('report-generation');
+                    }}
+                    className="btn" 
+                    style={{ width: '100%', fontSize: '14px' }}
+                  >
                     🚨 Create Incident Report
                   </button>
                 </div>
@@ -669,7 +705,14 @@ const Dashboard: React.FC = () => {
                   <p style={{ color: '#94a3b8', marginBottom: '20px', fontSize: '14px', lineHeight: '1.5' }}>
                     Comprehensive security system evaluation with discrepancy analysis.
                   </p>
-                  <button className="btn" style={{ width: '100%', fontSize: '14px' }}>
+                  <button 
+                    onClick={() => {
+                      setCurrentReportType('audit');
+                      setActiveTab('report-generation');
+                    }}
+                    className="btn" 
+                    style={{ width: '100%', fontSize: '14px' }}
+                  >
                     🔐 Create Audit Report
                   </button>
                 </div>
@@ -730,7 +773,7 @@ const Dashboard: React.FC = () => {
 
                       {/* Vendor Entry Form */}
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '16px' }}>
-                        <div className="form-group">
+                    <div className="form-group">
                           <label className="form-label" style={{ fontSize: '14px' }}>Vendor Company</label>
                           <input type="text" className="form-input" placeholder="Company name" style={{ fontSize: '14px', padding: '8px' }} />
                         </div>
@@ -766,8 +809,8 @@ const Dashboard: React.FC = () => {
 
                       <div className="form-group">
                         <label className="form-label" style={{ fontSize: '14px' }}>Additional Vendor Notes</label>
-                        <textarea 
-                          className="form-input" 
+                      <textarea 
+                        className="form-input" 
                           rows={3}
                           placeholder="Notes about vendor activities, special instructions, or observations..."
                           style={{ fontSize: '14px', resize: 'vertical' }}
@@ -1027,16 +1070,16 @@ const Dashboard: React.FC = () => {
                   <div>
                     <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', color: '#ef4444' }}>⏰ Time & Location Details</h4>
                     <div style={{ background: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px', padding: '20px' }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                        <div className="form-group">
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+                      <div className="form-group">
                           <label className="form-label">Incident Date</label>
                           <input type="date" className="form-input" defaultValue={new Date().toISOString().split('T')[0]} />
-                        </div>
-                        <div className="form-group">
+                      </div>
+                      <div className="form-group">
                           <label className="form-label">Incident Time</label>
                           <input type="time" className="form-input" />
-                        </div>
-                        <div className="form-group">
+                      </div>
+                      <div className="form-group">
                           <label className="form-label">Discovered Time (if different)</label>
                           <input type="time" className="form-input" placeholder="When incident was found" />
                         </div>
@@ -1050,7 +1093,7 @@ const Dashboard: React.FC = () => {
                         </div>
                         <div className="form-group">
                           <label className="form-label">Weather Conditions</label>
-                          <select className="form-input">
+                        <select className="form-input">
                             <option value="">Select conditions</option>
                             <option value="clear">Clear</option>
                             <option value="rain">Rain</option>
@@ -1059,7 +1102,7 @@ const Dashboard: React.FC = () => {
                             <option value="fog">Fog</option>
                             <option value="indoor">Indoor (N/A)</option>
                             <option value="other">Other</option>
-                          </select>
+                        </select>
                         </div>
                       </div>
                     </div>
@@ -1110,16 +1153,16 @@ const Dashboard: React.FC = () => {
                         </div>
                       </div>
                       
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                        <div className="form-group">
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+                      <div className="form-group">
                           <label className="form-label">Contact Phone Number</label>
                           <input type="tel" className="form-input" placeholder="Primary contact number" />
-                        </div>
-                        <div className="form-group">
+                      </div>
+                      <div className="form-group">
                           <label className="form-label">Emergency Contact Name</label>
                           <input type="text" className="form-input" placeholder="Emergency contact person" />
-                        </div>
-                        <div className="form-group">
+                      </div>
+                      <div className="form-group">
                           <label className="form-label">Emergency Contact Phone</label>
                           <input type="tel" className="form-input" placeholder="Emergency contact number" />
                         </div>
@@ -1246,17 +1289,17 @@ const Dashboard: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="form-group" style={{ marginBottom: '16px' }}>
+                    <div className="form-group" style={{ marginBottom: '16px' }}>
                         <label className="form-label">Detailed First Aid / Medical Treatment Provided</label>
-                        <textarea 
-                          className="form-input" 
-                          rows={4}
+                      <textarea 
+                        className="form-input" 
+                        rows={4}
                           placeholder="Describe specific first aid given, medical treatment provided, medications administered, equipment used..."
                           style={{ resize: 'vertical' }}
-                        />
-                      </div>
+                      />
+                    </div>
 
-                      <div className="form-group">
+                    <div className="form-group">
                         <label className="form-label">Transportation Details</label>
                         <textarea 
                           className="form-input" 
@@ -1302,13 +1345,13 @@ const Dashboard: React.FC = () => {
 
                       <div className="form-group" style={{ marginBottom: '16px' }}>
                         <label className="form-label">Resolution Details</label>
-                        <textarea 
-                          className="form-input" 
-                          rows={4}
+                      <textarea 
+                        className="form-input" 
+                        rows={4}
                           placeholder="Final outcome, medical diagnosis (if known), treatment received, work restrictions, return to work status..."
                           style={{ resize: 'vertical' }}
-                        />
-                      </div>
+                      />
+                    </div>
 
                       <div className="form-group" style={{ marginBottom: '16px' }}>
                         <label className="form-label">Follow-up Actions Required</label>
@@ -1318,7 +1361,7 @@ const Dashboard: React.FC = () => {
                           placeholder="Safety improvements needed, training required, equipment changes, investigation needed, insurance claims..."
                           style={{ resize: 'vertical' }}
                         />
-                      </div>
+                  </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
                         <label style={{ display: 'flex', alignItems: 'center', fontSize: '14px', cursor: 'pointer' }}>
@@ -1347,7 +1390,7 @@ const Dashboard: React.FC = () => {
                     <div style={{ background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.2)', borderRadius: '8px', padding: '20px' }}>
                       <div style={{ border: '2px dashed rgba(245, 158, 11, 0.4)', borderRadius: '8px', padding: '24px', textAlign: 'center', marginBottom: '16px' }}>
                         <div style={{ fontSize: '32px', marginBottom: '12px' }}>📷</div>
-                        <p style={{ marginBottom: '12px', color: '#94a3b8' }}>
+                      <p style={{ marginBottom: '12px', color: '#94a3b8' }}>
                           Upload photos and videos of the incident scene, injuries, equipment, or evidence
                         </p>
                         <input 
@@ -1383,15 +1426,15 @@ const Dashboard: React.FC = () => {
                   <div>
                     <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', color: '#06b6d4' }}>📋 Report Information</h4>
                     <div style={{ background: 'rgba(6, 182, 212, 0.05)', border: '1px solid rgba(6, 182, 212, 0.2)', borderRadius: '8px', padding: '20px' }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                        <div className="form-group">
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+                      <div className="form-group">
                           <label className="form-label">Report Prepared By</label>
                           <input type="text" className="form-input" placeholder="Name of person preparing this report" />
-                        </div>
-                        <div className="form-group">
+                      </div>
+                      <div className="form-group">
                           <label className="form-label">Title / Position</label>
                           <input type="text" className="form-input" placeholder="Job title or position" />
-                        </div>
+                      </div>
                         <div className="form-group">
                           <label className="form-label">Contact Phone</label>
                           <input type="tel" className="form-input" placeholder="Phone number of report preparer" />
@@ -1426,7 +1469,7 @@ const Dashboard: React.FC = () => {
                     🔒 Upon PIN submission, this report will be timestamped, watermarked, and converted to a secure PDF with embedded metadata
                   </div>
                 </form>
-              </div>
+                             </div>
 
                {/* Non-Medical Incident Report Form */}
                <div className="card" style={{ marginBottom: '32px' }}>
@@ -1800,6 +1843,11 @@ const Dashboard: React.FC = () => {
 
       {/* Daily Log Tab */}
       {activeTab === 'daily-log' && (
+        <EnhancedDailyLog />
+      )}
+
+      {/* Report Generation Tab */}
+      {activeTab === 'report-generation' && (
         <div>
           {/* Header Section */}
           <section style={{ padding: '80px 24px 40px', textAlign: 'center' }}>
@@ -1812,7 +1860,7 @@ const Dashboard: React.FC = () => {
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent'
               }}>
-                Daily Security Log
+                Report Generation
               </h1>
               <p style={{ 
                 fontSize: '20px', 
