@@ -1,15 +1,14 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm run build"
-watchPatterns = ["src/**"]
+buildCommand = "cd VeriVault/verivault-v2/server && npm run build"
+watchPatterns = ["VeriVault/verivault-v2/server/src/**"]
 
 [deploy]
 healthcheckPath = "/api/health"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
-startCommand = "npm start"
-workingDirectory = "VeriVault/verivault-v2/server"
+startCommand = "cd VeriVault/verivault-v2/server && npm start"
 
 [env]
 NODE_ENV = "production"
