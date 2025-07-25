@@ -30,28 +30,16 @@ if (!process.env.CLIENT_URL) {
 }
 
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    // Check if origin matches any allowed origins
-    const isAllowed = corsOrigins.some(allowedOrigin => {
-      if (allowedOrigin.includes('*')) {
-        // Handle wildcard domains like *.netlify.app
-        const pattern = allowedOrigin.replace(/\*/g, '.*');
-        return new RegExp(pattern).test(origin);
-      }
-      return allowedOrigin === origin;
-    });
-    
-    if (isAllowed) {
-      callback(null, true);
-    } else {
-      console.warn(`CORS blocked request from origin: ${origin}`);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001', 
+    'https://coruscating-starlight-ac42de.netlify.app',
+    'https://main--coruscating-starlight-ac42de.netlify.app'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
