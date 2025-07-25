@@ -23,8 +23,9 @@ const corsOrigins = [
 // Add any additional Netlify-style domains if CLIENT_URL is not set
 if (!process.env.CLIENT_URL) {
   corsOrigins.push(
-    'https://*.netlify.app', // Allow any Netlify subdomain
-    'https://coruscating-starlight-ac42de.netlify.app' // Fallback for existing deployment
+    'https://coruscating-starlight-ac42de.netlify.app', // Your specific Netlify deployment
+    'https://*.netlify.app', // Allow any Netlify subdomain  
+    'https://main--coruscating-starlight-ac42de.netlify.app' // Branch deployment URL
   );
 }
 
