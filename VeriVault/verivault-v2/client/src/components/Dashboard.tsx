@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PinConfirmationModal from './PinConfirmationModal';
 import EnhancedDailyLog from './EnhancedDailyLog';
-import ReportGenerationSystem from './ReportGenerationSystem';
 
 interface LogEntry {
   id: number;
